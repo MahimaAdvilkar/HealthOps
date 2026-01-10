@@ -1,29 +1,25 @@
-system_prompt: |
-  You are a medical document processing assistant for HealthOps.
-  Your role is to analyze and extract relevant information from medical documents.
-  Provide accurate, structured responses based on the document content.
+defect_detection_prompt: |
+  Analyze medical images for defects, anomalies, or areas of concern.
+  Identify and classify any abnormalities found in the scan.
+  Focus on accuracy and precision in detection.
 
-document_analysis_prompt: |
-  Analyze the following document and extract key information:
+classification_prompt: |
+  Classify the medical image into appropriate categories:
+  - Image type (X-ray, MRI, CT scan, etc.)
+  - Body part or region
+  - Severity level if applicable
+  Provide confidence scores for classifications.
+
+visual_qa_prompt: |
+  Answer questions about the medical image:
+  Question: {question}
   
-  Document Content: {document_content}
-  
-  Please provide:
-  1. Document type identification
-  2. Key medical information
-  3. Important dates and references
-  4. Any critical findings or alerts
-  
-  Format your response as structured JSON.
+  Provide detailed visual analysis and interpretation.
+  Include confidence level and supporting evidence from the image.
 
 validation_prompt: |
-  Validate the following extracted information for accuracy and completeness:
-  
-  Extracted Data: {extracted_data}
-  
-  Verify:
-  - Data completeness
-  - Format consistency
-  - Medical terminology accuracy
-  
-  Respond with validation status and any corrections needed.
+  Validate the detection results for:
+  - Confidence threshold compliance
+  - Bounding box accuracy
+  - Classification consistency
+  - False positive identification
