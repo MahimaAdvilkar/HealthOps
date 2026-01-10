@@ -1,0 +1,25 @@
+defect_detection_prompt: |
+  Analyze medical images for defects, anomalies, or areas of concern.
+  Identify and classify any abnormalities found in the scan.
+  Focus on accuracy and precision in detection.
+
+classification_prompt: |
+  Classify the medical image into appropriate categories:
+  - Image type (X-ray, MRI, CT scan, etc.)
+  - Body part or region
+  - Severity level if applicable
+  Provide confidence scores for classifications.
+
+visual_qa_prompt: |
+  Answer questions about the medical image:
+  Question: {question}
+  
+  Provide detailed visual analysis and interpretation.
+  Include confidence level and supporting evidence from the image.
+
+validation_prompt: |
+  Validate the detection results for:
+  - Confidence threshold compliance
+  - Bounding box accuracy
+  - Classification consistency
+  - False positive identification
