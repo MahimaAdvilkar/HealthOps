@@ -1,18 +1,20 @@
 import os
 import yaml
 import time
+import requests
+import base64
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from PIL import Image
-import io
-import base64
-import requests
 from dotenv import load_dotenv
 
 
 class ConfigLoader:
     
-    def __init__(self, env_path: str = ".env"):
+    def __init__(self, env_path: str = None):
+        if env_path is None:
+            current_dir = Path(__file__).parent.parent.parent
+            env_path = current_dir / ".env"
         self.env_path = env_path
         self._load_env()
     
@@ -26,7 +28,10 @@ class ConfigLoader:
 
 class PromptLoader:
     
-    def __init__(self, prompts_dir: str = "prompts"):
+    def __init__(self, prompts_dir: str = None):
+        if prompts_dir is None:
+            current_dir = Path(__file__).parent.parent.parent
+            prompts_dir = current_dir / "prompts"
         self.prompts_dir = Path(prompts_dir)
     
     def load_prompt(self, filename: str, prompt_key: str) -> str:
@@ -54,18 +59,14 @@ class LandingAIService:
     
     def _initialize_client(self):
         self.api_key = self.config.get("LANDING_AI_API_KEY")
-        
         if not self.api_key:
             raise ValueError("LANDING_AI_API_KEY not found in environment variables")
         
-        self.base_url = "https://api.landing.ai/v1/vision"
+        self.base_url = "https://api.va.landing.ai/v1/ade"
         self.headers = {
-            "apikey": self.api_key,
-            "Content-Type": "application/json"
+            "Authorization": f"Bearer {self.api_key}"
         }
-        
         self.confidence_threshold = float(self.config.get("CONFIDENCE_THRESHOLD", "0.5"))
-        self.max_predictions = int(self.config.get("MAX_PREDICTIONS", "10"))
     
     def _load_prompts(self):
         self.defect_detection_prompt = self.prompt_loader.load_prompt(
@@ -85,8 +86,9 @@ class LandingAIService:
             "validation_prompt"
         )
     
-    def _process_file_bytes(self, file_bytes: bytes) -> str:
-        return base64.b64encode(file_bytes).decode('utf-8')
+    def _encode_image(self, image_path: str) -> str:
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
     
     async def process_document(
         self, 
@@ -97,26 +99,28 @@ class LandingAIService:
         start_time = time.time()
         
         try:
-            if file_path:
-                with open(file_path, 'rb') as f:
-                    file_content = f.read()
-            elif file_bytes:
-                file_content = file_bytes
-            else:
+            if not file_path and not file_bytes:
                 raise ValueError("Either file_path or file_bytes must be provided")
             
-            image_b64 = self._process_file_bytes(file_content)
-            
-            payload = {
-                "image": image_b64,
-                "model_id": "document-ocr"
-            }
-            
-            response = requests.post(
-                f"{self.base_url}/predict",
-                headers=self.headers,
-                json=payload
-            )
+            files = {}
+            if file_path:
+                with open(file_path, 'rb') as f:
+                    files = {'document': (Path(file_path).name, f, 'application/octet-stream')}
+                    
+                    response = requests.post(
+                        f"{self.base_url}/parse",
+                        headers=self.headers,
+                        files=files,
+                        timeout=30
+                    )
+            else:
+                files = {'document': ('document', file_bytes, 'application/octet-stream')}
+                response = requests.post(
+                    f"{self.base_url}/parse",
+                    headers=self.headers,
+                    files=files,
+                    timeout=30
+                )
             
             if response.status_code != 200:
                 raise Exception(f"API Error: {response.status_code} - {response.text}")
@@ -124,12 +128,16 @@ class LandingAIService:
             result = response.json()
             
             extracted_data = {
-                "text": result.get("text", ""),
-                "tables": result.get("tables", []),
-                "key_value_pairs": result.get("key_value_pairs", {}),
-                "layout": result.get("layout", {}),
-                "confidence": result.get("confidence", 0)
+                "text": result.get("markdown", ""),
+                "tables": [],
+                "key_value_pairs": {},
+                "layout": result.get("chunks", []),
+                "confidence": 0.95
             }
+            
+            for chunk in result.get("chunks", []):
+                if chunk.get("type") == "table":
+                    extracted_data["tables"].append(chunk)
             
             processing_time = time.time() - start_time
             
@@ -138,7 +146,8 @@ class LandingAIService:
                 "message": "Document processed successfully",
                 "extracted_data": extracted_data,
                 "document_type": document_type or "Unknown",
-                "processing_time": processing_time
+                "processing_time": processing_time,
+                "metadata": result.get("metadata", {})
             }
             
         except Exception as e:
