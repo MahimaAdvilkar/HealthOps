@@ -1,19 +1,20 @@
 import os
 import yaml
 import time
+import requests
+import base64
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from PIL import Image
-import io
-import base64
-from landingai.predict import Predictor
-from landingai.pipeline.image_source import ImageSource
 from dotenv import load_dotenv
 
 
 class ConfigLoader:
     
-    def __init__(self, env_path: str = ".env"):
+    def __init__(self, env_path: str = None):
+        if env_path is None:
+            current_dir = Path(__file__).parent.parent.parent
+            env_path = current_dir / ".env"
         self.env_path = env_path
         self._load_env()
     
@@ -27,7 +28,10 @@ class ConfigLoader:
 
 class PromptLoader:
     
-    def __init__(self, prompts_dir: str = "prompts"):
+    def __init__(self, prompts_dir: str = None):
+        if prompts_dir is None:
+            current_dir = Path(__file__).parent.parent.parent
+            prompts_dir = current_dir / "prompts"
         self.prompts_dir = Path(prompts_dir)
     
     def load_prompt(self, filename: str, prompt_key: str) -> str:
@@ -50,25 +54,19 @@ class LandingAIService:
     def __init__(self):
         self.config = ConfigLoader()
         self.prompt_loader = PromptLoader()
-        self._initialize_predictor()
+        self._initialize_client()
         self._load_prompts()
     
-    def _initialize_predictor(self):
-        api_key = self.config.get("LANDING_AI_API_KEY")
-        endpoint_id = self.config.get("LANDING_AI_ENDPOINT_ID")
-        
-        if not api_key:
+    def _initialize_client(self):
+        self.api_key = self.config.get("LANDING_AI_API_KEY")
+        if not self.api_key:
             raise ValueError("LANDING_AI_API_KEY not found in environment variables")
-        if not endpoint_id:
-            raise ValueError("LANDING_AI_ENDPOINT_ID not found in environment variables")
         
-        self.predictor = Predictor(
-            endpoint_id=endpoint_id,
-            api_key=api_key
-        )
-        
+        self.base_url = "https://api.va.landing.ai/v1/ade"
+        self.headers = {
+            "Authorization": f"Bearer {self.api_key}"
+        }
         self.confidence_threshold = float(self.config.get("CONFIDENCE_THRESHOLD", "0.5"))
-        self.max_predictions = int(self.config.get("MAX_PREDICTIONS", "10"))
     
     def _load_prompts(self):
         self.defect_detection_prompt = self.prompt_loader.load_prompt(
@@ -88,97 +86,96 @@ class LandingAIService:
             "validation_prompt"
         )
     
-    def _decode_image(self, image_data: str) -> Image.Image:
-        try:
-            if image_data.startswith('data:image'):
-                image_data = image_data.split(',')[1]
-            
-            image_bytes = base64.b64decode(image_data)
-            image = Image.open(io.BytesIO(image_bytes))
-            return image
-        except Exception as e:
-            raise ValueError(f"Failed to decode image: {str(e)}")
+    def _encode_image(self, image_path: str) -> str:
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
     
-    def _process_predictions(self, predictions: List[Dict]) -> List[Dict[str, Any]]:
-        filtered_predictions = []
-        
-        for pred in predictions:
-            confidence = pred.get('score', 0)
-            if confidence >= self.confidence_threshold:
-                filtered_predictions.append({
-                    'label': pred.get('label', 'unknown'),
-                    'confidence': confidence,
-                    'bounding_box': pred.get('coordinates', {}),
-                    'metadata': pred.get('metadata', {})
-                })
-        
-        filtered_predictions.sort(key=lambda x: x['confidence'], reverse=True)
-        return filtered_predictions[:self.max_predictions]
-    
-    async def process_image(
+    async def process_document(
         self, 
-        image_data: str, 
-        image_type: Optional[str] = None,
-        task_type: str = "defect_detection"
+        file_path: str = None,
+        file_bytes: bytes = None,
+        document_type: Optional[str] = None
     ) -> Dict[str, Any]:
         start_time = time.time()
         
         try:
-            image = self._decode_image(image_data)
+            if not file_path and not file_bytes:
+                raise ValueError("Either file_path or file_bytes must be provided")
             
-            predictions = self.predictor.predict(image)
+            files = {}
+            if file_path:
+                with open(file_path, 'rb') as f:
+                    files = {'document': (Path(file_path).name, f, 'application/octet-stream')}
+                    
+                    response = requests.post(
+                        f"{self.base_url}/parse",
+                        headers=self.headers,
+                        files=files,
+                        timeout=30
+                    )
+            else:
+                files = {'document': ('document', file_bytes, 'application/octet-stream')}
+                response = requests.post(
+                    f"{self.base_url}/parse",
+                    headers=self.headers,
+                    files=files,
+                    timeout=30
+                )
             
-            processed_predictions = self._process_predictions(predictions)
+            if response.status_code != 200:
+                raise Exception(f"API Error: {response.status_code} - {response.text}")
+            
+            result = response.json()
+            
+            extracted_data = {
+                "text": result.get("markdown", ""),
+                "tables": [],
+                "key_value_pairs": {},
+                "layout": result.get("chunks", []),
+                "confidence": 0.95
+            }
+            
+            for chunk in result.get("chunks", []):
+                if chunk.get("type") == "table":
+                    extracted_data["tables"].append(chunk)
             
             processing_time = time.time() - start_time
             
             return {
                 "success": True,
-                "message": "Image processed successfully",
-                "predictions": processed_predictions,
-                "total_detections": len(processed_predictions),
-                "image_type": image_type or "Unknown",
-                "task_type": task_type,
-                "processing_time": processing_time
+                "message": "Document processed successfully",
+                "extracted_data": extracted_data,
+                "document_type": document_type or "Unknown",
+                "processing_time": processing_time,
+                "metadata": result.get("metadata", {})
             }
             
         except Exception as e:
             processing_time = time.time() - start_time
             return {
                 "success": False,
-                "message": f"Failed to process image: {str(e)}",
-                "predictions": None,
-                "total_detections": 0,
+                "message": f"Failed to process document: {str(e)}",
+                "extracted_data": None,
                 "processing_time": processing_time
             }
     
-    async def validate_predictions(self, predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
+    async def validate_extraction(self, extracted_data: Dict[str, Any]) -> Dict[str, Any]:
         try:
             validation_results = {
-                "total_predictions": len(predictions),
-                "high_confidence": 0,
-                "medium_confidence": 0,
-                "low_confidence": 0,
+                "has_text": bool(extracted_data.get("text")),
+                "has_tables": bool(extracted_data.get("tables")),
+                "has_key_value_pairs": bool(extracted_data.get("key_value_pairs")),
+                "confidence_score": extracted_data.get("confidence", 0),
                 "issues": []
             }
             
-            for pred in predictions:
-                confidence = pred.get('confidence', 0)
-                
-                if confidence >= 0.8:
-                    validation_results["high_confidence"] += 1
-                elif confidence >= 0.5:
-                    validation_results["medium_confidence"] += 1
-                else:
-                    validation_results["low_confidence"] += 1
-                    validation_results["issues"].append(
-                        f"Low confidence prediction: {pred.get('label')} ({confidence:.2f})"
-                    )
-                
-                if not pred.get('bounding_box'):
-                    validation_results["issues"].append(
-                        f"Missing bounding box for: {pred.get('label')}"
-                    )
+            if validation_results["confidence_score"] < self.confidence_threshold:
+                validation_results["issues"].append(
+                    f"Low confidence score: {validation_results['confidence_score']:.2f}"
+                )
+            
+            if not validation_results["has_text"]:
+                validation_results["issues"].append("No text extracted from document")
             
             validation_results["success"] = len(validation_results["issues"]) == 0
             
