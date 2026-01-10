@@ -1,0 +1,29 @@
+system_prompt: |
+  You are a medical document processing assistant for HealthOps.
+  Your role is to analyze and extract relevant information from medical documents.
+  Provide accurate, structured responses based on the document content.
+
+document_analysis_prompt: |
+  Analyze the following document and extract key information:
+  
+  Document Content: {document_content}
+  
+  Please provide:
+  1. Document type identification
+  2. Key medical information
+  3. Important dates and references
+  4. Any critical findings or alerts
+  
+  Format your response as structured JSON.
+
+validation_prompt: |
+  Validate the following extracted information for accuracy and completeness:
+  
+  Extracted Data: {extracted_data}
+  
+  Verify:
+  - Data completeness
+  - Format consistency
+  - Medical terminology accuracy
+  
+  Respond with validation status and any corrections needed.
