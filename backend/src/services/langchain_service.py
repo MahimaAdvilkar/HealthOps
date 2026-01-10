@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 class ConfigLoader:
     
-    def __init__(self, env_path: str = "config/env/.env"):
+    def __init__(self, env_path: str = ".env"):
         self.env_path = env_path
         self._load_env()
     
