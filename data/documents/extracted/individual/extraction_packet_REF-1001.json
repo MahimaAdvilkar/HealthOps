@@ -1,0 +1,631 @@
+{
+  "referral_id": "REF-1001",
+  "doc_type": "unknown",
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/packet_REF-1001.pdf",
+  "extraction": {
+    "success": true,
+    "message": "Document processed successfully",
+    "extracted_data": {
+      "text": "<a id='3ab7a44f-c8b2-4cf6-8a3e-27b2998cb9eb'></a>\n\nFILE: auth_approval_REF-1001.txt\n\n<a id='dcd5180e-ee2c-4071-8f4e-ffc327812ced'></a>\n\nAUTHORIZATION APPROVAL NOTICE\n\n<a id='06d259ad-627d-4ebf-9b55-76b16f50c9aa'></a>\n\nPayer: BlueCross\n\nPlan Type: PPO\n\nAuthorization Status: APPROVED\n\n<a id='4efabfb7-b348-469b-aec1-8d0ccf178458'></a>\n\nAuthorization Number: BC-APR-948201\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='ca0b895a-b2f9-4656-92a7-18276ab27030'></a>\n\nService Authorized:\n\nService Category: Imaging\n\nProcedure: MRI - Knee\n\n<a id='852cf017-c701-4848-ab6e-9972fee52b0d'></a>\n\nAuthorization Details:\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1\nUnit Type: SCANS\n\n<a id='c49be239-ffb0-4a2d-b65c-d85e416f7431'></a>\n\nRendering Provider: Any In-Network Imaging Facility\n\n<a id='3419d56d-7e73-4e88-a3cb-530cc6a4eaf9'></a>\n\nPlace of Service: Outpatient\n\n<a id='46396acc-2a33-4da6-8aaf-9d43fae80e06'></a>\n\nNotes:\n\nThis authorization confirms coverage for the service listed above.\n\n<!-- PAGE BREAK -->\n\n<a id='4b6003ae-5022-421e-9c63-4f7747295969'></a>\n\nServices rendered outside the authorization window may not be reimbursed.\n\n<a id='0c7d363d-4a8b-454d-8a36-d1e8e9a4ed81'></a>\n\nIssued Date: 01/05/2026\n\n<a id='aedee6b0-34ad-4c88-a95c-3eef23c0f918'></a>\n\nIssued By: BlueCross Utilization Management\n\n<!-- PAGE BREAK -->\n\n<a id='c27fe7ab-c557-4132-98f3-25cb7e0d21b3'></a>\n\nFILE: billing_readiness_REF-1001.txt\n\n<a id='38180576-4671-4758-8265-001f8ae9995f'></a>\n\nBILLING READINESS SUMMARY\n\n<a id='d64ddea3-31ad-47a7-a947-7691e2906e1b'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='485f076f-f483-4a8c-be54-9c253121a5ba'></a>\n\nService Summary:\n\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS\n\n<a id='0485ece8-8eb5-4e52-b2bf-cd4de6148fef'></a>\n\nAuthorization Verification:\nAuthorization Required: Yes\nAuthorization Status: Approved\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1\nUnits Used: 1\n\n<a id='e6703ab1-9651-4f4b-bddb-fb359ec55cb4'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete\n\n<!-- PAGE BREAK -->\n\n<a id='606035c4-154f-4354-b6f8-3dd0cd60bf17'></a>\n\nBilling Status:\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A\n\n<a id='2d49b89d-6cea-45b0-9db7-edbc533d0ed5'></a>\n\nBilling Instructions:\nProceed with claim submission.\n\n<a id='d595c3f2-f1cc-496f-aa3b-951c4f4d57cb'></a>\n\nEnsure CPT code aligns with authorized service.\n\n<a id='abbd9615-976c-4092-a60f-615b2cb6ac24'></a>\n\nAttach authorization letter and visit note.\n\n<a id='7716c211-ea3a-46df-9f30-aa8d3b7adec8'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026\n\n<!-- PAGE BREAK -->\n\n<a id='07e637f9-b835-49e1-888f-aaadf97db1eb'></a>\n\nFILE: referral_intake_REF-1001.txt\n\n<a id='8c3ee646-eeb8-4ed9-88ab-3fa28d2f389d'></a>\n\nREFERRAL INTAKE FORM\n\n<a id='2e95ca6c-f834-4585-b06c-3188f4453672'></a>\n\nReferral ID: REF-1001\nReferral Source: Primary Care Physician (PCP)\nReferral Received Date: 01/02/2026\nUrgency Level: Routine\n\n<a id='a0b50eea-2cf5-432f-847f-19129e45cbe2'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\nDate of Birth: 1969-08-14\nAge: 56\nGender: Male\nAddress: 245 Mission St, San Francisco, CA 94105\nPrimary Language: Spanish\nPhone Number: (415) 555-0198\n\n<a id='877d45d9-147c-4689-9822-639b8a3c45b3'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\nPayer Name: BlueCross\nPlan Type: PPO\nAuthorization Required: Yes\nAuthorization Status: Approved\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1\n\n<!-- PAGE BREAK -->\n\n<a id='9b065199-0ff0-4ba2-b857-f257b3cf2932'></a>\n\nUnit Type: SCANS\n\n<a id='b76ad65e-257b-4df1-a580-aead3d9accf5'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee\n\n<a id='63344b2f-8005-4dff-b861-66244f133dc8'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\nHome Assessment Required: No\nPatient Responsive: High\nContact Attempts Made: 1\n\n<a id='4a7c585a-7727-42ff-a3f7-c4802483c78e'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.\n\n<!-- PAGE BREAK -->\n\n<a id='7442123e-580f-45b9-a6f2-91f785feae56'></a>\n\nFILE: visit_note_REF-1001.txt\n\n<a id='3d518e28-2caf-456a-9a6d-549570d625f0'></a>\n\nVISIT COMPLETION NOTE\n\n<a id='a9217840-5221-446c-b52f-cc69d6a75def'></a>\n\nReferral ID: REF-1001\nPatient Name: John Martinez\nDate of Birth: 1969-08-14\n\n<a id='62f215d2-acd1-42fb-8b32-668787332857'></a>\n\nService Performed:\n\nService Category: Imaging\n\nProcedure: MRI - Knee\n\n<a id='5756ba81-b246-4508-a7b4-4198fb9f4662'></a>\n\nDate of Service: 01/07/2026\n\nTime In: 10:00 AM\n\nTime Out: 10:45 AM\n\nUnits Delivered: 1\n\nUnit Type: SCANS\n\n<a id='54a8d23d-107d-41f6-a7e8-6b3b1460185c'></a>\n\nRendering Staff:\n\nTechnician Name: Alex Chen\n\nTechnician ID: TECH-204\n\n<a id='44b9bf42-e488-48a1-9184-ae1be099c16d'></a>\n\nLocation:\n\nFacility: SF Imaging Center\n\nCity: San Francisco, CA\n\n<a id='65753aec-828d-46e3-a6a3-0c019ee00956'></a>\n\nVisit Outcome:\n\n<!-- PAGE BREAK -->\n\n<a id='18cb3b87-9cb2-47af-bf3f-5ef3c83dfd54'></a>\n\nService completed successfully.\nNo complications reported.\nPatient tolerated procedure well.\n\n<a id='006141c9-1fe0-4854-a7d8-12f1403ecc54'></a>\n\nDocumentation:\nVisit verified and signed by technician.\n\n<a id='e188ec26-b351-4d54-aa11-1d96263e9a3f'></a>\n\nSignature: Alex Chen\n\nSigned Date: 01/07/2026",
+      "tables": [],
+      "key_value_pairs": {},
+      "layout": [
+        {
+          "markdown": "<a id='3ab7a44f-c8b2-4cf6-8a3e-27b2998cb9eb'></a>\n\nFILE: auth_approval_REF-1001.txt",
+          "type": "text",
+          "id": "3ab7a44f-c8b2-4cf6-8a3e-27b2998cb9eb",
+          "grounding": {
+            "box": {
+              "left": 0.044232964515686035,
+              "top": 0.036463357508182526,
+              "right": 0.37429359555244446,
+              "bottom": 0.06273190677165985
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='dcd5180e-ee2c-4071-8f4e-ffc327812ced'></a>\n\nAUTHORIZATION APPROVAL NOTICE",
+          "type": "text",
+          "id": "dcd5180e-ee2c-4071-8f4e-ffc327812ced",
+          "grounding": {
+            "box": {
+              "left": 0.04524526000022888,
+              "top": 0.10296875983476639,
+              "right": 0.42175519466400146,
+              "bottom": 0.12940606474876404
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='06d259ad-627d-4ebf-9b55-76b16f50c9aa'></a>\n\nPayer: BlueCross\n\nPlan Type: PPO\n\nAuthorization Status: APPROVED",
+          "type": "text",
+          "id": "06d259ad-627d-4ebf-9b55-76b16f50c9aa",
+          "grounding": {
+            "box": {
+              "left": 0.04447241127490997,
+              "top": 0.1714438498020172,
+              "right": 0.3658244013786316,
+              "bottom": 0.26444104313850403
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='4efabfb7-b348-469b-aec1-8d0ccf178458'></a>\n\nAuthorization Number: BC-APR-948201\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+          "type": "text",
+          "id": "4efabfb7-b348-469b-aec1-8d0ccf178458",
+          "grounding": {
+            "box": {
+              "left": 0.045222699642181396,
+              "top": 0.30569878220558167,
+              "right": 0.4136320948600769,
+              "bottom": 0.3990928828716278
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='ca0b895a-b2f9-4656-92a7-18276ab27030'></a>\n\nService Authorized:\n\nService Category: Imaging\n\nProcedure: MRI - Knee",
+          "type": "text",
+          "id": "ca0b895a-b2f9-4656-92a7-18276ab27030",
+          "grounding": {
+            "box": {
+              "left": 0.04490205645561218,
+              "top": 0.4411275088787079,
+              "right": 0.2988421320915222,
+              "bottom": 0.5343841314315796
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='852cf017-c701-4848-ab6e-9972fee52b0d'></a>\n\nAuthorization Details:\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1\nUnit Type: SCANS",
+          "type": "text",
+          "id": "852cf017-c701-4848-ab6e-9972fee52b0d",
+          "grounding": {
+            "box": {
+              "left": 0.044607073068618774,
+              "top": 0.5758644342422485,
+              "right": 0.38616442680358887,
+              "bottom": 0.7373782396316528
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='c49be239-ffb0-4a2d-b65c-d85e416f7431'></a>\n\nRendering Provider: Any In-Network Imaging Facility",
+          "type": "text",
+          "id": "c49be239-ffb0-4a2d-b65c-d85e416f7431",
+          "grounding": {
+            "box": {
+              "left": 0.04617920517921448,
+              "top": 0.7784899473190308,
+              "right": 0.5272595882415771,
+              "bottom": 0.8034287691116333
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='3419d56d-7e73-4e88-a3cb-530cc6a4eaf9'></a>\n\nPlace of Service: Outpatient",
+          "type": "text",
+          "id": "3419d56d-7e73-4e88-a3cb-530cc6a4eaf9",
+          "grounding": {
+            "box": {
+              "left": 0.04675188660621643,
+              "top": 0.8125443458557129,
+              "right": 0.30991318821907043,
+              "bottom": 0.8360482454299927
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='46396acc-2a33-4da6-8aaf-9d43fae80e06'></a>\n\nNotes:\n\nThis authorization confirms coverage for the service listed above.",
+          "type": "text",
+          "id": "46396acc-2a33-4da6-8aaf-9d43fae80e06",
+          "grounding": {
+            "box": {
+              "left": 0.04605099558830261,
+              "top": 0.8795923590660095,
+              "right": 0.6371933221817017,
+              "bottom": 0.9372546076774597
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='4b6003ae-5022-421e-9c63-4f7747295969'></a>\n\nServices rendered outside the authorization window may not be reimbursed.",
+          "type": "marginalia",
+          "id": "4b6003ae-5022-421e-9c63-4f7747295969",
+          "grounding": {
+            "box": {
+              "left": 0.04486870765686035,
+              "top": 0.036691077053546906,
+              "right": 0.737811803817749,
+              "bottom": 0.0630190446972847
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='0c7d363d-4a8b-454d-8a36-d1e8e9a4ed81'></a>\n\nIssued Date: 01/05/2026",
+          "type": "text",
+          "id": "0c7d363d-4a8b-454d-8a36-d1e8e9a4ed81",
+          "grounding": {
+            "box": {
+              "left": 0.045288845896720886,
+              "top": 0.104285828769207,
+              "right": 0.28190934658050537,
+              "bottom": 0.1281116008758545
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='aedee6b0-34ad-4c88-a95c-3eef23c0f918'></a>\n\nIssued By: BlueCross Utilization Management",
+          "type": "text",
+          "id": "aedee6b0-34ad-4c88-a95c-3eef23c0f918",
+          "grounding": {
+            "box": {
+              "left": 0.0461420863866806,
+              "top": 0.13872092962265015,
+              "right": 0.4714999198913574,
+              "bottom": 0.1644592583179474
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='c27fe7ab-c557-4132-98f3-25cb7e0d21b3'></a>\n\nFILE: billing_readiness_REF-1001.txt",
+          "type": "marginalia",
+          "id": "c27fe7ab-c557-4132-98f3-25cb7e0d21b3",
+          "grounding": {
+            "box": {
+              "left": 0.04350826144218445,
+              "top": 0.03595682978630066,
+              "right": 0.39656737446784973,
+              "bottom": 0.06311681121587753
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='38180576-4671-4758-8265-001f8ae9995f'></a>\n\nBILLING READINESS SUMMARY",
+          "type": "text",
+          "id": "38180576-4671-4758-8265-001f8ae9995f",
+          "grounding": {
+            "box": {
+              "left": 0.04477231204509735,
+              "top": 0.10281597822904587,
+              "right": 0.37053442001342773,
+              "bottom": 0.12989884614944458
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='d64ddea3-31ad-47a7-a947-7691e2906e1b'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+          "type": "text",
+          "id": "d64ddea3-31ad-47a7-a947-7691e2906e1b",
+          "grounding": {
+            "box": {
+              "left": 0.04402293264865875,
+              "top": 0.1702977418899536,
+              "right": 0.32249510288238525,
+              "bottom": 0.26653751730918884
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='485f076f-f483-4a8c-be54-9c253121a5ba'></a>\n\nService Summary:\n\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS",
+          "type": "text",
+          "id": "485f076f-f483-4a8c-be54-9c253121a5ba",
+          "grounding": {
+            "box": {
+              "left": 0.042697519063949585,
+              "top": 0.3052530884742737,
+              "right": 0.31375908851623535,
+              "bottom": 0.5027613043785095
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='0485ece8-8eb5-4e52-b2bf-cd4de6148fef'></a>\n\nAuthorization Verification:\nAuthorization Required: Yes\nAuthorization Status: Approved\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1\nUnits Used: 1",
+          "type": "text",
+          "id": "0485ece8-8eb5-4e52-b2bf-cd4de6148fef",
+          "grounding": {
+            "box": {
+              "left": 0.04355320334434509,
+              "top": 0.5414661169052124,
+              "right": 0.38785600662231445,
+              "bottom": 0.7709006071090698
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='e6703ab1-9651-4f4b-bddb-fb359ec55cb4'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete",
+          "type": "text",
+          "id": "e6703ab1-9651-4f4b-bddb-fb359ec55cb4",
+          "grounding": {
+            "box": {
+              "left": 0.04326510429382324,
+              "top": 0.8099992275238037,
+              "right": 0.35616350173950195,
+              "bottom": 0.9394056797027588
+            },
+            "page": 2
+          }
+        },
+        {
+          "markdown": "<a id='606035c4-154f-4354-b6f8-3dd0cd60bf17'></a>\n\nBilling Status:\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A",
+          "type": "text",
+          "id": "606035c4-154f-4354-b6f8-3dd0cd60bf17",
+          "grounding": {
+            "box": {
+              "left": 0.04350205510854721,
+              "top": 0.07011165469884872,
+              "right": 0.2838473916053772,
+              "bottom": 0.16626909375190735
+            },
+            "page": 3
+          }
+        },
+        {
+          "markdown": "<a id='2d49b89d-6cea-45b0-9db7-edbc533d0ed5'></a>\n\nBilling Instructions:\nProceed with claim submission.",
+          "type": "text",
+          "id": "2d49b89d-6cea-45b0-9db7-edbc533d0ed5",
+          "grounding": {
+            "box": {
+              "left": 0.04334023594856262,
+              "top": 0.20380929112434387,
+              "right": 0.3492749035358429,
+              "bottom": 0.26458561420440674
+            },
+            "page": 3
+          }
+        },
+        {
+          "markdown": "<a id='d595c3f2-f1cc-496f-aa3b-951c4f4d57cb'></a>\n\nEnsure CPT code aligns with authorized service.",
+          "type": "text",
+          "id": "d595c3f2-f1cc-496f-aa3b-951c4f4d57cb",
+          "grounding": {
+            "box": {
+              "left": 0.04442897439002991,
+              "top": 0.27214619517326355,
+              "right": 0.49375155568122864,
+              "bottom": 0.2984895408153534
+            },
+            "page": 3
+          }
+        },
+        {
+          "markdown": "<a id='abbd9615-976c-4092-a60f-615b2cb6ac24'></a>\n\nAttach authorization letter and visit note.",
+          "type": "text",
+          "id": "abbd9615-976c-4092-a60f-615b2cb6ac24",
+          "grounding": {
+            "box": {
+              "left": 0.04468816518783569,
+              "top": 0.3068176507949829,
+              "right": 0.41976121068000793,
+              "bottom": 0.3332948684692383
+            },
+            "page": 3
+          }
+        },
+        {
+          "markdown": "<a id='7716c211-ea3a-46df-9f30-aa8d3b7adec8'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026",
+          "type": "text",
+          "id": "7716c211-ea3a-46df-9f30-aa8d3b7adec8",
+          "grounding": {
+            "box": {
+              "left": 0.04312416911125183,
+              "top": 0.37274065613746643,
+              "right": 0.3079703152179718,
+              "bottom": 0.46730688214302063
+            },
+            "page": 3
+          }
+        },
+        {
+          "markdown": "<a id='07e637f9-b835-49e1-888f-aaadf97db1eb'></a>\n\nFILE: referral_intake_REF-1001.txt",
+          "type": "text",
+          "id": "07e637f9-b835-49e1-888f-aaadf97db1eb",
+          "grounding": {
+            "box": {
+              "left": 0.043511033058166504,
+              "top": 0.0355047807097435,
+              "right": 0.3756263852119446,
+              "bottom": 0.06322675198316574
+            },
+            "page": 4
+          }
+        },
+        {
+          "markdown": "<a id='8c3ee646-eeb8-4ed9-88ab-3fa28d2f389d'></a>\n\nREFERRAL INTAKE FORM",
+          "type": "text",
+          "id": "8c3ee646-eeb8-4ed9-88ab-3fa28d2f389d",
+          "grounding": {
+            "box": {
+              "left": 0.04489850997924805,
+              "top": 0.10266364365816116,
+              "right": 0.31445127725601196,
+              "bottom": 0.1302114874124527
+            },
+            "page": 4
+          }
+        },
+        {
+          "markdown": "<a id='2e95ca6c-f834-4585-b06c-3188f4453672'></a>\n\nReferral ID: REF-1001\nReferral Source: Primary Care Physician (PCP)\nReferral Received Date: 01/02/2026\nUrgency Level: Routine",
+          "type": "text",
+          "id": "2e95ca6c-f834-4585-b06c-3188f4453672",
+          "grounding": {
+            "box": {
+              "left": 0.04393838346004486,
+              "top": 0.16949021816253662,
+              "right": 0.4842914342880249,
+              "bottom": 0.3001011908054352
+            },
+            "page": 4
+          }
+        },
+        {
+          "markdown": "<a id='a0b50eea-2cf5-432f-847f-19129e45cbe2'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\nDate of Birth: 1969-08-14\nAge: 56\nGender: Male\nAddress: 245 Mission St, San Francisco, CA 94105\nPrimary Language: Spanish\nPhone Number: (415) 555-0198",
+          "type": "text",
+          "id": "a0b50eea-2cf5-432f-847f-19129e45cbe2",
+          "grounding": {
+            "box": {
+              "left": 0.042744606733322144,
+              "top": 0.33834511041641235,
+              "right": 0.5211918354034424,
+              "bottom": 0.6040080189704895
+            },
+            "page": 4
+          }
+        },
+        {
+          "markdown": "<a id='877d45d9-147c-4689-9822-639b8a3c45b3'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\nPayer Name: BlueCross\nPlan Type: PPO\nAuthorization Required: Yes\nAuthorization Status: Approved\nAuthorization Start Date: 01/05/2026\nAuthorization End Date: 02/04/2026\nAuthorized Units: 1",
+          "type": "text",
+          "id": "877d45d9-147c-4689-9822-639b8a3c45b3",
+          "grounding": {
+            "box": {
+              "left": 0.0421803742647171,
+              "top": 0.6403549909591675,
+              "right": 0.38992559909820557,
+              "bottom": 0.9411951303482056
+            },
+            "page": 4
+          }
+        },
+        {
+          "markdown": "<a id='9b065199-0ff0-4ba2-b857-f257b3cf2932'></a>\n\nUnit Type: SCANS",
+          "type": "marginalia",
+          "id": "9b065199-0ff0-4ba2-b857-f257b3cf2932",
+          "grounding": {
+            "box": {
+              "left": 0.044740818440914154,
+              "top": 0.03557535260915756,
+              "right": 0.22925782203674316,
+              "bottom": 0.06335638463497162
+            },
+            "page": 5
+          }
+        },
+        {
+          "markdown": "<a id='b76ad65e-257b-4df1-a580-aead3d9accf5'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee",
+          "type": "text",
+          "id": "b76ad65e-257b-4df1-a580-aead3d9accf5",
+          "grounding": {
+            "box": {
+              "left": 0.044092923402786255,
+              "top": 0.10316397249698639,
+              "right": 0.2997443974018097,
+              "bottom": 0.19929330050945282
+            },
+            "page": 5
+          }
+        },
+        {
+          "markdown": "<a id='63344b2f-8005-4dff-b861-66244f133dc8'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\nHome Assessment Required: No\nPatient Responsive: High\nContact Attempts Made: 1",
+          "type": "text",
+          "id": "63344b2f-8005-4dff-b861-66244f133dc8",
+          "grounding": {
+            "box": {
+              "left": 0.043668583035469055,
+              "top": 0.23686955869197845,
+              "right": 0.37691664695739746,
+              "bottom": 0.40117204189300537
+            },
+            "page": 5
+          }
+        },
+        {
+          "markdown": "<a id='4a7c585a-7727-42ff-a3f7-c4802483c78e'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.",
+          "type": "text",
+          "id": "4a7c585a-7727-42ff-a3f7-c4802483c78e",
+          "grounding": {
+            "box": {
+              "left": 0.042841970920562744,
+              "top": 0.440737783908844,
+              "right": 0.9564306735992432,
+              "bottom": 0.534464955329895
+            },
+            "page": 5
+          }
+        },
+        {
+          "markdown": "<a id='7442123e-580f-45b9-a6f2-91f785feae56'></a>\n\nFILE: visit_note_REF-1001.txt",
+          "type": "text",
+          "id": "7442123e-580f-45b9-a6f2-91f785feae56",
+          "grounding": {
+            "box": {
+              "left": 0.043815746903419495,
+              "top": 0.03563675284385681,
+              "right": 0.3311169147491455,
+              "bottom": 0.0630786120891571
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='3d518e28-2caf-456a-9a6d-549570d625f0'></a>\n\nVISIT COMPLETION NOTE",
+          "type": "text",
+          "id": "3d518e28-2caf-456a-9a6d-549570d625f0",
+          "grounding": {
+            "box": {
+              "left": 0.04544594883918762,
+              "top": 0.1023082286119461,
+              "right": 0.31271257996559143,
+              "bottom": 0.12947238981723785
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='a9217840-5221-446c-b52f-cc69d6a75def'></a>\n\nReferral ID: REF-1001\nPatient Name: John Martinez\nDate of Birth: 1969-08-14",
+          "type": "text",
+          "id": "a9217840-5221-446c-b52f-cc69d6a75def",
+          "grounding": {
+            "box": {
+              "left": 0.0445578396320343,
+              "top": 0.17031922936439514,
+              "right": 0.32103946805000305,
+              "bottom": 0.2657935321331024
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='62f215d2-acd1-42fb-8b32-668787332857'></a>\n\nService Performed:\n\nService Category: Imaging\n\nProcedure: MRI - Knee",
+          "type": "text",
+          "id": "62f215d2-acd1-42fb-8b32-668787332857",
+          "grounding": {
+            "box": {
+              "left": 0.044057756662368774,
+              "top": 0.3054773211479187,
+              "right": 0.29993417859077454,
+              "bottom": 0.4001811146736145
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='5756ba81-b246-4508-a7b4-4198fb9f4662'></a>\n\nDate of Service: 01/07/2026\n\nTime In: 10:00 AM\n\nTime Out: 10:45 AM\n\nUnits Delivered: 1\n\nUnit Type: SCANS",
+          "type": "text",
+          "id": "5756ba81-b246-4508-a7b4-4198fb9f4662",
+          "grounding": {
+            "box": {
+              "left": 0.04447081685066223,
+              "top": 0.4399489462375641,
+              "right": 0.3097338080406189,
+              "bottom": 0.6036967039108276
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='54a8d23d-107d-41f6-a7e8-6b3b1460185c'></a>\n\nRendering Staff:\n\nTechnician Name: Alex Chen\n\nTechnician ID: TECH-204",
+          "type": "text",
+          "id": "54a8d23d-107d-41f6-a7e8-6b3b1460185c",
+          "grounding": {
+            "box": {
+              "left": 0.04455007612705231,
+              "top": 0.6424910426139832,
+              "right": 0.32211148738861084,
+              "bottom": 0.7363869547843933
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='44b9bf42-e488-48a1-9184-ae1be099c16d'></a>\n\nLocation:\n\nFacility: SF Imaging Center\n\nCity: San Francisco, CA",
+          "type": "text",
+          "id": "44b9bf42-e488-48a1-9184-ae1be099c16d",
+          "grounding": {
+            "box": {
+              "left": 0.043521493673324585,
+              "top": 0.7772601246833801,
+              "right": 0.3058323860168457,
+              "bottom": 0.8726012110710144
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='65753aec-828d-46e3-a6a3-0c019ee00956'></a>\n\nVisit Outcome:",
+          "type": "text",
+          "id": "65753aec-828d-46e3-a6a3-0c019ee00956",
+          "grounding": {
+            "box": {
+              "left": 0.04608171433210373,
+              "top": 0.9121354818344116,
+              "right": 0.1923394799232483,
+              "bottom": 0.9375317096710205
+            },
+            "page": 6
+          }
+        },
+        {
+          "markdown": "<a id='18cb3b87-9cb2-47af-bf3f-5ef3c83dfd54'></a>\n\nService completed successfully.\nNo complications reported.\nPatient tolerated procedure well.",
+          "type": "text",
+          "id": "18cb3b87-9cb2-47af-bf3f-5ef3c83dfd54",
+          "grounding": {
+            "box": {
+              "left": 0.044434934854507446,
+              "top": 0.03656547889113426,
+              "right": 0.3495853841304779,
+              "bottom": 0.13008882105350494
+            },
+            "page": 7
+          }
+        },
+        {
+          "markdown": "<a id='006141c9-1fe0-4854-a7d8-12f1403ecc54'></a>\n\nDocumentation:\nVisit verified and signed by technician.",
+          "type": "text",
+          "id": "006141c9-1fe0-4854-a7d8-12f1403ecc54",
+          "grounding": {
+            "box": {
+              "left": 0.04618605971336365,
+              "top": 0.17240603268146515,
+              "right": 0.39967817068099976,
+              "bottom": 0.23145709931850433
+            },
+            "page": 7
+          }
+        },
+        {
+          "markdown": "<a id='e188ec26-b351-4d54-aa11-1d96263e9a3f'></a>\n\nSignature: Alex Chen\n\nSigned Date: 01/07/2026",
+          "type": "text",
+          "id": "e188ec26-b351-4d54-aa11-1d96263e9a3f",
+          "grounding": {
+            "box": {
+              "left": 0.04540782421827316,
+              "top": 0.27264323830604553,
+              "right": 0.2843343913555145,
+              "bottom": 0.3319229185581207
+            },
+            "page": 7
+          }
+        }
+      ],
+      "confidence": 0.95
+    },
+    "document_type": "unknown",
+    "processing_time": 7.02485990524292,
+    "metadata": {
+      "filename": "packet_REF-1001.pdf",
+      "org_id": null,
+      "page_count": 8,
+      "duration_ms": 6104,
+      "credit_usage": 24.0,
+      "job_id": "8b4ab0afe4c04a87bf054b49dbe83da8",
+      "version": "dpt-2-20251103",
+      "failed_pages": []
+    }
+  }
+}

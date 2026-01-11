@@ -1,0 +1,27 @@
+referral_id,key,value
+REF-1001,Referral ID,REF-1001
+REF-1001,Referral Source,Primary Care Physician (PCP)
+REF-1001,Referral Received Date,01/02/2026
+REF-1001,Urgency Level,Routine
+REF-1001,Patient Full Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Age,56
+REF-1001,Gender,Male
+REF-1001,Address,"245 Mission St, San Francisco, CA 94105"
+REF-1001,Primary Language,Spanish
+REF-1001,Phone Number,(415) 555-0198
+REF-1001,Insurance Active,Yes
+REF-1001,Payer Name,BlueCross
+REF-1001,Plan Type,PPO
+REF-1001,Authorization Required,Yes
+REF-1001,Authorization Status,Approved
+REF-1001,Authorization Start Date,01/05/2026
+REF-1001,Authorization End Date,02/04/2026
+REF-1001,Authorized Units,1
+REF-1001,Unit Type,SCANS
+REF-1001,Service Category,Imaging
+REF-1001,Service Type,MRI - Knee
+REF-1001,Referral Documents Complete,Yes
+REF-1001,Home Assessment Required,No
+REF-1001,Patient Responsive,High
+REF-1001,Contact Attempts Made,1
