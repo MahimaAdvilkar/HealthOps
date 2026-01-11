@@ -3,7 +3,12 @@ import { agentService, WorkflowResult, PendingReferral } from '../services/agent
 import { AGENT_UI_CONFIG } from '../config/agentUiConfig';
 import '../styles/AgentScheduler.css';
 
-const AgentScheduler: React.FC = () => {
+interface AgentSchedulerProps {
+  dataVersion: number;
+  onDataChanged: () => void;
+}
+
+const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChanged }) => {
   const [pendingReferrals, setPendingReferrals] = useState<PendingReferral[]>([]);
   const [selectedReferral, setSelectedReferral] = useState<PendingReferral | null>(null);
   const [workflowResult, setWorkflowResult] = useState<WorkflowResult | null>(null);
@@ -12,10 +17,12 @@ const AgentScheduler: React.FC = () => {
   const [scheduling, setScheduling] = useState(false);
   const [scheduleSuccess, setScheduleSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [scheduleApplying, setScheduleApplying] = useState(false);
+  const [scheduleMessage, setScheduleMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadPendingReferrals();
-  }, []);
+  }, [dataVersion]);
 
   const loadPendingReferrals = async () => {
     try {
@@ -50,43 +57,37 @@ const AgentScheduler: React.FC = () => {
   };
 
   const handleScheduleNow = async () => {
-    if (!selectedReferral) return;
-    
+    if (!workflowResult) return;
+    if (!workflowResult.schedule_recommendation?.can_schedule) return;
+
+    const caregiverId =
+      workflowResult.schedule_recommendation.caregiver_id || workflowResult.matches?.[0]?.caregiver_id;
+    if (!caregiverId) {
+      setError('No caregiver available to schedule');
+      return;
+    }
+
     try {
-      setScheduling(true);
+      setScheduleApplying(true);
+      setScheduleMessage(null);
       setError(null);
-      
-      // Call schedule endpoint (it will send email automatically)
-      const response = await fetch(
-        `http://localhost:8000/api/v1/schedule/confirm?referral_id=${selectedReferral.referral_id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      
-      if (!response.ok) {
-        throw new Error('Failed to schedule referral');
-      }
-      
-      const result = await response.json();
-      
+
+      const resp = await agentService.applySchedule({
+        referral_id: workflowResult.referral_id,
+        caregiver_id: caregiverId,
+        schedule_status: 'SCHEDULED',
+      });
+
       setScheduleSuccess(true);
-      
-      // Show success message
-      alert(`Referral ${selectedReferral.referral_id} scheduled successfully!\n\nConfirmation email sent to: ${result.email_details?.to_email || 'customer'}`);
-      
-      // Reload pending referrals
+      setScheduleMessage(`Scheduled ${resp.referral_id} with ${caregiverId} (${resp.mode})`);
+
+      onDataChanged();
       await loadPendingReferrals();
-      
     } catch (err) {
       setError('Failed to schedule referral');
       console.error(err);
-      alert('Failed to schedule referral. Please try again.');
     } finally {
-      setScheduling(false);
+      setScheduleApplying(false);
     }
   };
 
@@ -126,6 +127,7 @@ const AgentScheduler: React.FC = () => {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {scheduleMessage && <div className="success-message">{scheduleMessage}</div>}
 
       <div className="scheduler-layout">
         {/* Left Panel: Pending Referrals */}
@@ -367,12 +369,12 @@ const AgentScheduler: React.FC = () => {
                 </div>
                 
                 {workflowResult.schedule_recommendation.can_schedule && (
-                  <button 
+                  <button
                     className="schedule-now-btn"
                     onClick={handleScheduleNow}
-                    disabled={scheduling || scheduleSuccess}
+                    disabled={scheduleApplying || scheduleSuccess}
                   >
-                    {scheduling ? 'Scheduling...' : scheduleSuccess ? 'Scheduled!' : 'Schedule Now'}
+                    {scheduleApplying ? 'Scheduling...' : scheduleSuccess ? 'Scheduled!' : 'Schedule Now'}
                   </button>
                 )}
               </div>

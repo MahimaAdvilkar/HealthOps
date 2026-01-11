@@ -207,7 +207,12 @@ class DatabaseService:
         try:
             # Ensure we have a connection
             if not self.connection or not self.cursor:
-                self.connect()
+                conn_result = self.connect()
+                if not conn_result.get("success"):
+                    return {
+                        "success": False,
+                        "message": conn_result.get("message", "Database connection failed")
+                    }
             
             self.cursor.execute(sql_query, params)
             
@@ -231,7 +236,11 @@ class DatabaseService:
                 }
                 
         except Exception as e:
-            self.connection.rollback()
+            if self.connection:
+                try:
+                    self.connection.rollback()
+                except Exception:
+                    pass
             return {
                 "success": False,
                 "message": f"Query failed: {str(e)}"

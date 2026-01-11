@@ -1,9 +1,82 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 20px;
+}
+
+.dashboard-section {
+  background: #f8f9fb;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+}
+
+.dashboard-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  color: #1f2937;
+}
+
+.dashboard-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.dashboard-title-row .dashboard-title {
+  margin: 0;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.intake-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.intake-btn.secondary {
+  background: #111827;
+}
+
+.intake-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(102,126,234,0.25);
+}
+
+.intake-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.dashboard-message {
+  margin: 0 0 16px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #374151;
+}
+
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  padding: 20px;
-  margin-bottom: 20px;
 }
 
 .stat-card {
@@ -52,6 +125,76 @@
 
 .stat-card.clickable:hover .stat-hint {
   opacity: 1;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.dashboard-funnel h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.funnel-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.funnel-table th,
+.funnel-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f0f2f5;
+  text-align: left;
+  font-size: 14px;
+}
+
+.funnel-table th {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+}
+
+.funnel-table tr:last-child td {
+  border-bottom: none;
+}
+
+.dashboard-empty {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  border: 1px dashed #d1d5db;
+  color: #6b7280;
 }
 
 .loading {

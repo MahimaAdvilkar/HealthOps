@@ -73,3 +73,18 @@ class DataStatsResponse(BaseModel):
     active_referrals: int
     total_caregivers: int
     active_caregivers: int
+
+
+class DashboardCard(BaseModel):
+    title: str
+    value: str
+
+
+class FunnelStage(BaseModel):
+    stage: str
+    count: int
+
+
+class DashboardMetricsResponse(BaseModel):
+    cards: List[DashboardCard]
+    funnel: List[FunnelStage]

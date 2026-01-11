@@ -76,5 +76,9 @@ htmlcov/
 # Generated pipeline outputs
 data/documents/extracted/pipeline_outcomes.csv
 
+# Runtime/demo state (file-mode persistence)
+data/*runtime*.json
+data/*overrides*.json
+
 
 notes.txt

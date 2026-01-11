@@ -48,7 +48,16 @@ export interface PendingReferral {
   [key: string]: any;
 }
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+export interface ApplyScheduleResponse {
+  success: boolean;
+  referral_id: string;
+  schedule_status: string;
+  scheduled_date: string;
+  assigned_caregiver_id?: string | null;
+  mode: 'db' | 'file';
+}
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8022';
 
 export const agentService = {
   async processReferral(referralId: string): Promise<WorkflowResult> {
@@ -74,5 +83,28 @@ export const agentService = {
     
     const data = await response.json();
     return data.referrals;
+  },
+
+  async applySchedule(input: {
+    referral_id: string;
+    caregiver_id?: string;
+    scheduled_date?: string;
+    schedule_status?: string;
+  }): Promise<ApplyScheduleResponse> {
+    const params = new URLSearchParams();
+    params.append('referral_id', input.referral_id);
+    if (input.caregiver_id) params.append('caregiver_id', input.caregiver_id);
+    if (input.scheduled_date) params.append('scheduled_date', input.scheduled_date);
+    if (input.schedule_status) params.append('schedule_status', input.schedule_status);
+
+    const response = await fetch(`${API_BASE_URL}/api/v1/scheduling/apply?${params.toString()}`, {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to apply schedule');
+    }
+
+    return response.json();
   },
 };

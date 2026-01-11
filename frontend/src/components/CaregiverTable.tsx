@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { apiService, Caregiver } from '../services/api';
 import '../styles/CaregiverTable.css';
 
-const CaregiverTable: React.FC = () => {
+interface CaregiverTableProps {
+  dataVersion: number;
+}
+
+const CaregiverTable: React.FC<CaregiverTableProps> = ({ dataVersion }) => {
   const [caregivers, setCaregivers] = useState<Caregiver[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,11 +16,7 @@ const CaregiverTable: React.FC = () => {
     skills: '',
   });
 
-  useEffect(() => {
-    loadCaregivers();
-  }, [filters]);
-
-  const loadCaregivers = async () => {
+  const loadCaregivers = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiService.getCaregivers({
@@ -33,7 +33,11 @@ const CaregiverTable: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadCaregivers();
+  }, [loadCaregivers, dataVersion]);
 
   if (loading) return <div className="loading">Loading caregivers...</div>;
   if (error) return <div className="error">{error}</div>;

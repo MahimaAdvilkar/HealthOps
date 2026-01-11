@@ -1,0 +1,90 @@
+.pdf-intake {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.pdf-intake-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pdf-intake-subtitle {
+  margin: 0 0 16px;
+  color: #666;
+}
+
+.pdf-intake-card {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.pdf-intake-btn {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pdf-intake-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pdf-intake-files {
+  margin-top: 14px;
+}
+
+.pdf-intake-files-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.pdf-intake-error {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #a8071a;
+}
+
+.pdf-intake-result {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+}
+
+.pdf-intake-result-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.pdf-intake-created-title {
+  font-weight: 700;
+  margin: 10px 0 6px;
+}
+
+.pdf-intake-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.pdf-intake-link {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  cursor: pointer;
+}
