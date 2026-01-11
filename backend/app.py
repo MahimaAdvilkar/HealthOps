@@ -18,6 +18,8 @@ from src.services.landingai_service import LandingAIService
 from src.services.agent_workflow import AgentWorkflow
 from src.services.crew_workflow import HealthOpsCrewWorkflow
 from src.services.email_service import email_service
+from src.services.rules_engine import rules_engine
+from src.services.sorting_agent import sorting_agent
 from database.db_service import DatabaseService
 
 
@@ -754,7 +756,7 @@ async def process_referral_with_agents(referral_id: str):
 async def get_pending_referrals():
     """
     Get referrals that are waiting for scheduling
-    Limit is loaded from agent_config.yaml
+    Uses rules engine to filter, then AI Sorting Agent to intelligently prioritize
     """
     try:
         if not db_service or not agent_workflow:
@@ -771,20 +773,35 @@ async def get_pending_referrals():
         except:
             pass
         
-        result = db_service.query(f"""
-            SELECT * FROM referrals 
-            WHERE schedule_status = 'NOT_SCHEDULED'
-              AND insurance_active = 'Y'
-              AND (auth_required = 'N' OR auth_status = 'APPROVED')
-              AND service_complete = 'N'
-            ORDER BY 
-                CASE WHEN urgency = 'Urgent' THEN 1 ELSE 2 END,
-                referral_received_date ASC
-            LIMIT {max_pending}
-        """)
+        # Step 1: Use rules engine to build WHERE clause (filtering only)
+        print(f"\n{'='*60}")
+        print(f"STEP 1: APPLYING FILTER RULES")
+        print(f"{'='*60}")
+        
+        sql_parts = rules_engine.generate_sql_where_clause()
+        
+        print(f"WHERE Clause: {sql_parts.get('where_clause')}")
+        print(f"{'='*60}\n")
+        
+        # Build query WITHOUT ORDER BY (sorting will be done by AI)
+        query = f"SELECT * FROM referrals"
+        
+        if sql_parts.get('where_clause'):
+            query += f" WHERE {sql_parts['where_clause']}"
+        
+        # Get more records than needed so AI can pick the best ones
+        query += f" LIMIT {max_pending * 2}"
+        
+        result = db_service.query(query)
         
         if not result['success']:
             raise HTTPException(status_code=500, detail=result['message'])
+        
+        # Step 2: Use AI Sorting Agent to intelligently prioritize
+        sorted_referrals = sorting_agent.sort_referrals(result['data'])
+        
+        # Step 3: Return top N after AI sorting
+        final_referrals = sorted_referrals[:max_pending]
         
         return {
             "success": True,
@@ -798,6 +815,31 @@ async def get_pending_referrals():
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch pending referrals: {str(e)}"
+        )
+
+
+@app.post("/api/v1/agent/reload-rules")
+async def reload_scheduler_rules():
+    """
+    Reload scheduler rules from config/scheduler_rules.txt
+    Allows updating rules without restarting the server
+    """
+    try:
+        rules_engine.reload_rules()
+        sql_parts = rules_engine.generate_sql_where_clause()
+        
+        return {
+            "success": True,
+            "message": "Scheduler rules reloaded successfully",
+            "rules_preview": {
+                "where_clause": sql_parts.get('where_clause'),
+                "order_by": sql_parts.get('order_by')
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to reload rules: {str(e)}"
         )
 
 
@@ -967,6 +1009,12 @@ async def schedule_referral(referral_id: str, caregiver_id: Optional[str] = None
         Scheduling result with email confirmation status
     """
     try:
+        print(f"\n{'='*60}")
+        print(f"SCHEDULE REQUEST RECEIVED")
+        print(f"Referral ID: {referral_id}")
+        print(f"Caregiver ID: {caregiver_id}")
+        print(f"{'='*60}\n")
+        
         if not db_service:
             raise HTTPException(status_code=500, detail="Database service not initialized")
         
@@ -975,10 +1023,13 @@ async def schedule_referral(referral_id: str, caregiver_id: Optional[str] = None
             f"SELECT * FROM referrals WHERE referral_id = '{referral_id}'"
         )
         
+        print(f"Referral query result: {referral_result.get('success')}")
+        
         if not referral_result['success'] or not referral_result['data']:
             raise HTTPException(status_code=404, detail=f"Referral {referral_id} not found")
         
         referral_data = referral_result['data'][0]
+        print(f"Referral data retrieved: {referral_data.get('referral_id')}")
         
         # Fetch caregiver data if provided
         caregiver_data = None
@@ -990,21 +1041,29 @@ async def schedule_referral(referral_id: str, caregiver_id: Optional[str] = None
                 caregiver_data = caregiver_result['data'][0]
         
         # Update referral status to SCHEDULED
-        update_result = db_service.execute(f"""
+        print(f"Updating referral status to SCHEDULED...")
+        update_result = db_service.query(f"""
             UPDATE referrals 
-            SET schedule_status = 'SCHEDULED',
-                assigned_caregiver_id = {f"'{caregiver_id}'" if caregiver_id else 'NULL'}
+            SET schedule_status = 'SCHEDULED'
             WHERE referral_id = '{referral_id}'
         """)
         
+        print(f"Update result: {update_result}")
+        
         if not update_result['success']:
-            raise HTTPException(status_code=500, detail="Failed to update referral status")
+            error_msg = update_result.get('message', 'Unknown error')
+            print(f"Database update failed: {error_msg}")
+            raise HTTPException(status_code=500, detail=f"Failed to update referral status: {error_msg}")
         
         # Send scheduling confirmation email
+        print(f"Sending email confirmation...")
+        print(f"Email service available: {email_service is not None}")
         email_result = email_service.send_scheduling_confirmation(
             referral_data=referral_data,
             caregiver_data=caregiver_data
         )
+        
+        print(f"Email result: {email_result}")
         
         return {
             "success": True,
@@ -1019,6 +1078,13 @@ async def schedule_referral(referral_id: str, caregiver_id: Optional[str] = None
     except HTTPException:
         raise
     except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"\n{'='*60}")
+        print(f"SCHEDULE ERROR:")
+        print(f"{'='*60}")
+        print(error_trace)
+        print(f"{'='*60}\n")
         raise HTTPException(
             status_code=500,
             detail=f"Scheduling failed: {str(e)}"
