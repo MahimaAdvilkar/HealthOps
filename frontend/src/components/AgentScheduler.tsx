@@ -161,7 +161,7 @@ const AgentScheduler: React.FC = () => {
                 >
                   {processing && selectedReferral?.referral_id === referral.referral_id
                     ? 'Processing...'
-                    : 'Run AI Agents'}
+                    : 'Analyze'}
                 </button>
               </div>
             ))}
@@ -180,7 +180,7 @@ const AgentScheduler: React.FC = () => {
           {selectedReferral && !workflowResult && !processing && (
             <div className="selected-info">
               <h3>Selected: {selectedReferral.referral_id}</h3>
-              <p>Click "Run AI Agents" to process this referral</p>
+              <p>Click "Analyze" to process this referral</p>
             </div>
           )}
 
