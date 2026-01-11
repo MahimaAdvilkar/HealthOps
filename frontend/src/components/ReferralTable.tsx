@@ -20,7 +20,7 @@ const ReferralTable: React.FC = () => {
     try {
       setLoading(true);
       const data = await apiService.getReferrals({
-        limit: 100,
+        limit: 50,
         urgency: filters.urgency || undefined,
         agent_segment: filters.agent_segment || undefined,
         schedule_status: filters.schedule_status || undefined,

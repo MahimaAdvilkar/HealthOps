@@ -52,6 +52,8 @@ const AgentScheduler: React.FC = () => {
   };
 
   const getActionColor = (action: string) => {
+    if (!action) return AGENT_UI_CONFIG.actionColors.colors.default;
+    
     const upperAction = action.toUpperCase();
     
     if (AGENT_UI_CONFIG.actionColors.scheduleKeywords.some(kw => upperAction.includes(kw))) {

@@ -20,7 +20,7 @@ const CaregiverTable: React.FC = () => {
     try {
       setLoading(true);
       const data = await apiService.getCaregivers({
-        limit: 100,
+        limit: 50,
         city: filters.city || undefined,
         active: filters.active || undefined,
         skills: filters.skills || undefined,
