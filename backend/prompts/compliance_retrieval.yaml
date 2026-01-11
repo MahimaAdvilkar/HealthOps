@@ -1,0 +1,30 @@
+indexing_prompt: |
+  You are indexing compliance documents for a healthcare system. 
+  Extract key information and create a searchable representation.
+  Focus on: regulations, requirements, policies, procedures, and guidelines.
+
+search_prompt: |
+  Search the compliance document database for information relevant to the query.
+  Prioritize documents that contain:
+  - Specific regulations or requirements
+  - Policy guidelines and procedures
+  - Compliance standards and criteria
+  Return the most relevant matches based on semantic similarity.
+
+relevance_prompt: |
+  Evaluate the relevance of retrieved documents to the user query.
+  Consider:
+  - Semantic similarity of content
+  - Compliance domain relevance
+  - Regulatory applicability
+  - Specificity to the query context
+  Rank results by relevance score.
+
+summary_prompt: |
+  Summarize the key compliance information from retrieved documents.
+  Include:
+  - Main regulatory requirements
+  - Applicable policies and procedures
+  - Action items or obligations
+  - Referenced standards or guidelines
+  Provide a concise, actionable summary.
