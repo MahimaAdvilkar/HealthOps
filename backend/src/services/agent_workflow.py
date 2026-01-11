@@ -221,7 +221,8 @@ class CaregiverMatchingAgent:
     
     def __init__(self):
         self.config = ConfigLoader()
-        self.agent_name = "Caregiver Matching Agent"        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
+        self.agent_name = "Caregiver Matching Agent"       
+        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
         self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"        
         # Load scoring parameters from config
         self.city_match_points = self.config.get_yaml('matching_agent', 'scoring', 'city_match_points', default=40)
