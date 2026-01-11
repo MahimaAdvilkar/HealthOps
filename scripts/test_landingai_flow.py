@@ -1,6 +1,7 @@
 import os
 import json
 import glob
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -101,6 +102,50 @@ def main():
             json.dump(out, f, indent=2)
         print(f"[OK] Wrote: {out_path}")
 
+        # Per-table CSV export when tables are present
+        tables = None
+        if isinstance(result, dict) and result.get("extracted_data"):
+            tables = result["extracted_data"].get("tables")
+        if isinstance(tables, list) and tables:
+            tables_dir = os.path.join(OUT_DIR, "tables")
+            os.makedirs(tables_dir, exist_ok=True)
+
+            def parse_markdown_table(md: str):
+                lines = [l.strip() for l in md.splitlines() if "|" in l]
+                if len(lines) < 2:
+                    return [], []
+                # Find header and separator indices
+                header_idx = 0
+                sep_idx = 1 if len(lines) > 1 else -1
+                header = [c.strip() for c in lines[header_idx].split("|")]
+                if header and header[0] == "":
+                    header = header[1:]
+                if header and header[-1] == "":
+                    header = header[:-1]
+                rows = []
+                for l in lines[sep_idx+1:]:
+                    cells = [c.strip() for c in l.split("|")]
+                    if cells and cells[0] == "":
+                        cells = cells[1:]
+                    if cells and cells[-1] == "":
+                        cells = cells[:-1]
+                    if any(cell for cell in cells):
+                        rows.append(cells)
+                return header, rows
+
+            import csv
+            for idx, chunk in enumerate(tables):
+                md = chunk.get("markdown") or ""
+                header, rows = parse_markdown_table(md)
+                csv_path = os.path.join(tables_dir, f"{ref_id}_table_{idx+1}.csv")
+                with open(csv_path, "w", newline="", encoding="utf-8") as f:
+                    writer = csv.writer(f)
+                    if header:
+                        writer.writerow(header)
+                    for r in rows:
+                        writer.writerow(r)
+                print(f"[OK] Table CSV: {csv_path}")
+
     index_path = os.path.join(OUT_DIR, "extraction_index.json")
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
@@ -153,6 +198,99 @@ def main():
         print(f"📑 KV summary CSV: {kv_csv_path}")
     except Exception as e:
         print(f"⚠️ Failed to write KV summary CSV: {e}")
+
+    # Build a normalized table CSV for downstream systems
+    normalized_csv_path = os.path.join(OUT_DIR, "normalized_summary.csv")
+    try:
+        import csv
+        # Aggregate per referral
+        by_ref: dict[str, dict[str, str]] = {}
+
+        def norm_key(k: str) -> str | None:
+            kl = k.strip().lower()
+            mapping = {
+                "referral id": "referral_id",
+                "patient name": "patient_name",
+                "date of birth": "date_of_birth",
+                "payer": "payer",
+                "payer name": "payer",
+                "plan type": "plan_type",
+                "authorization status": "authorization_status",
+                "authorization number": "authorization_number",
+                "authorization required": "authorization_required",
+                "authorization start date": "authorization_start_date",
+                "authorization end date": "authorization_end_date",
+                "authorized units": "authorized_units",
+                "units used": "units_used",
+                "units delivered": "units_delivered",
+                "unit type": "unit_type",
+                "service category": "service_category",
+                "procedure": "procedure",
+                "date of service": "date_of_service",
+                "ready to bill": "ready_to_bill",
+                "billing hold reason": "billing_hold_reason",
+                "facility": "facility",
+                "city": "city",
+                "technician name": "technician_name",
+                "signed date": "signed_date",
+                "issued date": "issued_date",
+                "issued by": "issued_by",
+            }
+            return mapping.get(kl)
+
+        for row in kv_rows:
+            rid = row["referral_id"]
+            k = row["key"]
+            v = row["value"]
+            nk = norm_key(k)
+            if nk:
+                by_ref.setdefault(rid, {})
+                # do not overwrite referral_id key if exists
+                if nk == "referral_id":
+                    by_ref[rid][nk] = rid
+                else:
+                    by_ref[rid][nk] = v
+
+        # Columns order for consistency
+        cols = [
+            "referral_id",
+            "patient_name",
+            "date_of_birth",
+            "payer",
+            "plan_type",
+            "authorization_required",
+            "authorization_status",
+            "authorization_number",
+            "authorization_start_date",
+            "authorization_end_date",
+            "authorized_units",
+            "units_used",
+            "units_delivered",
+            "unit_type",
+            "service_category",
+            "procedure",
+            "date_of_service",
+            "ready_to_bill",
+            "billing_hold_reason",
+            "facility",
+            "city",
+            "technician_name",
+            "signed_date",
+            "issued_date",
+            "issued_by",
+        ]
+
+        with open(normalized_csv_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=cols)
+            writer.writeheader()
+            for rid, data in by_ref.items():
+                row = {c: data.get(c, "") for c in cols}
+                # ensure referral_id populated
+                row["referral_id"] = rid
+                writer.writerow(row)
+        print(f"📎 Normalized CSV: {normalized_csv_path}")
+    except Exception as e:
+        print(f"⚠️ Failed to write normalized CSV: {e}")
 
 
 if __name__ == "__main__":

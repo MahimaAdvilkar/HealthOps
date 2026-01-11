@@ -1,0 +1,127 @@
+{
+  "referral_id": "REF-1001",
+  "doc_type": "referral_intake",
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/referral_intake_REF-1001.pdf",
+  "extraction": {
+    "success": true,
+    "message": "Document processed successfully",
+    "extracted_data": {
+      "text": "<a id='e0f386c4-a433-46e6-9c93-b3d95abcb886'></a>\n\nREFERRAL INTAKE FORM\n\n<a id='ba06b884-c3f9-4d53-a227-d68d5cc6464f'></a>\n\nReferral ID: REF-1001\n\nReferral Source: Primary Care Physician (PCP)\n\nReferral Received Date: 01/02/2026\n\nUrgency Level: Routine\n\n<a id='4ce56796-c73d-4fcd-b866-53e655666164'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\n\nDate of Birth: 1969-08-14\n\nAge: 56\n\nGender: Male\n\nAddress: 245 Mission St, San Francisco, CA 94105\n\nPrimary Language: Spanish\n\nPhone Number: (415) 555-0198\n\n<a id='f4cac35f-30e2-48fb-8412-af4732eea12e'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\n\nPayer Name: BlueCross\n\nPlan Type: PPO\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS\n\n<!-- PAGE BREAK -->\n\n<a id='ecf647ae-fbc6-45c7-83df-759ebdc4ede7'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee\n\n<a id='9a3be2c1-c9dc-4da4-81ec-1e30141b9db8'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\n\nHome Assessment Required: No\n\nPatient Responsive: High\n\nContact Attempts Made: 1\n\n<a id='3b84caf8-c2a6-42ce-8d85-d98c6c5ff6f0'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.",
+      "tables": [],
+      "key_value_pairs": {},
+      "layout": [
+        {
+          "markdown": "<a id='e0f386c4-a433-46e6-9c93-b3d95abcb886'></a>\n\nREFERRAL INTAKE FORM",
+          "type": "text",
+          "id": "e0f386c4-a433-46e6-9c93-b3d95abcb886",
+          "grounding": {
+            "box": {
+              "left": 0.0449051707983017,
+              "top": 0.03579573705792427,
+              "right": 0.31283605098724365,
+              "bottom": 0.06286001205444336
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='ba06b884-c3f9-4d53-a227-d68d5cc6464f'></a>\n\nReferral ID: REF-1001\n\nReferral Source: Primary Care Physician (PCP)\n\nReferral Received Date: 01/02/2026\n\nUrgency Level: Routine",
+          "type": "text",
+          "id": "ba06b884-c3f9-4d53-a227-d68d5cc6464f",
+          "grounding": {
+            "box": {
+              "left": 0.04442541301250458,
+              "top": 0.1030348688364029,
+              "right": 0.4831768870353699,
+              "bottom": 0.23252050578594208
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='4ce56796-c73d-4fcd-b866-53e655666164'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\n\nDate of Birth: 1969-08-14\n\nAge: 56\n\nGender: Male\n\nAddress: 245 Mission St, San Francisco, CA 94105\n\nPrimary Language: Spanish\n\nPhone Number: (415) 555-0198",
+          "type": "text",
+          "id": "4ce56796-c73d-4fcd-b866-53e655666164",
+          "grounding": {
+            "box": {
+              "left": 0.04264013469219208,
+              "top": 0.27083712816238403,
+              "right": 0.5211141109466553,
+              "bottom": 0.5359578728675842
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='f4cac35f-30e2-48fb-8412-af4732eea12e'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\n\nPayer Name: BlueCross\n\nPlan Type: PPO\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS",
+          "type": "text",
+          "id": "f4cac35f-30e2-48fb-8412-af4732eea12e",
+          "grounding": {
+            "box": {
+              "left": 0.04235999286174774,
+              "top": 0.5732940435409546,
+              "right": 0.3887573480606079,
+              "bottom": 0.9075272083282471
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='ecf647ae-fbc6-45c7-83df-759ebdc4ede7'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee",
+          "type": "text",
+          "id": "ecf647ae-fbc6-45c7-83df-759ebdc4ede7",
+          "grounding": {
+            "box": {
+              "left": 0.042546361684799194,
+              "top": 0.035076700150966644,
+              "right": 0.30132585763931274,
+              "bottom": 0.13241073489189148
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='9a3be2c1-c9dc-4da4-81ec-1e30141b9db8'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\n\nHome Assessment Required: No\n\nPatient Responsive: High\n\nContact Attempts Made: 1",
+          "type": "text",
+          "id": "9a3be2c1-c9dc-4da4-81ec-1e30141b9db8",
+          "grounding": {
+            "box": {
+              "left": 0.04311847686767578,
+              "top": 0.16990511119365692,
+              "right": 0.37839147448539734,
+              "bottom": 0.3342667818069458
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='3b84caf8-c2a6-42ce-8d85-d98c6c5ff6f0'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.",
+          "type": "text",
+          "id": "3b84caf8-c2a6-42ce-8d85-d98c6c5ff6f0",
+          "grounding": {
+            "box": {
+              "left": 0.042841434478759766,
+              "top": 0.3730323314666748,
+              "right": 0.9570193290710449,
+              "bottom": 0.4673014283180237
+            },
+            "page": 1
+          }
+        }
+      ],
+      "confidence": 0.95
+    },
+    "document_type": "referral_intake",
+    "processing_time": 5.46708869934082,
+    "metadata": {
+      "filename": "referral_intake_REF-1001.pdf",
+      "org_id": null,
+      "page_count": 2,
+      "duration_ms": 4766,
+      "credit_usage": 6.0,
+      "job_id": "ff5460e563654524bf215459472524e1",
+      "version": "dpt-2-20251103",
+      "failed_pages": []
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/auth_approval_REF-1001.pdf",
+  "referral_id": "REF-1001",
+  "results": [
+    {
+      "name": "DocumentExtractionAgent",
+      "success": true,
+      "data": {
+        "document_type": "auto",
+        "processing_time": 5.4908270835876465,
+        "table_count": 0,
+        "extracted_data": {
+          "text": "<a id='6689c6fa-86e3-4539-b95c-755eb36a5fec'></a>\n\nAUTHORIZATION APPROVAL NOTICE\n\n<a id='299ea8b2-76af-4c65-8f9c-833e2c7a19bb'></a>\n\nPayer: BlueCross\n\nPlan Type: PPO\n\nAuthorization Status: APPROVED\n\n<a id='45a27c1e-6375-4325-baea-03c0ff411d39'></a>\n\nAuthorization Number: BC-APR-948201\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='ea599baf-488a-4d26-a48d-02e534b390c4'></a>\n\nService Authorized:\nService Category: Imaging\nProcedure: MRI - Knee\n\n<a id='687f9884-2859-4922-a7e4-4d01eacc01d3'></a>\n\nAuthorization Details:\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS\n\n<a id='d74b5c02-7cf8-4799-910b-6ab87bef14d5'></a>\n\nRendering Provider: Any In-Network Imaging Facility\nPlace of Service: Outpatient\n\n<a id='b844ee93-35ab-49d3-8f86-63142cca637d'></a>\n\nNotes:\n\nThis authorization confirms coverage for the service listed above.\n\n<a id='836367c0-fde0-40f7-9558-c2a46ce9cbad'></a>\n\nServices rendered outside the authorization window may not be reimbursed.\n\n<!-- PAGE BREAK -->\n\n<a id='80fabcc9-1555-4e70-a8df-4f2c207395e3'></a>\n\nIssued Date: 01/05/2026\n\n<a id='732618cb-26a6-401c-9e42-86ddfcfe7192'></a>\n\nIssued By: BlueCross Utilization Management",
+          "tables": [],
+          "key_value_pairs": {},
+          "layout": [
+            {
+              "markdown": "<a id='6689c6fa-86e3-4539-b95c-755eb36a5fec'></a>\n\nAUTHORIZATION APPROVAL NOTICE",
+              "type": "text",
+              "id": "6689c6fa-86e3-4539-b95c-755eb36a5fec",
+              "grounding": {
+                "box": {
+                  "left": 0.04477714002132416,
+                  "top": 0.03619154915213585,
+                  "right": 0.42274272441864014,
+                  "bottom": 0.06247493252158165
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='299ea8b2-76af-4c65-8f9c-833e2c7a19bb'></a>\n\nPayer: BlueCross\n\nPlan Type: PPO\n\nAuthorization Status: APPROVED",
+              "type": "text",
+              "id": "299ea8b2-76af-4c65-8f9c-833e2c7a19bb",
+              "grounding": {
+                "box": {
+                  "left": 0.04388098418712616,
+                  "top": 0.10391376912593842,
+                  "right": 0.3674687147140503,
+                  "bottom": 0.1977401226758957
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='45a27c1e-6375-4325-baea-03c0ff411d39'></a>\n\nAuthorization Number: BC-APR-948201\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+              "type": "text",
+              "id": "45a27c1e-6375-4325-baea-03c0ff411d39",
+              "grounding": {
+                "box": {
+                  "left": 0.04483520984649658,
+                  "top": 0.23775792121887207,
+                  "right": 0.41395002603530884,
+                  "bottom": 0.33194416761398315
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='ea599baf-488a-4d26-a48d-02e534b390c4'></a>\n\nService Authorized:\nService Category: Imaging\nProcedure: MRI - Knee",
+              "type": "text",
+              "id": "ea599baf-488a-4d26-a48d-02e534b390c4",
+              "grounding": {
+                "box": {
+                  "left": 0.04440516233444214,
+                  "top": 0.3731229305267334,
+                  "right": 0.3000138998031616,
+                  "bottom": 0.4676944613456726
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='687f9884-2859-4922-a7e4-4d01eacc01d3'></a>\n\nAuthorization Details:\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS",
+              "type": "text",
+              "id": "687f9884-2859-4922-a7e4-4d01eacc01d3",
+              "grounding": {
+                "box": {
+                  "left": 0.04460301995277405,
+                  "top": 0.5081397294998169,
+                  "right": 0.38663244247436523,
+                  "bottom": 0.6704086065292358
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='d74b5c02-7cf8-4799-910b-6ab87bef14d5'></a>\n\nRendering Provider: Any In-Network Imaging Facility\nPlace of Service: Outpatient",
+              "type": "text",
+              "id": "d74b5c02-7cf8-4799-910b-6ab87bef14d5",
+              "grounding": {
+                "box": {
+                  "left": 0.04525160789489746,
+                  "top": 0.7107135653495789,
+                  "right": 0.5288930535316467,
+                  "bottom": 0.7683129906654358
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='b844ee93-35ab-49d3-8f86-63142cca637d'></a>\n\nNotes:\n\nThis authorization confirms coverage for the service listed above.",
+              "type": "text",
+              "id": "b844ee93-35ab-49d3-8f86-63142cca637d",
+              "grounding": {
+                "box": {
+                  "left": 0.04500359296798706,
+                  "top": 0.8120785355567932,
+                  "right": 0.640592634677887,
+                  "bottom": 0.869716227054596
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='836367c0-fde0-40f7-9558-c2a46ce9cbad'></a>\n\nServices rendered outside the authorization window may not be reimbursed.",
+              "type": "text",
+              "id": "836367c0-fde0-40f7-9558-c2a46ce9cbad",
+              "grounding": {
+                "box": {
+                  "left": 0.04605913162231445,
+                  "top": 0.8797476887702942,
+                  "right": 0.7364628314971924,
+                  "bottom": 0.9039629101753235
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='80fabcc9-1555-4e70-a8df-4f2c207395e3'></a>\n\nIssued Date: 01/05/2026",
+              "type": "marginalia",
+              "id": "80fabcc9-1555-4e70-a8df-4f2c207395e3",
+              "grounding": {
+                "box": {
+                  "left": 0.046089641749858856,
+                  "top": 0.03764177858829498,
+                  "right": 0.28043225407600403,
+                  "bottom": 0.06087978184223175
+                },
+                "page": 1
+              }
+            },
+            {
+              "markdown": "<a id='732618cb-26a6-401c-9e42-86ddfcfe7192'></a>\n\nIssued By: BlueCross Utilization Management",
+              "type": "text",
+              "id": "732618cb-26a6-401c-9e42-86ddfcfe7192",
+              "grounding": {
+                "box": {
+                  "left": 0.04675872623920441,
+                  "top": 0.071541927754879,
+                  "right": 0.4699900150299072,
+                  "bottom": 0.09540297836065292
+                },
+                "page": 1
+              }
+            }
+          ],
+          "confidence": 0.95
+        }
+      },
+      "issues": null
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": false,
+      "data": {},
+      "issues": [
+        "Missing extracted_text in context"
+      ]
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": true,
+      "data": {
+        "normalized": {
+          "payer": "BlueCross",
+          "plan_type": "PPO",
+          "authorization_status": "APPROVED",
+          "authorization_number": "BC-APR-948201",
+          "patient_name": "John Martinez",
+          "date_of_birth": "1969-08-14",
+          "service_category": "Imaging",
+          "procedure": "MRI - Knee",
+          "authorization_start_date": "01/05/2026",
+          "authorization_end_date": "02/04/2026",
+          "authorized_units": "1",
+          "unit_type": "SCANS",
+          "issued_date": "01/05/2026",
+          "issued_by": "BlueCross Utilization Management",
+          "referral_id": "REF-1001"
+        }
+      },
+      "issues": null
+    }
+  ]
+}

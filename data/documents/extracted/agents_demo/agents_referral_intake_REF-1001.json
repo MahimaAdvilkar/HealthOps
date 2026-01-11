@@ -1,0 +1,150 @@
+{
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/referral_intake_REF-1001.pdf",
+  "referral_id": "REF-1001",
+  "results": [
+    {
+      "name": "DocumentExtractionAgent",
+      "success": true,
+      "data": {
+        "document_type": "auto",
+        "processing_time": 5.529060125350952,
+        "table_count": 0,
+        "extracted_data": {
+          "text": "<a id='ee4e10a6-7648-43bd-9b40-f062e48c36ed'></a>\n\nREFERRAL INTAKE FORM\n\n<a id='4265fbf5-e4d6-4dbc-8906-f4d21845b0b9'></a>\n\nReferral ID: REF-1001\n\nReferral Source: Primary Care Physician (PCP)\n\nReferral Received Date: 01/02/2026\n\nUrgency Level: Routine\n\n<a id='afbfbfcb-0ba5-464b-9119-4179b7e3c5f4'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\n\nDate of Birth: 1969-08-14\n\nAge: 56\n\nGender: Male\n\nAddress: 245 Mission St, San Francisco, CA 94105\n\nPrimary Language: Spanish\n\nPhone Number: (415) 555-0198\n\n<a id='25dd378e-33f9-4d65-9825-f7466b70e6f7'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\n\nPayer Name: BlueCross\n\nPlan Type: PPO\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS\n\n<!-- PAGE BREAK -->\n\n<a id='c4a8c892-3b42-4b12-8406-063ba6fe34d8'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee\n\n<a id='8e539e31-8563-457a-9e4b-92e0fb0569ef'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\n\nHome Assessment Required: No\n\nPatient Responsive: High\n\nContact Attempts Made: 1\n\n<a id='ddd64e38-40bb-461c-ada2-14609114d366'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.",
+          "tables": [],
+          "key_value_pairs": {},
+          "layout": [
+            {
+              "markdown": "<a id='ee4e10a6-7648-43bd-9b40-f062e48c36ed'></a>\n\nREFERRAL INTAKE FORM",
+              "type": "text",
+              "id": "ee4e10a6-7648-43bd-9b40-f062e48c36ed",
+              "grounding": {
+                "box": {
+                  "left": 0.0449051707983017,
+                  "top": 0.03579573705792427,
+                  "right": 0.31283605098724365,
+                  "bottom": 0.06286001205444336
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='4265fbf5-e4d6-4dbc-8906-f4d21845b0b9'></a>\n\nReferral ID: REF-1001\n\nReferral Source: Primary Care Physician (PCP)\n\nReferral Received Date: 01/02/2026\n\nUrgency Level: Routine",
+              "type": "text",
+              "id": "4265fbf5-e4d6-4dbc-8906-f4d21845b0b9",
+              "grounding": {
+                "box": {
+                  "left": 0.04442541301250458,
+                  "top": 0.1030348688364029,
+                  "right": 0.4831768870353699,
+                  "bottom": 0.23252050578594208
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='afbfbfcb-0ba5-464b-9119-4179b7e3c5f4'></a>\n\nPATIENT INFORMATION\n\nPatient Full Name: John Martinez\n\nDate of Birth: 1969-08-14\n\nAge: 56\n\nGender: Male\n\nAddress: 245 Mission St, San Francisco, CA 94105\n\nPrimary Language: Spanish\n\nPhone Number: (415) 555-0198",
+              "type": "text",
+              "id": "afbfbfcb-0ba5-464b-9119-4179b7e3c5f4",
+              "grounding": {
+                "box": {
+                  "left": 0.04264013469219208,
+                  "top": 0.27083712816238403,
+                  "right": 0.5211141109466553,
+                  "bottom": 0.5359578728675842
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='25dd378e-33f9-4d65-9825-f7466b70e6f7'></a>\n\nINSURANCE DETAILS\n\nInsurance Active: Yes\n\nPayer Name: BlueCross\n\nPlan Type: PPO\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnit Type: SCANS",
+              "type": "text",
+              "id": "25dd378e-33f9-4d65-9825-f7466b70e6f7",
+              "grounding": {
+                "box": {
+                  "left": 0.04235999286174774,
+                  "top": 0.5732940435409546,
+                  "right": 0.3887573480606079,
+                  "bottom": 0.9075272083282471
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='c4a8c892-3b42-4b12-8406-063ba6fe34d8'></a>\n\nSERVICE REQUESTED\n\nService Category: Imaging\n\nService Type: MRI - Knee",
+              "type": "text",
+              "id": "c4a8c892-3b42-4b12-8406-063ba6fe34d8",
+              "grounding": {
+                "box": {
+                  "left": 0.042546361684799194,
+                  "top": 0.035076700150966644,
+                  "right": 0.30132585763931274,
+                  "bottom": 0.13241073489189148
+                },
+                "page": 1
+              }
+            },
+            {
+              "markdown": "<a id='8e539e31-8563-457a-9e4b-92e0fb0569ef'></a>\n\nDOCUMENTATION STATUS\n\nReferral Documents Complete: Yes\n\nHome Assessment Required: No\n\nPatient Responsive: High\n\nContact Attempts Made: 1",
+              "type": "text",
+              "id": "8e539e31-8563-457a-9e4b-92e0fb0569ef",
+              "grounding": {
+                "box": {
+                  "left": 0.04311847686767578,
+                  "top": 0.16990511119365692,
+                  "right": 0.37839147448539734,
+                  "bottom": 0.3342667818069458
+                },
+                "page": 1
+              }
+            },
+            {
+              "markdown": "<a id='ddd64e38-40bb-461c-ada2-14609114d366'></a>\n\nNOTES\nReferral approved and documentation complete. Ready to move downstream into scheduling workflow.",
+              "type": "text",
+              "id": "ddd64e38-40bb-461c-ada2-14609114d366",
+              "grounding": {
+                "box": {
+                  "left": 0.042841434478759766,
+                  "top": 0.3730323314666748,
+                  "right": 0.9570193290710449,
+                  "bottom": 0.4673014283180237
+                },
+                "page": 1
+              }
+            }
+          ],
+          "confidence": 0.95
+        }
+      },
+      "issues": null
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": false,
+      "data": {},
+      "issues": [
+        "Missing extracted_text in context"
+      ]
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": true,
+      "data": {
+        "normalized": {
+          "referral_id": "REF-1001",
+          "date_of_birth": "1969-08-14",
+          "payer": "BlueCross",
+          "plan_type": "PPO",
+          "authorization_required": "Yes",
+          "authorization_status": "Approved",
+          "authorization_start_date": "01/05/2026",
+          "authorization_end_date": "02/04/2026",
+          "authorized_units": "1",
+          "unit_type": "SCANS",
+          "service_category": "Imaging"
+        }
+      },
+      "issues": null
+    }
+  ]
+}

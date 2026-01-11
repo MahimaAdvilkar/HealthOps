@@ -1,0 +1,169 @@
+{
+  "referral_id": "REF-1001",
+  "doc_type": "visit_note",
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/visit_note_REF-1001.pdf",
+  "extraction": {
+    "success": true,
+    "message": "Document processed successfully",
+    "extracted_data": {
+      "text": "<a id='65742823-1c10-4fa8-b6eb-eb9a263f47e9'></a>\n\nVISIT COMPLETION NOTE\n\n<a id='6d571eb3-3c22-4c27-acf7-d22a5f8126a1'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='c27497ca-4ec0-4705-b3e6-de0b4ac304f1'></a>\n\nService Performed:\n\nService Category: Imaging\n\nProcedure: MRI - Knee\n\n<a id='8049999b-5559-4fc4-8cee-9c77d4c337a7'></a>\n\nDate of Service: 01/07/2026\n\nTime In: 10:00 AM\n\nTime Out: 10:45 AM\n\nUnits Delivered: 1\n\nUnit Type: SCANS\n\n<a id='910bac76-acef-4763-9bf0-8858b3a64458'></a>\n\nRendering Staff:\n\nTechnician Name: Alex Chen\n\nTechnician ID: TECH-204\n\n<a id='a3dd0d15-6610-415b-8952-6fee2054a413'></a>\n\nLocation:\n\nFacility: SF Imaging Center\n\nCity: San Francisco, CA\n\n<a id='5650ba51-93cc-49ee-8e1e-b28086ac8a47'></a>\n\nVisit Outcome:\nService completed successfully.\nNo complications reported.\n\n<!-- PAGE BREAK -->\n\n<a id='58c8b9e6-b53c-4c4b-a55d-ce75f37c64ca'></a>\n\nPatient tolerated procedure well.\n\n<a id='c506ed15-975c-4083-b5d6-f4beb139ba4a'></a>\n\nDocumentation:\n\nVisit verified and signed by technician.\n\n<a id='1fad4497-7dfd-473a-b7c1-e26be343c52a'></a>\n\nSignature: Alex Chen\n\nSigned Date: 01/07/2026",
+      "tables": [],
+      "key_value_pairs": {},
+      "layout": [
+        {
+          "markdown": "<a id='65742823-1c10-4fa8-b6eb-eb9a263f47e9'></a>\n\nVISIT COMPLETION NOTE",
+          "type": "text",
+          "id": "65742823-1c10-4fa8-b6eb-eb9a263f47e9",
+          "grounding": {
+            "box": {
+              "left": 0.04421830177307129,
+              "top": 0.03541914373636246,
+              "right": 0.3130444586277008,
+              "bottom": 0.06256821751594543
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='6d571eb3-3c22-4c27-acf7-d22a5f8126a1'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+          "type": "text",
+          "id": "6d571eb3-3c22-4c27-acf7-d22a5f8126a1",
+          "grounding": {
+            "box": {
+              "left": 0.04445788264274597,
+              "top": 0.10326144844293594,
+              "right": 0.3213123679161072,
+              "bottom": 0.19802355766296387
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='c27497ca-4ec0-4705-b3e6-de0b4ac304f1'></a>\n\nService Performed:\n\nService Category: Imaging\n\nProcedure: MRI - Knee",
+          "type": "text",
+          "id": "c27497ca-4ec0-4705-b3e6-de0b4ac304f1",
+          "grounding": {
+            "box": {
+              "left": 0.04447878897190094,
+              "top": 0.23837336897850037,
+              "right": 0.2998466491699219,
+              "bottom": 0.3327160179615021
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='8049999b-5559-4fc4-8cee-9c77d4c337a7'></a>\n\nDate of Service: 01/07/2026\n\nTime In: 10:00 AM\n\nTime Out: 10:45 AM\n\nUnits Delivered: 1\n\nUnit Type: SCANS",
+          "type": "text",
+          "id": "8049999b-5559-4fc4-8cee-9c77d4c337a7",
+          "grounding": {
+            "box": {
+              "left": 0.04493613541126251,
+              "top": 0.3729747533798218,
+              "right": 0.3092077374458313,
+              "bottom": 0.5355467796325684
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='910bac76-acef-4763-9bf0-8858b3a64458'></a>\n\nRendering Staff:\n\nTechnician Name: Alex Chen\n\nTechnician ID: TECH-204",
+          "type": "text",
+          "id": "910bac76-acef-4763-9bf0-8858b3a64458",
+          "grounding": {
+            "box": {
+              "left": 0.044575855135917664,
+              "top": 0.5747062563896179,
+              "right": 0.32214266061782837,
+              "bottom": 0.6701567769050598
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='a3dd0d15-6610-415b-8952-6fee2054a413'></a>\n\nLocation:\n\nFacility: SF Imaging Center\n\nCity: San Francisco, CA",
+          "type": "text",
+          "id": "a3dd0d15-6610-415b-8952-6fee2054a413",
+          "grounding": {
+            "box": {
+              "left": 0.04342217743396759,
+              "top": 0.7099255919456482,
+              "right": 0.30637770891189575,
+              "bottom": 0.8051158785820007
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='5650ba51-93cc-49ee-8e1e-b28086ac8a47'></a>\n\nVisit Outcome:\nService completed successfully.\nNo complications reported.",
+          "type": "text",
+          "id": "5650ba51-93cc-49ee-8e1e-b28086ac8a47",
+          "grounding": {
+            "box": {
+              "left": 0.04397684335708618,
+              "top": 0.8439236879348755,
+              "right": 0.3451050817966461,
+              "bottom": 0.938918948173523
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='58c8b9e6-b53c-4c4b-a55d-ce75f37c64ca'></a>\n\nPatient tolerated procedure well.",
+          "type": "marginalia",
+          "id": "58c8b9e6-b53c-4c4b-a55d-ce75f37c64ca",
+          "grounding": {
+            "box": {
+              "left": 0.04459787905216217,
+              "top": 0.036591168493032455,
+              "right": 0.3494884967803955,
+              "bottom": 0.0628833919763565
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='c506ed15-975c-4083-b5d6-f4beb139ba4a'></a>\n\nDocumentation:\n\nVisit verified and signed by technician.",
+          "type": "text",
+          "id": "c506ed15-975c-4083-b5d6-f4beb139ba4a",
+          "grounding": {
+            "box": {
+              "left": 0.04527084529399872,
+              "top": 0.10464967042207718,
+              "right": 0.4010530114173889,
+              "bottom": 0.1648634672164917
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='1fad4497-7dfd-473a-b7c1-e26be343c52a'></a>\n\nSignature: Alex Chen\n\nSigned Date: 01/07/2026",
+          "type": "text",
+          "id": "1fad4497-7dfd-473a-b7c1-e26be343c52a",
+          "grounding": {
+            "box": {
+              "left": 0.04510819911956787,
+              "top": 0.20398099720478058,
+              "right": 0.28402814269065857,
+              "bottom": 0.26396459341049194
+            },
+            "page": 1
+          }
+        }
+      ],
+      "confidence": 0.95
+    },
+    "document_type": "visit_note",
+    "processing_time": 9.15053105354309,
+    "metadata": {
+      "filename": "visit_note_REF-1001.pdf",
+      "org_id": null,
+      "page_count": 2,
+      "duration_ms": 8368,
+      "credit_usage": 6.0,
+      "job_id": "f8523a8d875f4ac4b58d1eb30ed9489e",
+      "version": "dpt-2-20251103",
+      "failed_pages": []
+    }
+  }
+}

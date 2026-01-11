@@ -1,0 +1,17 @@
+referral_id,key,value
+REF-1001,Referral ID,REF-1001
+REF-1001,Patient Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Service Category,Imaging
+REF-1001,Procedure,MRI - Knee
+REF-1001,Date of Service,01/07/2026
+REF-1001,Time In,10:00 AM
+REF-1001,Time Out,10:45 AM
+REF-1001,Units Delivered,1
+REF-1001,Unit Type,SCANS
+REF-1001,Technician Name,Alex Chen
+REF-1001,Technician ID,TECH-204
+REF-1001,Facility,SF Imaging Center
+REF-1001,City,"San Francisco, CA"
+REF-1001,Signature,Alex Chen
+REF-1001,Signed Date,01/07/2026

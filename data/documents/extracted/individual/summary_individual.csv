@@ -1,0 +1,6 @@
+referral_id,doc_type,success,table_count,processing_time
+REF-1001,auth_approval,False,0,30.217676162719727
+REF-1001,billing_readiness,True,0,5.248669862747192
+REF-1001,unknown,True,0,7.02485990524292
+REF-1001,referral_intake,True,0,5.46708869934082
+REF-1001,visit_note,True,0,9.15053105354309
