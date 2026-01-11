@@ -1,0 +1,65 @@
+# Agent Workflow Configuration
+# All thresholds, scoring weights, and limits for the 3-agent workflow
+
+validation_agent:
+  scoring:
+    insurance_inactive_penalty: 30
+    auth_not_approved_penalty: 40
+    no_auth_units_penalty: 35
+    docs_incomplete_penalty: 10
+    no_home_assessment_penalty: 10
+    low_responsiveness_penalty: 5
+  
+  thresholds:
+    high_contact_attempts: 5
+    passing_score: 70
+  
+  status_mapping:
+    ready: "READY"
+    ready_with_warnings: "READY_WITH_WARNINGS"
+    blocked: "BLOCKED"
+    needs_docs: "NEEDS_DOCS"
+
+matching_agent:
+  scoring:
+    city_match_points: 40
+    exact_skill_match_points: 40
+    general_skill_match_points: 20
+    flexible_availability_points: 20
+    partial_availability_points: 10
+  
+  thresholds:
+    minimum_match_score: 30
+    max_matches_returned: 5
+  
+  general_skills:
+    - "ECM"
+    - "HOME"
+    - "CARE"
+
+scheduling_agent:
+  limits:
+    max_units_per_week: 20
+    max_pending_referrals: 50
+  
+  priorities:
+    urgent_keywords:
+      - "Urgent"
+      - "STAT"
+      - "Emergency"
+    high_priority: "HIGH"
+    normal_priority: "NORMAL"
+  
+  actions:
+    schedule_now: "SCHEDULE_NOW"
+    hold: "HOLD"
+    block: "BLOCK"
+  
+  unit_calculation:
+    min_suggested_units: 1
+    default_buffer: 0
+
+workflow:
+  enable_parallel_processing: false
+  max_retry_attempts: 3
+  timeout_seconds: 30
