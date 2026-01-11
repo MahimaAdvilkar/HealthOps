@@ -1,0 +1,183 @@
+{
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/billing_readiness_REF-1001.pdf",
+  "referral_id": "REF-1001",
+  "results": [
+    {
+      "name": "DocumentExtractionAgent",
+      "success": true,
+      "data": {
+        "document_type": "auto",
+        "processing_time": 4.83480978012085,
+        "table_count": 0,
+        "extracted_data": {
+          "text": "<a id='6df06637-d1b2-4aa2-ada2-f4612ed3ec6b'></a>\n\nBILLING READINESS SUMMARY\n\n<a id='0272d185-d11f-4b5a-99e7-50e7dfe7901e'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='1aad926a-9f43-460f-98e8-9f99b222053a'></a>\n\nService Summary:\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS\n\n<a id='4c6819ed-6e92-43d5-95f6-f14681e0b64e'></a>\n\nAuthorization Verification:\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnits Used: 1\n\n<a id='b0243c78-88bf-4dc4-8cf3-46dc983ff5b2'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete\n\n<a id='92e34950-25cc-40db-a2d6-e7e0266c9010'></a>\n\nBilling Status:\n\n<!-- PAGE BREAK -->\n\n<a id='ff1e8405-69cf-460b-a337-ea77c763b02e'></a>\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A\n\n<a id='7b874477-76df-498a-8f8f-d3b74c02d359'></a>\n\nBilling Instructions:\n\nProceed with claim submission.\n\nEnsure CPT code aligns with authorized service.\n\nAttach authorization letter and visit note.\n\n<a id='ffea9ddd-a204-41c4-b6f5-918217cdb09f'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026",
+          "tables": [],
+          "key_value_pairs": {},
+          "layout": [
+            {
+              "markdown": "<a id='6df06637-d1b2-4aa2-ada2-f4612ed3ec6b'></a>\n\nBILLING READINESS SUMMARY",
+              "type": "text",
+              "id": "6df06637-d1b2-4aa2-ada2-f4612ed3ec6b",
+              "grounding": {
+                "box": {
+                  "left": 0.0441385954618454,
+                  "top": 0.03557640314102173,
+                  "right": 0.3696592450141907,
+                  "bottom": 0.06269954144954681
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='0272d185-d11f-4b5a-99e7-50e7dfe7901e'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+              "type": "text",
+              "id": "0272d185-d11f-4b5a-99e7-50e7dfe7901e",
+              "grounding": {
+                "box": {
+                  "left": 0.044047653675079346,
+                  "top": 0.10336486995220184,
+                  "right": 0.32233157753944397,
+                  "bottom": 0.19900254905223846
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='1aad926a-9f43-460f-98e8-9f99b222053a'></a>\n\nService Summary:\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS",
+              "type": "text",
+              "id": "1aad926a-9f43-460f-98e8-9f99b222053a",
+              "grounding": {
+                "box": {
+                  "left": 0.04330745339393616,
+                  "top": 0.23814348876476288,
+                  "right": 0.31354209780693054,
+                  "bottom": 0.4354400634765625
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='4c6819ed-6e92-43d5-95f6-f14681e0b64e'></a>\n\nAuthorization Verification:\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnits Used: 1",
+              "type": "text",
+              "id": "4c6819ed-6e92-43d5-95f6-f14681e0b64e",
+              "grounding": {
+                "box": {
+                  "left": 0.04367963969707489,
+                  "top": 0.473797082901001,
+                  "right": 0.38717156648635864,
+                  "bottom": 0.7038500308990479
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='b0243c78-88bf-4dc4-8cf3-46dc983ff5b2'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete",
+              "type": "text",
+              "id": "b0243c78-88bf-4dc4-8cf3-46dc983ff5b2",
+              "grounding": {
+                "box": {
+                  "left": 0.043218180537223816,
+                  "top": 0.7431111335754395,
+                  "right": 0.355094313621521,
+                  "bottom": 0.872065544128418
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='92e34950-25cc-40db-a2d6-e7e0266c9010'></a>\n\nBilling Status:",
+              "type": "text",
+              "id": "92e34950-25cc-40db-a2d6-e7e0266c9010",
+              "grounding": {
+                "box": {
+                  "left": 0.04594004899263382,
+                  "top": 0.9117616415023804,
+                  "right": 0.18354752659797668,
+                  "bottom": 0.938361406326294
+                },
+                "page": 0
+              }
+            },
+            {
+              "markdown": "<a id='ff1e8405-69cf-460b-a337-ea77c763b02e'></a>\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A",
+              "type": "text",
+              "id": "ff1e8405-69cf-460b-a337-ea77c763b02e",
+              "grounding": {
+                "box": {
+                  "left": 0.045407816767692566,
+                  "top": 0.03659585863351822,
+                  "right": 0.279056191444397,
+                  "bottom": 0.09487567096948624
+                },
+                "page": 1
+              }
+            },
+            {
+              "markdown": "<a id='7b874477-76df-498a-8f8f-d3b74c02d359'></a>\n\nBilling Instructions:\n\nProceed with claim submission.\n\nEnsure CPT code aligns with authorized service.\n\nAttach authorization letter and visit note.",
+              "type": "text",
+              "id": "7b874477-76df-498a-8f8f-d3b74c02d359",
+              "grounding": {
+                "box": {
+                  "left": 0.04561915993690491,
+                  "top": 0.13772757351398468,
+                  "right": 0.4892742931842804,
+                  "bottom": 0.2645449638366699
+                },
+                "page": 1
+              }
+            },
+            {
+              "markdown": "<a id='ffea9ddd-a204-41c4-b6f5-918217cdb09f'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026",
+              "type": "text",
+              "id": "ffea9ddd-a204-41c4-b6f5-918217cdb09f",
+              "grounding": {
+                "box": {
+                  "left": 0.04546426236629486,
+                  "top": 0.3070095181465149,
+                  "right": 0.30417656898498535,
+                  "bottom": 0.3994767665863037
+                },
+                "page": 1
+              }
+            }
+          ],
+          "confidence": 0.95
+        }
+      },
+      "issues": null
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": false,
+      "data": {},
+      "issues": [
+        "Missing extracted_text in context"
+      ]
+    },
+    {
+      "name": "NormalizedSummaryAgent",
+      "success": true,
+      "data": {
+        "normalized": {
+          "referral_id": "REF-1001",
+          "patient_name": "John Martinez",
+          "date_of_birth": "1969-08-14",
+          "service_category": "Imaging",
+          "procedure": "MRI - Knee",
+          "date_of_service": "01/07/2026",
+          "units_delivered": "1",
+          "unit_type": "SCANS",
+          "authorization_required": "Yes",
+          "authorization_status": "Approved",
+          "authorization_start_date": "01/05/2026",
+          "authorization_end_date": "02/04/2026",
+          "authorized_units": "1",
+          "units_used": "1",
+          "ready_to_bill": "YES",
+          "billing_hold_reason": "N/A"
+        }
+      },
+      "issues": null
+    }
+  ]
+}
