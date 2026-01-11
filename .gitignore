@@ -73,5 +73,8 @@ htmlcov/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Generated pipeline outputs
+data/documents/extracted/pipeline_outcomes.csv
+
 
 notes.txt
