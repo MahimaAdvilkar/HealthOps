@@ -74,7 +74,7 @@ const AgentScheduler: React.FC = () => {
   return (
     <div className="agent-scheduler-container">
       <div className="scheduler-header">
-        <h2>🤖 AI Agent Scheduler</h2>
+        <h2>AI Agent Scheduler</h2>
         <p className="subtitle">3-Agent Workflow: Validation → Matching → Scheduling</p>
         <button onClick={loadPendingReferrals} className="refresh-btn">
           Refresh List
@@ -117,7 +117,7 @@ const AgentScheduler: React.FC = () => {
                 >
                   {processing && selectedReferral?.referral_id === referral.referral_id
                     ? '⏳ Processing...'
-                    : '🤖 Run AI Agents'}
+                    : '▶ Run AI Agents'}
                 </button>
               </div>
             ))}
@@ -143,7 +143,7 @@ const AgentScheduler: React.FC = () => {
           {processing && (
             <div className="processing-state">
               <div className="spinner"></div>
-              <h3>🤖 AI Agents Working...</h3>
+              <h3>⚙️ AI Agents Working...</h3>
               <div className="agent-progress">
                 <div className="agent-step">✓ Agent 1: Validating referral</div>
                 <div className="agent-step">⏳ Agent 2: Finding caregivers</div>
@@ -170,14 +170,12 @@ const AgentScheduler: React.FC = () => {
                 </div>
                 <div className="score-bar">
                   <div className="score-label">Validation Score</div>
-                  <div className="score-progress">AGENT_UI_CONFIG.validation.passingScoreThreshold 
-                          ? AGENT_UI_CONFIG.validation.colors.pass 
-                          : AGENT_UI_CONFIG.validation.colors.fail
+                  <div className="score-progress">
                     <div
                       className="score-fill"
                       style={{
                         width: `${workflowResult.validation.validation_score}%`,
-                        backgroundColor: workflowResult.validation.validation_score >= 70 ? '#28a745' : '#dc3545'
+                        backgroundColor: workflowResult.validation.validation_score >= AGENT_UI_CONFIG.validation.passingScoreThreshold ? '#28a745' : '#dc3545'
                       }}
                     >
                       {workflowResult.validation.validation_score}%
@@ -208,7 +206,7 @@ const AgentScheduler: React.FC = () => {
                 )}
 
                 <div className="recommendation-box" style={{ borderColor: getActionColor(workflowResult.validation_recommendation) }}>
-                  <strong>🤖 Agent Recommendation:</strong>
+                  <strong>💡 Agent Recommendation:</strong>
                   <p>{workflowResult.validation_recommendation}</p>
                 </div>
               </div>
@@ -247,7 +245,7 @@ const AgentScheduler: React.FC = () => {
                 )}
 
                 <div className="recommendation-box" style={{ borderColor: getActionColor(workflowResult.matching_recommendation) }}>
-                  <strong>🤖 Agent Recommendation:</strong>
+                  <strong>💡 Agent Recommendation:</strong>
                   <p>{workflowResult.matching_recommendation}</p>
                 </div>
               </div>
