@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.responses import HTMLResponse
+from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import sys
@@ -54,6 +56,78 @@ async def health_check():
         "status": "healthy",
         "service": "landingai_image_processor"
     }
+
+
+# --- Simple Frontend Views for Document Tables ---
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DOC_EXTRACT_DIR = REPO_ROOT / "data" / "documents" / "extracted"
+
+def _csv_to_html_table(csv_path: Path, title: str) -> str:
+        try:
+                import csv
+                if not csv_path.exists():
+                        return f"<h2>{title}</h2><p>File not found: {csv_path}</p>"
+                rows = []
+                with open(csv_path, "r", encoding="utf-8") as f:
+                        reader = csv.reader(f)
+                        for row in reader:
+                                rows.append(row)
+                if not rows:
+                        return f"<h2>{title}</h2><p>No data available.</p>"
+                header = rows[0]
+                body = rows[1:]
+                th = "".join([f"<th>{h}</th>" for h in header])
+                trs = "\n".join(["<tr>" + "".join([f"<td>{c}</td>" for c in r]) + "</tr>" for r in body])
+                return f"""
+                <h2>{title}</h2>
+                <table border=1 cellspacing=0 cellpadding=6>
+                    <thead><tr>{th}</tr></thead>
+                    <tbody>
+                        {trs}
+                    </tbody>
+                </table>
+                """
+        except Exception as e:
+                return f"<h2>{title}</h2><p>Error rendering table: {e}</p>"
+
+
+@app.get("/ui/summary", response_class=HTMLResponse)
+async def ui_summary():
+        path = DOC_EXTRACT_DIR / "normalized_summary.csv"
+        content = _csv_to_html_table(path, "Normalized Referral Summary")
+        return f"""
+        <html>
+            <head><title>HealthOps Summary</title></head>
+            <body>
+                <h1>HealthOps Document Parsing</h1>
+                <nav>
+                    <a href='/ui/summary'>Summary</a> |
+                    <a href='/ui/individual'>Per-Document Summary</a>
+                </nav>
+                {content}
+            </body>
+        </html>
+        """
+
+
+@app.get("/ui/individual", response_class=HTMLResponse)
+async def ui_individual():
+        path = DOC_EXTRACT_DIR / "individual" / "summary_individual.csv"
+        content = _csv_to_html_table(path, "Per-Document Parsing Summary")
+        return f"""
+        <html>
+            <head><title>HealthOps Per-Document Summary</title></head>
+            <body>
+                <h1>HealthOps Document Parsing</h1>
+                <nav>
+                    <a href='/ui/summary'>Summary</a> |
+                    <a href='/ui/individual'>Per-Document Summary</a>
+                </nav>
+                {content}
+            </body>
+        </html>
+        """
 
 
 @app.post("/api/v1/process-image", response_model=ImageResponse)
