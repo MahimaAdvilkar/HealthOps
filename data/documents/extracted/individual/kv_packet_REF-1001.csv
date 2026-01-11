@@ -1,0 +1,83 @@
+referral_id,key,value
+REF-1001,FILE,auth_approval_REF-1001.txt
+REF-1001,Payer,BlueCross
+REF-1001,Plan Type,PPO
+REF-1001,Authorization Status,APPROVED
+REF-1001,Authorization Number,BC-APR-948201
+REF-1001,Patient Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Service Category,Imaging
+REF-1001,Procedure,MRI - Knee
+REF-1001,Authorization Start Date,01/05/2026
+REF-1001,Authorization End Date,02/04/2026
+REF-1001,Authorized Units,1
+REF-1001,Unit Type,SCANS
+REF-1001,Rendering Provider,Any In-Network Imaging Facility
+REF-1001,Place of Service,Outpatient
+REF-1001,Issued Date,01/05/2026
+REF-1001,Issued By,BlueCross Utilization Management
+REF-1001,FILE,billing_readiness_REF-1001.txt
+REF-1001,Referral ID,REF-1001
+REF-1001,Patient Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Service Category,Imaging
+REF-1001,Procedure,MRI - Knee
+REF-1001,Date of Service,01/07/2026
+REF-1001,Units Delivered,1
+REF-1001,Unit Type,SCANS
+REF-1001,Authorization Required,Yes
+REF-1001,Authorization Status,Approved
+REF-1001,Authorization Start Date,01/05/2026
+REF-1001,Authorization End Date,02/04/2026
+REF-1001,Authorized Units,1
+REF-1001,Units Used,1
+REF-1001,Referral Intake,Complete
+REF-1001,Authorization Letter,Received
+REF-1001,Visit Note / EVV Proof,Complete
+REF-1001,Ready to Bill,YES
+REF-1001,Billing Hold Reason,N/A
+REF-1001,Prepared Date,01/08/2026
+REF-1001,FILE,referral_intake_REF-1001.txt
+REF-1001,Referral ID,REF-1001
+REF-1001,Referral Source,Primary Care Physician (PCP)
+REF-1001,Referral Received Date,01/02/2026
+REF-1001,Urgency Level,Routine
+REF-1001,Patient Full Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Age,56
+REF-1001,Gender,Male
+REF-1001,Address,"245 Mission St, San Francisco, CA 94105"
+REF-1001,Primary Language,Spanish
+REF-1001,Phone Number,(415) 555-0198
+REF-1001,Insurance Active,Yes
+REF-1001,Payer Name,BlueCross
+REF-1001,Plan Type,PPO
+REF-1001,Authorization Required,Yes
+REF-1001,Authorization Status,Approved
+REF-1001,Authorization Start Date,01/05/2026
+REF-1001,Authorization End Date,02/04/2026
+REF-1001,Authorized Units,1
+REF-1001,Unit Type,SCANS
+REF-1001,Service Category,Imaging
+REF-1001,Service Type,MRI - Knee
+REF-1001,Referral Documents Complete,Yes
+REF-1001,Home Assessment Required,No
+REF-1001,Patient Responsive,High
+REF-1001,Contact Attempts Made,1
+REF-1001,FILE,visit_note_REF-1001.txt
+REF-1001,Referral ID,REF-1001
+REF-1001,Patient Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Service Category,Imaging
+REF-1001,Procedure,MRI - Knee
+REF-1001,Date of Service,01/07/2026
+REF-1001,Time In,10:00 AM
+REF-1001,Time Out,10:45 AM
+REF-1001,Units Delivered,1
+REF-1001,Unit Type,SCANS
+REF-1001,Technician Name,Alex Chen
+REF-1001,Technician ID,TECH-204
+REF-1001,Facility,SF Imaging Center
+REF-1001,City,"San Francisco, CA"
+REF-1001,Signature,Alex Chen
+REF-1001,Signed Date,01/07/2026

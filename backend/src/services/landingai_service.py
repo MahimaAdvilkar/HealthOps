@@ -3,10 +3,12 @@ import yaml
 import time
 import requests
 import base64
+import io
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 from PIL import Image
 from dotenv import load_dotenv
+from fpdf import FPDF
 
 
 class ConfigLoader:
@@ -89,6 +91,28 @@ class LandingAIService:
     def _encode_image(self, image_path: str) -> str:
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode('utf-8')
+
+    def _sanitize_text(self, s: str) -> str:
+        # Replace common unicode punctuation with ASCII for core fonts
+        return (
+            s.replace("\u2013", "-")
+             .replace("\u2014", "-")
+             .replace("\u2019", "'")
+             .replace("\u2018", "'")
+             .replace("\u201c", '"')
+             .replace("\u201d", '"')
+        )
+
+    def _text_to_pdf_bytes(self, text: str) -> bytes:
+        pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        safe_text = self._sanitize_text(text)
+        pdf.multi_cell(0, 10, safe_text)
+        out = io.BytesIO()
+        pdf.output(out)
+        return out.getvalue()
     
     async def process_document(
         self, 
@@ -104,17 +128,40 @@ class LandingAIService:
             
             files = {}
             if file_path:
-                with open(file_path, 'rb') as f:
-                    files = {'document': (Path(file_path).name, f, 'application/octet-stream')}
-                    
-                    response = requests.post(
-                        f"{self.base_url}/parse",
-                        headers=self.headers,
-                        files=files,
-                        timeout=30
-                    )
+                # If a text file is provided, convert to PDF first
+                suffix = Path(file_path).suffix.lower()
+                if suffix == ".txt":
+                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as tf:
+                        text = tf.read()
+                    pdf_bytes = self._text_to_pdf_bytes(text)
+                    files = {'document': ('document.pdf', pdf_bytes, 'application/pdf')}
+                else:
+                    # Read to bytes to avoid closed file issues
+                    with open(file_path, 'rb') as f:
+                        content = f.read()
+                    # Use appropriate content type
+                    content_type = 'application/pdf' if suffix == '.pdf' else 'application/octet-stream'
+                    files = {'document': (Path(file_path).name, content, content_type)}
+
+                response = requests.post(
+                    f"{self.base_url}/parse",
+                    headers=self.headers,
+                    files=files,
+                    timeout=30
+                )
             else:
-                files = {'document': ('document', file_bytes, 'application/octet-stream')}
+                # If bytes provided and not PDF, convert text to PDF
+                is_pdf = bool(file_bytes) and file_bytes[:4] == b"%PDF"
+                if not is_pdf:
+                    try:
+                        text = file_bytes.decode('utf-8', errors='ignore')
+                        pdf_bytes = self._text_to_pdf_bytes(text)
+                        files = {'document': ('document.pdf', pdf_bytes, 'application/pdf')}
+                    except Exception:
+                        files = {'document': ('document', file_bytes, 'application/octet-stream')}
+                else:
+                    files = {'document': ('document.pdf', file_bytes, 'application/pdf')}
+
                 response = requests.post(
                     f"{self.base_url}/parse",
                     headers=self.headers,

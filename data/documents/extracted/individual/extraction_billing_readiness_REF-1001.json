@@ -1,0 +1,155 @@
+{
+  "referral_id": "REF-1001",
+  "doc_type": "billing_readiness",
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/billing_readiness_REF-1001.pdf",
+  "extraction": {
+    "success": true,
+    "message": "Document processed successfully",
+    "extracted_data": {
+      "text": "<a id='8519f26b-1de8-499d-b488-4b91d982febb'></a>\n\nBILLING READINESS SUMMARY\n\n<a id='ccaa29f3-71b6-40f6-a42f-d138a772b818'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14\n\n<a id='22590699-a72b-40f7-9465-8e1a782d0ccc'></a>\n\nService Summary:\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS\n\n<a id='2ce44043-0eba-435b-940c-fcce31b711ee'></a>\n\nAuthorization Verification:\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnits Used: 1\n\n<a id='02313bde-dbc7-4b44-86c7-63d760f47537'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete\n\n<a id='03a0e8cb-f3a6-4ee4-b1b8-a9419e88fa06'></a>\n\nBilling Status:\n\n<!-- PAGE BREAK -->\n\n<a id='689fa4ec-7c3a-45a3-a3e1-5f24d77c2f5d'></a>\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A\n\n<a id='0024942b-e07d-46cb-a09f-9d2328d0ec0d'></a>\n\nBilling Instructions:\n\nProceed with claim submission.\n\nEnsure CPT code aligns with authorized service.\n\nAttach authorization letter and visit note.\n\n<a id='de8347c9-67d8-4349-9c43-3d8b589369ea'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026",
+      "tables": [],
+      "key_value_pairs": {},
+      "layout": [
+        {
+          "markdown": "<a id='8519f26b-1de8-499d-b488-4b91d982febb'></a>\n\nBILLING READINESS SUMMARY",
+          "type": "text",
+          "id": "8519f26b-1de8-499d-b488-4b91d982febb",
+          "grounding": {
+            "box": {
+              "left": 0.0441385954618454,
+              "top": 0.03557640314102173,
+              "right": 0.3696592450141907,
+              "bottom": 0.06269954144954681
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='ccaa29f3-71b6-40f6-a42f-d138a772b818'></a>\n\nReferral ID: REF-1001\n\nPatient Name: John Martinez\n\nDate of Birth: 1969-08-14",
+          "type": "text",
+          "id": "ccaa29f3-71b6-40f6-a42f-d138a772b818",
+          "grounding": {
+            "box": {
+              "left": 0.044047653675079346,
+              "top": 0.10336486995220184,
+              "right": 0.32233157753944397,
+              "bottom": 0.19900254905223846
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='22590699-a72b-40f7-9465-8e1a782d0ccc'></a>\n\nService Summary:\nService Category: Imaging\nProcedure: MRI - Knee\nDate of Service: 01/07/2026\nUnits Delivered: 1\nUnit Type: SCANS",
+          "type": "text",
+          "id": "22590699-a72b-40f7-9465-8e1a782d0ccc",
+          "grounding": {
+            "box": {
+              "left": 0.04330745339393616,
+              "top": 0.23814348876476288,
+              "right": 0.31354209780693054,
+              "bottom": 0.4354400634765625
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='2ce44043-0eba-435b-940c-fcce31b711ee'></a>\n\nAuthorization Verification:\n\nAuthorization Required: Yes\n\nAuthorization Status: Approved\n\nAuthorization Start Date: 01/05/2026\n\nAuthorization End Date: 02/04/2026\n\nAuthorized Units: 1\n\nUnits Used: 1",
+          "type": "text",
+          "id": "2ce44043-0eba-435b-940c-fcce31b711ee",
+          "grounding": {
+            "box": {
+              "left": 0.04367963969707489,
+              "top": 0.473797082901001,
+              "right": 0.38717156648635864,
+              "bottom": 0.7038500308990479
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='02313bde-dbc7-4b44-86c7-63d760f47537'></a>\n\nDocumentation Checklist:\n\nReferral Intake: Complete\n\nAuthorization Letter: Received\n\nVisit Note / EVV Proof: Complete",
+          "type": "text",
+          "id": "02313bde-dbc7-4b44-86c7-63d760f47537",
+          "grounding": {
+            "box": {
+              "left": 0.043218180537223816,
+              "top": 0.7431111335754395,
+              "right": 0.355094313621521,
+              "bottom": 0.872065544128418
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='03a0e8cb-f3a6-4ee4-b1b8-a9419e88fa06'></a>\n\nBilling Status:",
+          "type": "text",
+          "id": "03a0e8cb-f3a6-4ee4-b1b8-a9419e88fa06",
+          "grounding": {
+            "box": {
+              "left": 0.04594004899263382,
+              "top": 0.9117616415023804,
+              "right": 0.18354752659797668,
+              "bottom": 0.938361406326294
+            },
+            "page": 0
+          }
+        },
+        {
+          "markdown": "<a id='689fa4ec-7c3a-45a3-a3e1-5f24d77c2f5d'></a>\n\nReady to Bill: YES\n\nBilling Hold Reason: N/A",
+          "type": "text",
+          "id": "689fa4ec-7c3a-45a3-a3e1-5f24d77c2f5d",
+          "grounding": {
+            "box": {
+              "left": 0.045407816767692566,
+              "top": 0.03659585863351822,
+              "right": 0.279056191444397,
+              "bottom": 0.09487567096948624
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='0024942b-e07d-46cb-a09f-9d2328d0ec0d'></a>\n\nBilling Instructions:\n\nProceed with claim submission.\n\nEnsure CPT code aligns with authorized service.\n\nAttach authorization letter and visit note.",
+          "type": "text",
+          "id": "0024942b-e07d-46cb-a09f-9d2328d0ec0d",
+          "grounding": {
+            "box": {
+              "left": 0.04561915993690491,
+              "top": 0.13772757351398468,
+              "right": 0.4892742931842804,
+              "bottom": 0.2645449638366699
+            },
+            "page": 1
+          }
+        },
+        {
+          "markdown": "<a id='de8347c9-67d8-4349-9c43-3d8b589369ea'></a>\n\nPrepared By:\n\nBilling Operations Agent\n\nPrepared Date: 01/08/2026",
+          "type": "text",
+          "id": "de8347c9-67d8-4349-9c43-3d8b589369ea",
+          "grounding": {
+            "box": {
+              "left": 0.04546426236629486,
+              "top": 0.3070095181465149,
+              "right": 0.30417656898498535,
+              "bottom": 0.3994767665863037
+            },
+            "page": 1
+          }
+        }
+      ],
+      "confidence": 0.95
+    },
+    "document_type": "billing_readiness",
+    "processing_time": 5.248669862747192,
+    "metadata": {
+      "filename": "billing_readiness_REF-1001.pdf",
+      "org_id": null,
+      "page_count": 2,
+      "duration_ms": 4413,
+      "credit_usage": 6.0,
+      "job_id": "f6a1fbde4ce34df1825bd2ff94ccf678",
+      "version": "dpt-2-20251103",
+      "failed_pages": []
+    }
+  }
+}

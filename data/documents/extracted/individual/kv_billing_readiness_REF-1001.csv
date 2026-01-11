@@ -1,0 +1,21 @@
+referral_id,key,value
+REF-1001,Referral ID,REF-1001
+REF-1001,Patient Name,John Martinez
+REF-1001,Date of Birth,1969-08-14
+REF-1001,Service Category,Imaging
+REF-1001,Procedure,MRI - Knee
+REF-1001,Date of Service,01/07/2026
+REF-1001,Units Delivered,1
+REF-1001,Unit Type,SCANS
+REF-1001,Authorization Required,Yes
+REF-1001,Authorization Status,Approved
+REF-1001,Authorization Start Date,01/05/2026
+REF-1001,Authorization End Date,02/04/2026
+REF-1001,Authorized Units,1
+REF-1001,Units Used,1
+REF-1001,Referral Intake,Complete
+REF-1001,Authorization Letter,Received
+REF-1001,Visit Note / EVV Proof,Complete
+REF-1001,Ready to Bill,YES
+REF-1001,Billing Hold Reason,N/A
+REF-1001,Prepared Date,01/08/2026

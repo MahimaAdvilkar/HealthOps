@@ -1,0 +1,11 @@
+{
+  "referral_id": "REF-1001",
+  "doc_type": "auth_approval",
+  "pdf": "/Users/mahimaadvilkar/Desktop/ALL ABOUT AI/HealthOps/data/documents/converted/auth_approval_REF-1001.pdf",
+  "extraction": {
+    "success": false,
+    "message": "Failed to process document: HTTPSConnectionPool(host='api.va.landing.ai', port=443): Read timed out. (read timeout=30)",
+    "extracted_data": null,
+    "processing_time": 30.217676162719727
+  }
+}
