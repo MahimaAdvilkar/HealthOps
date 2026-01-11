@@ -37,3 +37,6 @@ psycopg2-binary==2.9.9
 crewai
 crewai-tools
 
+# Google Gemini AI
+google-generativeai
+
