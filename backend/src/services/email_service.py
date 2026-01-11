@@ -23,9 +23,11 @@ class EmailService:
     """
     
     def __init__(self):
-        self.gmail_api_key = os.getenv("GMAIL_API_KEY")
         self.sender_email = os.getenv("SENDER_EMAIL", "noreply@healthops.com")
         self.default_receiver = os.getenv("DEFAULT_RECEIVER_EMAIL", "advilkarmahima190@gmail.com")
+        self.gmail_app_password = os.getenv("GMAIL_APP_PASSWORD")
+        self.smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+        self.smtp_port = int(os.getenv("SMTP_PORT", "587"))
         
     def send_scheduling_confirmation(
         self,
@@ -212,14 +214,9 @@ class EmailService:
     
     def _send_email(self, to_email: str, subject: str, html_body: str) -> Dict[str, Any]:
         """
-        Send email using SMTP (Gmail)
-        Gmail API requires OAuth2 which is complex, using SMTP with app password instead
+        Send email using Gmail SMTP with app password
         """
         try:
-            # For Gmail, you need to enable "App Passwords" in Google Account settings
-            # The API key provided might not work directly for sending emails
-            # Using a simple SMTP approach instead
-            
             # Create message
             msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
@@ -230,25 +227,45 @@ class EmailService:
             html_part = MIMEText(html_body, 'html')
             msg.attach(html_part)
             
-            # Log the email (don't actually send without proper SMTP credentials)
+            # Check if SMTP credentials are configured
+            if not self.gmail_app_password:
+                print(f"\n{'='*60}")
+                print(f"EMAIL NOTIFICATION (NOT SENT - NO APP PASSWORD)")
+                print(f"{'='*60}")
+                print(f"To: {to_email}")
+                print(f"Subject: {subject}")
+                print(f"{'='*60}\n")
+                return {
+                    "success": False,
+                    "message": "Gmail App Password not configured",
+                    "to_email": to_email,
+                    "subject": subject,
+                    "note": "Set GMAIL_APP_PASSWORD in .env file"
+                }
+            
+            # Send email via Gmail SMTP
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()  # Secure the connection
+                server.login(self.sender_email, self.gmail_app_password)
+                server.send_message(msg)
+            
             print(f"\n{'='*60}")
-            print(f"EMAIL NOTIFICATION")
+            print(f"EMAIL SENT SUCCESSFULLY")
             print(f"{'='*60}")
             print(f"To: {to_email}")
             print(f"Subject: {subject}")
             print(f"{'='*60}\n")
             
-            # Return success (actual SMTP sending would require app password)
             return {
                 "success": True,
-                "message": f"Email notification logged for {to_email}",
+                "message": f"Email sent successfully to {to_email}",
                 "to_email": to_email,
                 "subject": subject,
-                "timestamp": datetime.now().isoformat(),
-                "note": "Enable SMTP with Gmail App Password in production"
+                "timestamp": datetime.now().isoformat()
             }
             
         except Exception as e:
+            print(f"\nEMAIL ERROR: {str(e)}\n")
             return {
                 "success": False,
                 "error": str(e),
