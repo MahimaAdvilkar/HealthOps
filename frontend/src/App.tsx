@@ -4,16 +4,24 @@ import Dashboard from './components/Dashboard';
 import ReferralTable from './components/ReferralTable';
 import CaregiverTable from './components/CaregiverTable';
 import AgentScheduler from './components/AgentScheduler';
+import PdfIntake from './components/PdfIntake';
+import ComplianceDocs from './components/ComplianceDocs';
+import JourneyBoard from './components/JourneyBoard';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'referrals' | 'caregivers' | 'scheduler'>('referrals');
+  const [activeTab, setActiveTab] = useState<'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey'>('referrals');
+  const [dataVersion, setDataVersion] = useState(0);
 
-  const handleNavigate = (tab: 'referrals' | 'caregivers') => {
+  const handleNavigate = (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey') => {
     setActiveTab(tab);
     // Scroll to the table section
     setTimeout(() => {
       document.querySelector('.tabs')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
+  };
+
+  const handleDataChanged = () => {
+    setDataVersion((v) => v + 1);
   };
 
   return (
@@ -23,7 +31,7 @@ function App() {
         <p>Referral and Caregiver Management System</p>
       </header>
 
-      <Dashboard onNavigate={handleNavigate} />
+      <Dashboard onNavigate={handleNavigate} onDataChanged={handleDataChanged} dataVersion={dataVersion} />
 
       <div className="tabs">
         <button 
@@ -44,12 +52,33 @@ function App() {
         >
           AI Scheduler
         </button>
+        <button 
+          className={activeTab === 'journey' ? 'tab-active' : ''} 
+          onClick={() => setActiveTab('journey')}
+        >
+          🧭 Journey Board
+        </button>
+        <button 
+          className={activeTab === 'intake' ? 'tab-active' : ''} 
+          onClick={() => setActiveTab('intake')}
+        >
+          📄 PDF Intake
+        </button>
+        <button 
+          className={activeTab === 'compliance' ? 'tab-active' : ''} 
+          onClick={() => setActiveTab('compliance')}
+        >
+          🛡️ Compliance
+        </button>
       </div>
 
       <div className="tab-content">
-        {activeTab === 'referrals' && <ReferralTable />}
-        {activeTab === 'caregivers' && <CaregiverTable />}
-        {activeTab === 'scheduler' && <AgentScheduler />}
+        {activeTab === 'referrals' && <ReferralTable dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'caregivers' && <CaregiverTable dataVersion={dataVersion} />}
+        {activeTab === 'scheduler' && <AgentScheduler dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'journey' && <JourneyBoard dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'intake' && <PdfIntake onDataChanged={handleDataChanged} onNavigate={handleNavigate} />}
+        {activeTab === 'compliance' && <ComplianceDocs dataVersion={dataVersion} />}
       </div>
     </div>
   );

@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { apiService, Referral } from '../services/api';
+import ReferralJourneyModal from './ReferralJourneyModal';
 import '../styles/ReferralTable.css';
 
-const ReferralTable: React.FC = () => {
+interface ReferralTableProps {
+  dataVersion: number;
+  onDataChanged: () => void;
+}
+
+const ReferralTable: React.FC<ReferralTableProps> = ({ dataVersion, onDataChanged }) => {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [journeyReferralId, setJourneyReferralId] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     urgency: '',
     agent_segment: '',
     schedule_status: '',
   });
 
-  useEffect(() => {
-    loadReferrals();
-  }, [filters]);
-
-  const loadReferrals = async () => {
+  const loadReferrals = useCallback(async () => {
     try {
       setLoading(true);
       const data = await apiService.getReferrals({
@@ -33,7 +36,11 @@ const ReferralTable: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadReferrals();
+  }, [loadReferrals, dataVersion]);
 
   const getUrgencyClass = (urgency?: string) => {
     switch (urgency) {
@@ -57,6 +64,13 @@ const ReferralTable: React.FC = () => {
 
   return (
     <div className="referral-container">
+      {journeyReferralId && (
+        <ReferralJourneyModal
+          referralId={journeyReferralId}
+          onClose={() => setJourneyReferralId(null)}
+          onDataChanged={onDataChanged}
+        />
+      )}
       <div className="referral-header">
         <h2>Referrals Dashboard</h2>
         <div className="filters">
@@ -107,6 +121,7 @@ const ReferralTable: React.FC = () => {
               <th>Units Remaining</th>
               <th>Next Action</th>
               <th>Contact Attempts</th>
+              <th>Journey</th>
             </tr>
           </thead>
           <tbody>
@@ -130,6 +145,14 @@ const ReferralTable: React.FC = () => {
                 <td>{referral.auth_units_remaining || 0}</td>
                 <td className="action-cell">{referral.agent_next_action || 'N/A'}</td>
                 <td>{referral.contact_attempts || 0}</td>
+                <td>
+                  <button
+                    className="refresh-btn"
+                    onClick={() => setJourneyReferralId(referral.referral_id)}
+                  >
+                    View
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

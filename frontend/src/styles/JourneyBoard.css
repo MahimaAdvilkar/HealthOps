@@ -1,0 +1,128 @@
+.journey-board {
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.journey-board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.journey-board-header h2 {
+  margin: 0;
+}
+
+.journey-board-subtitle {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.journey-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.journey-column {
+  background: #f8f9fb;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  padding: 10px;
+  min-height: 520px;
+}
+
+.journey-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.journey-column-title {
+  font-weight: 800;
+  color: #111827;
+}
+
+.journey-column-count {
+  font-weight: 800;
+  background: #111827;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+
+.journey-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journey-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.journey-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+}
+
+.journey-card.urgent {
+  border-left: 4px solid #dc2626;
+}
+
+.journey-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.journey-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 700;
+}
+
+.journey-card-meta {
+  margin-top: 8px;
+  color: #374151;
+  font-size: 12px;
+  display: grid;
+  gap: 3px;
+}
+
+.journey-card-action {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.journey-empty {
+  border: 1px dashed #d1d5db;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  color: #6b7280;
+}
+
+.journey-board-footer {
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: 12px;
+}

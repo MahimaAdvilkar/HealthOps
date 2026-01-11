@@ -72,6 +72,17 @@ CREATE TABLE IF NOT EXISTS caregivers (
 );
 
 -- ============================================
+-- REFERRAL ASSIGNMENTS (PAIRING + SCHEDULING)
+-- ============================================
+CREATE TABLE IF NOT EXISTS referral_assignments (
+    referral_id VARCHAR(20) PRIMARY KEY,
+    caregiver_id VARCHAR(20),
+    schedule_status VARCHAR(50) DEFAULT 'SCHEDULED',
+    scheduled_date DATE,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
 -- INDEXES FOR PERFORMANCE
 -- ============================================
 CREATE INDEX idx_referrals_patient_city ON referrals(patient_city);
@@ -85,6 +96,8 @@ CREATE INDEX idx_caregivers_city ON caregivers(city);
 CREATE INDEX idx_caregivers_active ON caregivers(active);
 CREATE INDEX idx_caregivers_skills ON caregivers(skills);
 CREATE INDEX idx_caregivers_language ON caregivers(primary_language);
+
+CREATE INDEX idx_referral_assignments_caregiver ON referral_assignments(caregiver_id);
 
 -- ============================================
 -- VIEWS FOR COMMON QUERIES
