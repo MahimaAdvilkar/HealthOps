@@ -2,14 +2,14 @@
   "success": true,
   "message": "Document processed successfully",
   "extracted_data": {
-    "text": "<a id='765f331c-b866-4698-8161-4c69ab9881e8'></a>\n\nHealthOps Medical Center\n\nPATIENT MEDICAL RECORD\n\n<a id='01935bbc-8f40-4462-9f11-1d5a83a9c5e7'></a>\n\nDate: January 10, 2026\n\nDocument ID: DOC-2026-001\n\n<a id='2c59a3c3-18d6-43a5-b47f-f62d262b4117'></a>\n\n## Patient Information\nName: John Doe\nDate of Birth: March 15, 1985\nMedical Record Number: MRN-12345\nGender: Male\n\n<a id='5fc5aec0-b7fd-4720-bbd6-223278bf8c5b'></a>\n\nChief Complaint\nPatient presents with persistent headache and fatigue lasting for 3 days. Reports difficulty sleeping and mild nausea.\n\n<a id='60f3cd4d-fcad-404f-83ec-5c38dfec5ac8'></a>\n\n## Vital Signs\n\nBlood Pressure: 120/80 mmHg\nHeart Rate: 72 bpm\nRespiratory Rate: 16 breaths/min\nTemperature: 98.6 F (37.0 C)\nOxygen Saturation: 98% on room air\n\n<a id='10ed2b60-645c-48e7-ab4b-c793f0d86f0a'></a>\n\n## Physical Examination\nGeneral: Patient alert and oriented. Appears mildly fatigued.\nHEENT: Pupils equal and reactive. No abnormalities noted.\nCardiovascular: Regular rhythm, no murmurs.\nRespiratory: Clear breath sounds bilaterally.\n\n<a id='2aab8e6f-efdc-4507-9922-4573a6a409e8'></a>\n\n## Assessment and Plan\n\nPatient appears to be in stable condition with symptoms consistent with tension headache and mild dehydration. Recommend increased fluid intake, rest, and OTC pain management as needed.\n\n<a id='8fb4f973-abb8-4a98-b3ea-c068c65c3fce'></a>\n\nFollow-up\n\nScheduled for: January 17, 2026\n\n<a id='60aa4ed2-871d-4bf2-a919-e306ca3344fa'></a>\n\nPage 1\n\n<!-- PAGE BREAK -->\n\n<a id='990efba5-dc7e-4f51-b10b-55c3187b56db'></a>\n\nHealthOps Medical Center\n\n<a id='9cf11838-d7c5-48b1-af2f-294911bfed2d'></a>\n\nInstructions: Return if symptoms worsen or new symptoms develop\n\n<a id='7ff44f45-885f-4d0e-81fc-569de970b87c'></a>\n\n_Physician: Dr. Sarah Johnson, MD_\n\n<a id='4dd434b0-9a5d-4e8c-9955-ea0365e971b0'></a>\n\nLicense: MD-54321\n\n<a id='7b7fde34-dd20-4765-9940-4c9b67f84b67'></a>\n\nPage 2",
+    "text": "<a id='a3a327eb-6d16-48d5-90e8-8aa68ab6b42e'></a>\n\nHealthOps Medical Center\n\nPATIENT MEDICAL RECORD\n\n<a id='a32e8d5e-15af-4b2b-a1a4-5866aefb339e'></a>\n\nDate: January 10, 2026\n\nDocument ID: DOC-2026-001\n\n<a id='0d35a1bf-17da-41ea-8b0d-bb1521ecb6bd'></a>\n\n## Patient Information\nName: John Doe\nDate of Birth: March 15, 1985\nMedical Record Number: MRN-12345\nGender: Male\n\n<a id='0172284b-06fe-4875-a5cc-5ff9d47da440'></a>\n\nChief Complaint\nPatient presents with persistent headache and fatigue lasting for 3 days. Reports difficulty sleeping and mild nausea.\n\n<a id='92c84fe2-2833-460a-bb2e-abb4431c0033'></a>\n\n## Vital Signs\n\nBlood Pressure: 120/80 mmHg\nHeart Rate: 72 bpm\nRespiratory Rate: 16 breaths/min\nTemperature: 98.6 F (37.0 C)\nOxygen Saturation: 98% on room air\n\n<a id='f34ec2e9-3a62-431a-b681-6568895b1bd3'></a>\n\n## Physical Examination\nGeneral: Patient alert and oriented. Appears mildly fatigued.\nHEENT: Pupils equal and reactive. No abnormalities noted.\nCardiovascular: Regular rhythm, no murmurs.\nRespiratory: Clear breath sounds bilaterally.\n\n<a id='8202b512-eaf9-493e-be87-4a495a77c637'></a>\n\n## Assessment and Plan\n\nPatient appears to be in stable condition with symptoms consistent with tension headache and mild dehydration. Recommend increased fluid intake, rest, and OTC pain management as needed.\n\n<a id='d54cf5ab-e813-4e7e-a008-6c8f076e6f27'></a>\n\nFollow-up\n\nScheduled for: January 17, 2026\n\n<a id='a8b5f212-e884-4189-b187-0e32e755b476'></a>\n\nPage 1\n\n<!-- PAGE BREAK -->\n\n<a id='4493b7b7-d098-4803-ac76-6c72a599870f'></a>\n\nHealthOps Medical Center\n\n<a id='ea47c29f-5604-451a-85a0-9e1ba219399c'></a>\n\nInstructions: Return if symptoms worsen or new symptoms develop\n\n<a id='2e02292f-39c1-4960-9b4d-331669a2b0a2'></a>\n\n_Physician: Dr. Sarah Johnson, MD_\n\n<a id='1819d577-a895-49c9-b704-834dd9151096'></a>\n\nLicense: MD-54321\n\n<a id='7ba757d4-b956-4208-a2be-0e03ff3bb1ef'></a>\n\nPage 2",
     "tables": [],
     "key_value_pairs": {},
     "layout": [
       {
-        "markdown": "<a id='765f331c-b866-4698-8161-4c69ab9881e8'></a>\n\nHealthOps Medical Center\n\nPATIENT MEDICAL RECORD",
+        "markdown": "<a id='a3a327eb-6d16-48d5-90e8-8aa68ab6b42e'></a>\n\nHealthOps Medical Center\n\nPATIENT MEDICAL RECORD",
         "type": "text",
-        "id": "765f331c-b866-4698-8161-4c69ab9881e8",
+        "id": "a3a327eb-6d16-48d5-90e8-8aa68ab6b42e",
         "grounding": {
           "box": {
             "left": 0.32496723532676697,
@@ -21,9 +21,9 @@
         }
       },
       {
-        "markdown": "<a id='01935bbc-8f40-4462-9f11-1d5a83a9c5e7'></a>\n\nDate: January 10, 2026\n\nDocument ID: DOC-2026-001",
+        "markdown": "<a id='a32e8d5e-15af-4b2b-a1a4-5866aefb339e'></a>\n\nDate: January 10, 2026\n\nDocument ID: DOC-2026-001",
         "type": "text",
-        "id": "01935bbc-8f40-4462-9f11-1d5a83a9c5e7",
+        "id": "a32e8d5e-15af-4b2b-a1a4-5866aefb339e",
         "grounding": {
           "box": {
             "left": 0.04516613483428955,
@@ -35,9 +35,9 @@
         }
       },
       {
-        "markdown": "<a id='2c59a3c3-18d6-43a5-b47f-f62d262b4117'></a>\n\n## Patient Information\nName: John Doe\nDate of Birth: March 15, 1985\nMedical Record Number: MRN-12345\nGender: Male",
+        "markdown": "<a id='0d35a1bf-17da-41ea-8b0d-bb1521ecb6bd'></a>\n\n## Patient Information\nName: John Doe\nDate of Birth: March 15, 1985\nMedical Record Number: MRN-12345\nGender: Male",
         "type": "text",
-        "id": "2c59a3c3-18d6-43a5-b47f-f62d262b4117",
+        "id": "0d35a1bf-17da-41ea-8b0d-bb1521ecb6bd",
         "grounding": {
           "box": {
             "left": 0.04519683122634888,
@@ -49,9 +49,9 @@
         }
       },
       {
-        "markdown": "<a id='5fc5aec0-b7fd-4720-bbd6-223278bf8c5b'></a>\n\nChief Complaint\nPatient presents with persistent headache and fatigue lasting for 3 days. Reports difficulty sleeping and mild nausea.",
+        "markdown": "<a id='0172284b-06fe-4875-a5cc-5ff9d47da440'></a>\n\nChief Complaint\nPatient presents with persistent headache and fatigue lasting for 3 days. Reports difficulty sleeping and mild nausea.",
         "type": "text",
-        "id": "5fc5aec0-b7fd-4720-bbd6-223278bf8c5b",
+        "id": "0172284b-06fe-4875-a5cc-5ff9d47da440",
         "grounding": {
           "box": {
             "left": 0.044192224740982056,
@@ -63,9 +63,9 @@
         }
       },
       {
-        "markdown": "<a id='60f3cd4d-fcad-404f-83ec-5c38dfec5ac8'></a>\n\n## Vital Signs\n\nBlood Pressure: 120/80 mmHg\nHeart Rate: 72 bpm\nRespiratory Rate: 16 breaths/min\nTemperature: 98.6 F (37.0 C)\nOxygen Saturation: 98% on room air",
+        "markdown": "<a id='92c84fe2-2833-460a-bb2e-abb4431c0033'></a>\n\n## Vital Signs\n\nBlood Pressure: 120/80 mmHg\nHeart Rate: 72 bpm\nRespiratory Rate: 16 breaths/min\nTemperature: 98.6 F (37.0 C)\nOxygen Saturation: 98% on room air",
         "type": "text",
-        "id": "60f3cd4d-fcad-404f-83ec-5c38dfec5ac8",
+        "id": "92c84fe2-2833-460a-bb2e-abb4431c0033",
         "grounding": {
           "box": {
             "left": 0.04427933692932129,
@@ -77,9 +77,9 @@
         }
       },
       {
-        "markdown": "<a id='10ed2b60-645c-48e7-ab4b-c793f0d86f0a'></a>\n\n## Physical Examination\nGeneral: Patient alert and oriented. Appears mildly fatigued.\nHEENT: Pupils equal and reactive. No abnormalities noted.\nCardiovascular: Regular rhythm, no murmurs.\nRespiratory: Clear breath sounds bilaterally.",
+        "markdown": "<a id='f34ec2e9-3a62-431a-b681-6568895b1bd3'></a>\n\n## Physical Examination\nGeneral: Patient alert and oriented. Appears mildly fatigued.\nHEENT: Pupils equal and reactive. No abnormalities noted.\nCardiovascular: Regular rhythm, no murmurs.\nRespiratory: Clear breath sounds bilaterally.",
         "type": "text",
-        "id": "10ed2b60-645c-48e7-ab4b-c793f0d86f0a",
+        "id": "f34ec2e9-3a62-431a-b681-6568895b1bd3",
         "grounding": {
           "box": {
             "left": 0.04417255520820618,
@@ -91,9 +91,9 @@
         }
       },
       {
-        "markdown": "<a id='2aab8e6f-efdc-4507-9922-4573a6a409e8'></a>\n\n## Assessment and Plan\n\nPatient appears to be in stable condition with symptoms consistent with tension headache and mild dehydration. Recommend increased fluid intake, rest, and OTC pain management as needed.",
+        "markdown": "<a id='8202b512-eaf9-493e-be87-4a495a77c637'></a>\n\n## Assessment and Plan\n\nPatient appears to be in stable condition with symptoms consistent with tension headache and mild dehydration. Recommend increased fluid intake, rest, and OTC pain management as needed.",
         "type": "text",
-        "id": "2aab8e6f-efdc-4507-9922-4573a6a409e8",
+        "id": "8202b512-eaf9-493e-be87-4a495a77c637",
         "grounding": {
           "box": {
             "left": 0.04431667923927307,
@@ -105,9 +105,9 @@
         }
       },
       {
-        "markdown": "<a id='8fb4f973-abb8-4a98-b3ea-c068c65c3fce'></a>\n\nFollow-up\n\nScheduled for: January 17, 2026",
+        "markdown": "<a id='d54cf5ab-e813-4e7e-a008-6c8f076e6f27'></a>\n\nFollow-up\n\nScheduled for: January 17, 2026",
         "type": "text",
-        "id": "8fb4f973-abb8-4a98-b3ea-c068c65c3fce",
+        "id": "d54cf5ab-e813-4e7e-a008-6c8f076e6f27",
         "grounding": {
           "box": {
             "left": 0.04419909417629242,
@@ -119,9 +119,9 @@
         }
       },
       {
-        "markdown": "<a id='60aa4ed2-871d-4bf2-a919-e306ca3344fa'></a>\n\nPage 1",
+        "markdown": "<a id='a8b5f212-e884-4189-b187-0e32e755b476'></a>\n\nPage 1",
         "type": "marginalia",
-        "id": "60aa4ed2-871d-4bf2-a919-e306ca3344fa",
+        "id": "a8b5f212-e884-4189-b187-0e32e755b476",
         "grounding": {
           "box": {
             "left": 0.47352850437164307,
@@ -133,9 +133,9 @@
         }
       },
       {
-        "markdown": "<a id='990efba5-dc7e-4f51-b10b-55c3187b56db'></a>\n\nHealthOps Medical Center",
+        "markdown": "<a id='4493b7b7-d098-4803-ac76-6c72a599870f'></a>\n\nHealthOps Medical Center",
         "type": "text",
-        "id": "990efba5-dc7e-4f51-b10b-55c3187b56db",
+        "id": "4493b7b7-d098-4803-ac76-6c72a599870f",
         "grounding": {
           "box": {
             "left": 0.3252573609352112,
@@ -147,9 +147,9 @@
         }
       },
       {
-        "markdown": "<a id='9cf11838-d7c5-48b1-af2f-294911bfed2d'></a>\n\nInstructions: Return if symptoms worsen or new symptoms develop",
+        "markdown": "<a id='ea47c29f-5604-451a-85a0-9e1ba219399c'></a>\n\nInstructions: Return if symptoms worsen or new symptoms develop",
         "type": "text",
-        "id": "9cf11838-d7c5-48b1-af2f-294911bfed2d",
+        "id": "ea47c29f-5604-451a-85a0-9e1ba219399c",
         "grounding": {
           "box": {
             "left": 0.046336859464645386,
@@ -161,9 +161,9 @@
         }
       },
       {
-        "markdown": "<a id='7ff44f45-885f-4d0e-81fc-569de970b87c'></a>\n\n_Physician: Dr. Sarah Johnson, MD_",
+        "markdown": "<a id='2e02292f-39c1-4960-9b4d-331669a2b0a2'></a>\n\n_Physician: Dr. Sarah Johnson, MD_",
         "type": "text",
-        "id": "7ff44f45-885f-4d0e-81fc-569de970b87c",
+        "id": "2e02292f-39c1-4960-9b4d-331669a2b0a2",
         "grounding": {
           "box": {
             "left": 0.04620061814785004,
@@ -175,9 +175,9 @@
         }
       },
       {
-        "markdown": "<a id='4dd434b0-9a5d-4e8c-9955-ea0365e971b0'></a>\n\nLicense: MD-54321",
+        "markdown": "<a id='1819d577-a895-49c9-b704-834dd9151096'></a>\n\nLicense: MD-54321",
         "type": "text",
-        "id": "4dd434b0-9a5d-4e8c-9955-ea0365e971b0",
+        "id": "1819d577-a895-49c9-b704-834dd9151096",
         "grounding": {
           "box": {
             "left": 0.04709598422050476,
@@ -189,9 +189,9 @@
         }
       },
       {
-        "markdown": "<a id='7b7fde34-dd20-4765-9940-4c9b67f84b67'></a>\n\nPage 2",
+        "markdown": "<a id='7ba757d4-b956-4208-a2be-0e03ff3bb1ef'></a>\n\nPage 2",
         "type": "marginalia",
-        "id": "7b7fde34-dd20-4765-9940-4c9b67f84b67",
+        "id": "7ba757d4-b956-4208-a2be-0e03ff3bb1ef",
         "grounding": {
           "box": {
             "left": 0.4725554585456848,
@@ -206,14 +206,14 @@
     "confidence": 0.95
   },
   "document_type": "medical_record",
-  "processing_time": 6.241122722625732,
+  "processing_time": 5.024749994277954,
   "metadata": {
     "filename": "sample_medical_record.pdf",
     "org_id": null,
     "page_count": 2,
-    "duration_ms": 4272,
+    "duration_ms": 4119,
     "credit_usage": 6.0,
-    "job_id": "1c64a16625bd4f0cacb8b0401ee2b778",
+    "job_id": "aabd18ed0e47480e9b1d7118216c5eb3",
     "version": "dpt-2-20251103",
     "failed_pages": []
   }

@@ -1,0 +1,39 @@
+REFERRAL INTAKE FORM
+
+Referral ID: REF-1001
+Referral Source: Primary Care Physician (PCP)
+Referral Received Date: 01/02/2026
+Urgency Level: Routine
+
+PATIENT INFORMATION
+Patient Full Name: John Martinez
+Date of Birth: 1969-08-14
+Age: 56
+Gender: Male
+Address: 245 Mission St, San Francisco, CA 94105
+Primary Language: Spanish
+Phone Number: (415) 555-0198
+
+INSURANCE DETAILS
+Insurance Active: Yes
+Payer Name: BlueCross
+Plan Type: PPO
+Authorization Required: Yes
+Authorization Status: Approved
+Authorization Start Date: 01/05/2026
+Authorization End Date: 02/04/2026
+Authorized Units: 1
+Unit Type: SCANS
+
+SERVICE REQUESTED
+Service Category: Imaging
+Service Type: MRI – Knee
+
+DOCUMENTATION STATUS
+Referral Documents Complete: Yes
+Home Assessment Required: No
+Patient Responsive: High
+Contact Attempts Made: 1
+
+NOTES
+Referral approved and documentation complete. Ready to move downstream into scheduling workflow.

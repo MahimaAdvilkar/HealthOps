@@ -1,0 +1,38 @@
+BILLING READINESS SUMMARY
+
+Referral ID: REF-1001
+Patient Name: John Martinez
+Date of Birth: 1969-08-14
+
+Service Summary:
+Service Category: Imaging
+Procedure: MRI – Knee
+Date of Service: 01/07/2026
+Units Delivered: 1
+Unit Type: SCANS
+
+Authorization Verification:
+Authorization Required: Yes
+Authorization Status: Approved
+Authorization Start Date: 01/05/2026
+Authorization End Date: 02/04/2026
+Authorized Units: 1
+Units Used: 1
+
+Documentation Checklist:
+Referral Intake: Complete
+Authorization Letter: Received
+Visit Note / EVV Proof: Complete
+
+Billing Status:
+Ready to Bill: YES
+Billing Hold Reason: N/A
+
+Billing Instructions:
+Proceed with claim submission.
+Ensure CPT code aligns with authorized service.
+Attach authorization letter and visit note.
+
+Prepared By:
+Billing Operations Agent
+Prepared Date: 01/08/2026
