@@ -88,4 +88,48 @@ export const apiService = {
     }
     return response.json();
   },
+
+  async scheduleReferral(referralId: string, caregiverId?: string): Promise<any> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('referral_id', referralId);
+    if (caregiverId) {
+      queryParams.append('caregiver_id', caregiverId);
+    }
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/schedule/confirm?${queryParams}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to schedule referral');
+    }
+    return response.json();
+  },
+
+  async processReferralWithCrew(referralId: string): Promise<any> {
+    const queryParams = new URLSearchParams();
+    queryParams.append('referral_id', referralId);
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/crew/process-referral?${queryParams}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to process referral with Crew AI');
+    }
+    return response.json();
+  },
 };
+
