@@ -1,5 +1,6 @@
 import os
 import yaml
+import requests
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dotenv import load_dotenv
@@ -61,6 +62,8 @@ class ReferralValidationAgent:
     def __init__(self):
         self.config = ConfigLoader()
         self.agent_name = "Referral Validation Agent"
+        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
+        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"
         
         # Load all scoring parameters from config
         self.insurance_penalty = self.config.get_yaml('validation_agent', 'scoring', 'insurance_inactive_penalty', default=30)
@@ -153,8 +156,53 @@ class ReferralValidationAgent:
     
     def get_agent_recommendation(self, validation: Dict[str, Any]) -> str:
         """
-        Get AI agent recommendation based on validation
+        Get AI agent recommendation based on validation using Swarms API
         """
+        if not self.swarms_api_key:
+            # Fallback to rule-based recommendation
+            if validation["status"] == "BLOCKED":
+                return f"HOLD: Cannot proceed. Issues: {', '.join(validation['issues'])}"
+            elif validation["status"] == "READY":
+                return f"PROCEED: Referral validated. Priority: {validation['priority']}"
+            elif validation["status"] == "READY_WITH_WARNINGS":
+                return f"PROCEED WITH CAUTION: {', '.join(validation['warnings'])}"
+            else:
+                return f"REVIEW: {validation['status']}"
+        
+        # Use AI to generate recommendation
+        try:
+            prompt = f"""As a healthcare referral validation expert, provide a brief recommendation (1-2 sentences) for this referral:
+
+Status: {validation['status']}
+Score: {validation['validation_score']}/100
+Issues: {', '.join(validation['issues']) if validation['issues'] else 'None'}
+Warnings: {', '.join(validation['warnings']) if validation['warnings'] else 'None'}
+Priority: {validation.get('priority', 'NORMAL')}
+
+Provide actionable guidance for the care coordinator."""
+
+            response = requests.post(
+                self.swarms_api_url,
+                headers={
+                    "Authorization": f"Bearer {self.swarms_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "gpt-4o",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.3,
+                    "max_tokens": 150
+                },
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+        except Exception as e:
+            print(f"AI recommendation failed: {e}")
+        
+        # Fallback to rule-based
         if validation["status"] == "BLOCKED":
             return f"HOLD: Cannot proceed. Issues: {', '.join(validation['issues'])}"
         elif validation["status"] == "READY":
@@ -173,8 +221,8 @@ class CaregiverMatchingAgent:
     
     def __init__(self):
         self.config = ConfigLoader()
-        self.agent_name = "Caregiver Matching Agent"
-        
+        self.agent_name = "Caregiver Matching Agent"        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
+        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"        
         # Load scoring parameters from config
         self.city_match_points = self.config.get_yaml('matching_agent', 'scoring', 'city_match_points', default=40)
         self.exact_skill_points = self.config.get_yaml('matching_agent', 'scoring', 'exact_skill_match_points', default=40)
@@ -256,9 +304,59 @@ class CaregiverMatchingAgent:
         matches: List[Dict[str, Any]]
     ) -> str:
         """
-        Get AI agent recommendation for caregiver matching
-    All limits and thresholds loaded from YAML config
-    """
+        Get AI agent recommendation for caregiver matching using Swarms API
+        """
+        if not matches:
+            return f"NO MATCHES: No caregivers found in the area for {referral_id}"
+        
+        if not self.swarms_api_key:
+            # Fallback to rule-based
+            if len(matches) >= 3:
+                return f"EXCELLENT: Found {len(matches)} matching caregivers. Top match: {matches[0]['caregiver_id']} ({matches[0]['match_score']}%)"
+            elif len(matches) > 0:
+                return f"GOOD: Found {len(matches)} caregiver(s). Assign {matches[0]['caregiver_id']} (score: {matches[0]['match_score']}%)"
+            return f"LIMITED: Only {len(matches)} match found"
+        
+        # Use AI to generate recommendation
+        try:
+            match_summary = f"{len(matches)} caregivers found\\n"
+            for i, m in enumerate(matches[:3], 1):
+                match_summary += f"{i}. {m['caregiver_id']}: {m['match_score']}% - {', '.join(m['match_reasons'][:2])}\\n"
+            
+            prompt = f"""As a healthcare caregiver matching expert, provide a brief recommendation (1-2 sentences) for this referral:
+
+Referral: {referral_id}
+{match_summary}
+
+Recommend which caregiver to assign and why."""
+
+            response = requests.post(
+                self.swarms_api_url,
+                headers={
+                    "Authorization": f"Bearer {self.swarms_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "gpt-4o",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.3,
+                    "max_tokens": 150
+                },
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+        except Exception as e:
+            print(f"AI matching recommendation failed: {e}")
+        
+        # Fallback
+        if len(matches) >= 3:
+            return f"EXCELLENT: Found {len(matches)} matching caregivers. Top match: {matches[0]['caregiver_id']} ({matches[0]['match_score']}%)"
+        elif len(matches) > 0:
+            return f"GOOD: Found {len(matches)} caregiver(s). Assign {matches[0]['caregiver_id']} (score: {matches[0]['match_score']}%)"
+        return f"LIMITED: Only {len(matches)} match found"
 
 
 class SchedulingAgent:
@@ -270,6 +368,8 @@ class SchedulingAgent:
     def __init__(self):
         self.config = ConfigLoader()
         self.agent_name = "Scheduling Agent"
+        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
+        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"
         
         # Load scheduling parameters from config
         self.max_units_per_week = self.config.get_yaml('scheduling_agent', 'limits', 'max_units_per_week', default=20)
@@ -360,17 +460,62 @@ class SchedulingAgent:
     
     def get_agent_recommendation(self, schedule_rec: Dict[str, Any]) -> str:
         """
-        Get AI agent recommendation for scheduling
+        Get AI agent recommendation for scheduling using Swarms API
         """
         action = schedule_rec.get("schedule_action")
         priority = schedule_rec.get("priority")
+        rationale = ', '.join(schedule_rec['rationale'])
         
+        if not self.swarms_api_key:
+            # Fallback to rule-based
+            if action == "SCHEDULE_NOW":
+                return f"SCHEDULE NOW [{priority}]: {rationale}"
+            elif action == "HOLD":
+                return f"HOLD: {rationale}"
+            else:
+                return f"BLOCK: Cannot schedule. {rationale}"
+        
+        # Use AI to generate recommendation
+        try:
+            prompt = f"""As a healthcare scheduling coordinator, provide a brief action recommendation (1-2 sentences) for this scheduling decision:
+
+Action: {action}
+Priority: {priority}
+Can Schedule: {schedule_rec.get('can_schedule')}
+Caregiver: {schedule_rec.get('caregiver_id', 'None')}
+Suggested Units: {schedule_rec.get('suggested_units')}
+Rationale: {rationale}
+
+Provide clear next steps for the coordinator."""
+
+            response = requests.post(
+                self.swarms_api_url,
+                headers={
+                    "Authorization": f"Bearer {self.swarms_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "gpt-4o",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.3,
+                    "max_tokens": 150
+                },
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result['choices'][0]['message']['content'].strip()
+        except Exception as e:
+            print(f"AI scheduling recommendation failed: {e}")
+        
+        # Fallback
         if action == "SCHEDULE_NOW":
-            return f"SCHEDULE NOW [{priority}]: {', '.join(schedule_rec['rationale'])}"
+            return f"SCHEDULE NOW [{priority}]: {rationale}"
         elif action == "HOLD":
-            return f"HOLD: {', '.join(schedule_rec['rationale'])}"
+            return f"HOLD: {rationale}"
         else:
-            return f"BLOCK: Cannot schedule. {', '.join(schedule_rec['rationale'])}"
+            return f"BLOCK: Cannot schedule. {rationale}"
 
 
 class AgentWorkflow:
@@ -398,7 +543,7 @@ class AgentWorkflow:
         }
         
         # Agent 1: Validate
-        print(f"\n🤖 Agent 1: Validating referral {referral.get('referral_id')}...")
+        print(f"\n🔍 Agent 1: Validating referral {referral.get('referral_id')}...")
         validation = self.validation_agent.validate_referral(referral)
         validation_rec = self.validation_agent.get_agent_recommendation(validation)
         
@@ -409,7 +554,7 @@ class AgentWorkflow:
         # Agent 2: Match caregivers (only if validation passed)
         matches = []
         if validation.get("is_valid"):
-            print(f"🤖 Agent 2: Finding matching caregivers...")
+            print(f"🎯 Agent 2: Finding matching caregivers...")
             matches = self.matching_agent.match_caregivers(referral, caregivers)
             matching_rec = self.matching_agent.get_agent_recommendation(
                 referral.get("referral_id"), 
@@ -424,7 +569,7 @@ class AgentWorkflow:
             workflow_result["matching_recommendation"] = "SKIPPED: Validation failed"
         
         # Agent 3: Create schedule recommendation
-        print(f"🤖 Agent 3: Creating schedule recommendation...")
+        print(f"📅 Agent 3: Creating schedule recommendation...")
         top_match = matches[0] if matches else None
         schedule_rec = self.scheduling_agent.create_schedule_recommendation(
             referral, 
