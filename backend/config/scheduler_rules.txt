@@ -1,0 +1,22 @@
+# AI Agent Scheduler Rules
+# These rules determine which referrals are eligible for the AI agent scheduler
+# Rules are converted to SQL WHERE clauses automatically
+
+# Rule 1: Only show referrals that are not already scheduled
+schedule_status must not be 'SCHEDULED' or 'COMPLETED'
+
+# Rule 2: Must have valid authorization
+auth_units_remaining must be greater than 0
+
+# Rule 3: Only show active referrals (not cancelled)
+schedule_status must not be 'CANCELLED'
+
+# Rule 4: Prioritize based on urgency and contact attempts
+# Show urgent cases first, then routine cases with fewer contact attempts
+order by urgency DESC, contact_attempts ASC
+
+# Rule 5: Exclude referrals that are on hold
+schedule_status must not be 'ON_HOLD'
+
+# Rule 6: Only show referrals that need action
+agent_segment must be 'Needs Scheduling' or 'Pending Review' or 'Ready for Agent'
