@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from psycopg2 import sql
+from psycopg2 import pool, sql
 import csv
 from pathlib import Path
 from typing import Dict, Any, List
@@ -25,12 +25,14 @@ class ConfigLoader:
 
 
 class DatabaseService:
+    _connection_pool = None
     
     def __init__(self):
         self.config = ConfigLoader()
         self.connection = None
         self.cursor = None
         self._load_db_config()
+        self._init_pool()
     
     def _load_db_config(self):
         self.db_host = self.config.get("DB_HOST", "localhost")
@@ -39,15 +41,34 @@ class DatabaseService:
         self.db_user = self.config.get("DB_USER", "postgres")
         self.db_password = self.config.get("DB_PASSWORD", "")
     
+    def _init_pool(self):
+        """Initialize connection pool for better performance"""
+        if DatabaseService._connection_pool is None:
+            try:
+                DatabaseService._connection_pool = psycopg2.pool.SimpleConnectionPool(
+                    1,  # minconn
+                    10,  # maxconn
+                    host=self.db_host,
+                    port=self.db_port,
+                    database=self.db_name,
+                    user=self.db_user,
+                    password=self.db_password
+                )
+            except Exception as e:
+                print(f"Failed to create connection pool: {e}")
+    
     def connect(self) -> Dict[str, Any]:
         try:
-            self.connection = psycopg2.connect(
-                host=self.db_host,
-                port=self.db_port,
-                database=self.db_name,
-                user=self.db_user,
-                password=self.db_password
-            )
+            if DatabaseService._connection_pool:
+                self.connection = DatabaseService._connection_pool.getconn()
+            else:
+                self.connection = psycopg2.connect(
+                    host=self.db_host,
+                    port=self.db_port,
+                    database=self.db_name,
+                    user=self.db_user,
+                    password=self.db_password
+                )
             self.cursor = self.connection.cursor()
             
             return {
@@ -64,9 +85,13 @@ class DatabaseService:
     def disconnect(self):
         if self.cursor:
             self.cursor.close()
+            self.cursor = None
         if self.connection:
-            self.connection.close()
-        print("Database connection closed")
+            if DatabaseService._connection_pool:
+                DatabaseService._connection_pool.putconn(self.connection)
+            else:
+                self.connection.close()
+            self.connection = None
     
     def execute_sql_file(self, sql_file_path: str) -> Dict[str, Any]:
         try:
@@ -180,6 +205,10 @@ class DatabaseService:
     
     def query(self, sql_query: str, params: tuple = None) -> Dict[str, Any]:
         try:
+            # Ensure we have a connection
+            if not self.connection or not self.cursor:
+                self.connect()
+            
             self.cursor.execute(sql_query, params)
             
             if sql_query.strip().upper().startswith('SELECT'):

@@ -146,9 +146,9 @@ async def validate_predictions(predictions: list):
         )
 
 
-@app.get("/api/v1/referrals", response_model=List[ReferralResponse])
+@app.get("/api/v1/referrals")
 async def get_referrals(
-    limit: int = Query(100, ge=1, le=1000),
+    limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     urgency: Optional[str] = None,
     agent_segment: Optional[str] = None,
@@ -188,6 +188,9 @@ async def get_referrals(
     except HTTPException:
         raise
     except Exception as e:
+        import traceback
+        error_detail = f"Failed to fetch referrals: {str(e)}\n{traceback.format_exc()}"
+        print(error_detail)
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch referrals: {str(e)}"
@@ -196,7 +199,7 @@ async def get_referrals(
 
 @app.get("/api/v1/caregivers", response_model=List[CaregiverResponse])
 async def get_caregivers(
-    limit: int = Query(100, ge=1, le=500),
+    limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     city: Optional[str] = None,
     active: Optional[str] = None,
@@ -209,7 +212,10 @@ async def get_caregivers(
                 detail="Database service not initialized"
             )
         
-        query = "SELECT * FROM caregivers WHERE 1=1"
+        # Select only needed columns
+        query = """SELECT caregiver_id, gender, date_of_birth, age, primary_language, skills, 
+                   employment_type, availability, city, active 
+                   FROM caregivers WHERE 1=1"""
         params = []
         
         if city:
@@ -335,8 +341,13 @@ async def get_pending_referrals():
                 detail="Services not initialized"
             )
         
-        # Get limit from agent config
-        max_pending = agent_workflow.scheduling_agent.max_pending_referrals
+        # Get limit from agent config (default to 50 if not available)
+        max_pending = 50
+        try:
+            if hasattr(agent_workflow, 'scheduling_agent') and hasattr(agent_workflow.scheduling_agent, 'max_pending_referrals'):
+                max_pending = agent_workflow.scheduling_agent.max_pending_referrals
+        except:
+            pass
         
         result = db_service.query(f"""
             SELECT * FROM referrals 

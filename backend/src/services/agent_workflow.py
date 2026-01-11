@@ -259,6 +259,13 @@ class CaregiverMatchingAgent:
         Get AI agent recommendation for caregiver matching
     All limits and thresholds loaded from YAML config
     """
+
+
+class SchedulingAgent:
+    """
+    Agent 3: Creates scheduling recommendations
+    All limits and thresholds loaded from YAML config
+    """
     
     def __init__(self):
         self.config = ConfigLoader()
