@@ -1,0 +1,41 @@
+documents:
+  referral_intake:
+    required_fields:
+      - referral_id
+      - patient_name
+      - dob
+      - address
+      - phone
+      - service_type
+      - referral_source
+      - urgency
+      - referral_received_date
+
+  auth_approval:
+    required_fields:
+      - referral_id
+      - auth_required
+      - auth_status
+      - auth_start_date
+      - auth_end_date
+      - auth_units_total
+      - unit_type
+      - payer
+      - plan_type
+
+  visit_note:
+    required_fields:
+      - referral_id
+      - service_date
+      - caregiver_id
+      - units_delivered
+      - evv_proof_present
+      - visit_note_signed
+
+  billing_readiness:
+    required_fields:
+      - referral_id
+      - ready_to_bill
+      - billing_hold_reason
+      - claim_recommended
+      - cpt_code
