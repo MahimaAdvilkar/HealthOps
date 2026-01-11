@@ -16,17 +16,20 @@ from src.models.schemas import ImageRequest, ImageResponse, ErrorResponse
 from src.models.data_schemas import CaregiverResponse, ReferralResponse, DataStatsResponse
 from src.services.landingai_service import LandingAIService
 from src.services.agent_workflow import AgentWorkflow
+from src.services.crew_workflow import HealthOpsCrewWorkflow
+from src.services.email_service import email_service
 from database.db_service import DatabaseService
 
 
 landingai_service = None
 db_service = None
 agent_workflow = None
+crew_workflow = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global landingai_service, db_service, agent_workflow
+    global landingai_service, db_service, agent_workflow, crew_workflow
     landingai_service = LandingAIService()
     print("Landing AI service initialized successfully")
     
@@ -39,6 +42,13 @@ async def lifespan(app: FastAPI):
     
     agent_workflow = AgentWorkflow()
     print("Agent Workflow initialized successfully")
+    
+    try:
+        crew_workflow = HealthOpsCrewWorkflow()
+        print("Crew AI Workflow initialized successfully")
+    except Exception as e:
+        print(f"Warning: Crew AI initialization failed - {e}")
+        crew_workflow = None
     
     yield
     
@@ -788,6 +798,265 @@ async def get_pending_referrals():
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch pending referrals: {str(e)}"
+        )
+
+
+@app.post("/api/v1/crew/process-referral")
+async def process_referral_with_crew(referral_id: str):
+    """
+    Process a referral using Crew AI workflow
+    Runs validation, matching, and compliance agents
+    """
+    try:
+        if not crew_workflow:
+            raise HTTPException(
+                status_code=503,
+                detail="Crew AI workflow not initialized. Check SWARMS_API_KEY in environment."
+            )
+        
+        if not db_service:
+            raise HTTPException(status_code=500, detail="Database service not initialized")
+        
+        # Fetch referral data
+        referral_result = db_service.query(
+            f"SELECT * FROM referrals WHERE referral_id = '{referral_id}'"
+        )
+        
+        if not referral_result['success'] or not referral_result['data']:
+            raise HTTPException(status_code=404, detail=f"Referral {referral_id} not found")
+        
+        referral_data = referral_result['data'][0]
+        
+        # Fetch available caregivers
+        caregivers_result = db_service.query("SELECT * FROM caregivers WHERE available = 'Y'")
+        caregivers = caregivers_result.get('data', []) if caregivers_result['success'] else []
+        
+        # Process through Crew AI workflow
+        result = crew_workflow.process_referral(referral_data, caregivers)
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Crew AI processing failed: {str(e)}"
+        )
+
+
+@app.post("/api/v1/crew/process-batch")
+async def process_batch_with_crew(limit: int = 10):
+    """
+    Process multiple referrals in batch using Crew AI
+    """
+    try:
+        if not crew_workflow:
+            raise HTTPException(
+                status_code=503,
+                detail="Crew AI workflow not initialized. Check SWARMS_API_KEY in environment."
+            )
+        
+        if not db_service:
+            raise HTTPException(status_code=500, detail="Database service not initialized")
+        
+        # Get pending referrals
+        referrals_result = db_service.query(f"""
+            SELECT * FROM referrals 
+            WHERE schedule_status = 'NOT_SCHEDULED'
+              AND insurance_active = 'Y'
+            LIMIT {limit}
+        """)
+        
+        if not referrals_result['success']:
+            raise HTTPException(status_code=500, detail="Failed to fetch referrals")
+        
+        referrals = referrals_result.get('data', [])
+        
+        # Get caregivers
+        caregivers_result = db_service.query("SELECT * FROM caregivers WHERE available = 'Y'")
+        caregivers = caregivers_result.get('data', []) if caregivers_result['success'] else []
+        
+        # Process batch
+        results = crew_workflow.process_batch_referrals(referrals, caregivers)
+        
+        return {
+            "success": True,
+            "processed_count": len(results),
+            "results": results
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Batch processing failed: {str(e)}"
+        )
+
+
+@app.get("/api/v1/crew/history")
+async def get_crew_execution_history(limit: int = 20):
+    """
+    Get Crew AI execution history for monitoring
+    Shows recent agent workflow runs with status and duration
+    """
+    try:
+        if not crew_workflow:
+            raise HTTPException(
+                status_code=503,
+                detail="Crew AI workflow not initialized"
+            )
+        
+        history = crew_workflow.get_execution_history(limit)
+        
+        return {
+            "success": True,
+            "count": len(history),
+            "executions": history
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch history: {str(e)}"
+        )
+
+
+@app.get("/api/v1/crew/stats")
+async def get_crew_stats():
+    """
+    Get Crew AI workflow statistics
+    Returns: total runs, success rate, average duration, etc.
+    """
+    try:
+        if not crew_workflow:
+            raise HTTPException(
+                status_code=503,
+                detail="Crew AI workflow not initialized"
+            )
+        
+        stats = crew_workflow.get_stats()
+        
+        return {
+            "success": True,
+            "stats": stats
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch stats: {str(e)}"
+        )
+
+
+@app.post("/api/v1/schedule/confirm")
+async def schedule_referral(referral_id: str, caregiver_id: Optional[str] = None):
+    """
+    Schedule a referral and send confirmation email
+    
+    Args:
+        referral_id: ID of the referral to schedule
+        caregiver_id: Optional caregiver assignment
+        
+    Returns:
+        Scheduling result with email confirmation status
+    """
+    try:
+        if not db_service:
+            raise HTTPException(status_code=500, detail="Database service not initialized")
+        
+        # Fetch referral data
+        referral_result = db_service.query(
+            f"SELECT * FROM referrals WHERE referral_id = '{referral_id}'"
+        )
+        
+        if not referral_result['success'] or not referral_result['data']:
+            raise HTTPException(status_code=404, detail=f"Referral {referral_id} not found")
+        
+        referral_data = referral_result['data'][0]
+        
+        # Fetch caregiver data if provided
+        caregiver_data = None
+        if caregiver_id:
+            caregiver_result = db_service.query(
+                f"SELECT * FROM caregivers WHERE caregiver_id = '{caregiver_id}'"
+            )
+            if caregiver_result['success'] and caregiver_result['data']:
+                caregiver_data = caregiver_result['data'][0]
+        
+        # Update referral status to SCHEDULED
+        update_result = db_service.execute(f"""
+            UPDATE referrals 
+            SET schedule_status = 'SCHEDULED',
+                assigned_caregiver_id = {f"'{caregiver_id}'" if caregiver_id else 'NULL'}
+            WHERE referral_id = '{referral_id}'
+        """)
+        
+        if not update_result['success']:
+            raise HTTPException(status_code=500, detail="Failed to update referral status")
+        
+        # Send scheduling confirmation email
+        email_result = email_service.send_scheduling_confirmation(
+            referral_data=referral_data,
+            caregiver_data=caregiver_data
+        )
+        
+        return {
+            "success": True,
+            "referral_id": referral_id,
+            "status": "SCHEDULED",
+            "caregiver_assigned": caregiver_id,
+            "email_sent": email_result.get("success", False),
+            "email_details": email_result,
+            "message": "Referral scheduled successfully and confirmation email sent"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Scheduling failed: {str(e)}"
+        )
+
+
+@app.post("/api/v1/email/send-notification")
+async def send_email_notification(
+    referral_id: str,
+    notification_type: str = "workflow_update",
+    details: Optional[str] = None
+):
+    """
+    Send email notification for workflow updates
+    
+    Args:
+        referral_id: Referral ID
+        notification_type: Type of notification
+        details: Additional details
+    """
+    try:
+        if notification_type == "workflow_update":
+            result = email_service.send_workflow_notification(
+                referral_id=referral_id,
+                workflow_status="Updated",
+                details=details or "Workflow status has been updated"
+            )
+        else:
+            raise HTTPException(status_code=400, detail="Invalid notification type")
+        
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to send notification: {str(e)}"
         )
 
 
