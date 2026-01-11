@@ -1,0 +1,302 @@
+# Healthcare Document Extraction Rules
+# Defines field extraction rules, validation criteria, and processing guidelines
+
+# Global Extraction Settings
+settings:
+  confidence_threshold: 0.75
+  auto_correct_dates: true
+  normalize_phone_numbers: true
+  require_referral_id: true
+  extract_pii_securely: true
+
+# Document Type Identification Rules
+document_types:
+  referral_intake:
+    keywords:
+      - "referral intake"
+      - "new referral"
+      - "patient referral"
+      - "intake form"
+    priority_fields:
+      - referral_id
+      - patient_name
+      - service_type
+  
+  auth_approval:
+    keywords:
+      - "authorization"
+      - "auth approval"
+      - "prior auth"
+      - "insurance authorization"
+    priority_fields:
+      - referral_id
+      - auth_status
+      - auth_start_date
+  
+  visit_note:
+    keywords:
+      - "visit note"
+      - "service note"
+      - "progress note"
+      - "care visit"
+    priority_fields:
+      - referral_id
+      - service_date
+      - units_delivered
+  
+  billing_readiness:
+    keywords:
+      - "billing"
+      - "ready to bill"
+      - "claim"
+      - "billing status"
+    priority_fields:
+      - referral_id
+      - ready_to_bill
+      - cpt_code
+
+# Field Extraction Rules by Document Type
+extraction_rules:
+  
+  referral_intake:
+    required_fields:
+      referral_id:
+        pattern: "REF-\\d{4}"
+        validation: "Must start with REF- followed by 4 digits"
+        extract_from: ["title", "header", "top_section"]
+      
+      patient_name:
+        pattern: "(?i)(patient name|name):\\s*([A-Za-z\\s]+)"
+        validation: "Must contain first and last name"
+        normalize: "title_case"
+      
+      dob:
+        pattern: "(?i)(dob|date of birth|birth date):\\s*(\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4})"
+        validation: "Must be valid date in MM/DD/YYYY or MM-DD-YYYY format"
+        normalize: "date_format_mm_dd_yyyy"
+      
+      phone:
+        pattern: "(?i)(phone|telephone|mobile):\\s*([\\d\\s\\-\\(\\)]+)"
+        validation: "Must be 10 digits"
+        normalize: "phone_format_xxx_xxx_xxxx"
+      
+      address:
+        pattern: "(?i)(address|location):\\s*([^\\n]+(?:\\n[^\\n]+)?)"
+        validation: "Must include street and city"
+        extract_multiline: true
+      
+      service_type:
+        pattern: "(?i)(service type|service needed|type of care):\\s*([^\\n]+)"
+        validation: "Must match known service types"
+        allowed_values:
+          - "Home Health"
+          - "Physical Therapy"
+          - "Occupational Therapy"
+          - "Speech Therapy"
+          - "Skilled Nursing"
+          - "Personal Care"
+      
+      urgency:
+        pattern: "(?i)(urgency|priority):\\s*(urgent|routine|stat)"
+        validation: "Must be Urgent or Routine"
+        allowed_values: ["Urgent", "Routine", "STAT"]
+        default: "Routine"
+      
+      referral_source:
+        pattern: "(?i)(referral source|referred by|source):\\s*([^\\n]+)"
+        validation: "Must not be empty"
+      
+      referral_received_date:
+        pattern: "(?i)(received date|referral date|intake date):\\s*(\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4})"
+        validation: "Must be valid date"
+        normalize: "date_format_mm_dd_yyyy"
+  
+  auth_approval:
+    required_fields:
+      referral_id:
+        pattern: "REF-\\d{4}"
+        validation: "Must start with REF- followed by 4 digits"
+        extract_from: ["title", "header", "top_section"]
+      
+      auth_required:
+        pattern: "(?i)(authorization required|auth required):\\s*(yes|no|true|false)"
+        validation: "Must be Yes or No"
+        allowed_values: ["Yes", "No"]
+        normalize: "boolean_to_yes_no"
+      
+      auth_status:
+        pattern: "(?i)(auth status|authorization status|status):\\s*([^\\n]+)"
+        validation: "Must match known statuses"
+        allowed_values:
+          - "Approved"
+          - "Pending"
+          - "Denied"
+          - "Expired"
+          - "Not Required"
+      
+      auth_start_date:
+        pattern: "(?i)(auth start|start date|effective date):\\s*(\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4})"
+        validation: "Must be valid date"
+        normalize: "date_format_mm_dd_yyyy"
+      
+      auth_end_date:
+        pattern: "(?i)(auth end|end date|expiration date):\\s*(\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4})"
+        validation: "Must be valid date and after start_date"
+        normalize: "date_format_mm_dd_yyyy"
+      
+      auth_units_total:
+        pattern: "(?i)(total units|authorized units|units):\\s*(\\d+)"
+        validation: "Must be positive integer"
+        data_type: "integer"
+      
+      unit_type:
+        pattern: "(?i)(unit type|type of unit):\\s*([^\\n]+)"
+        validation: "Must match known unit types"
+        allowed_values: ["Visits", "Hours", "Days", "Sessions"]
+      
+      payer:
+        pattern: "(?i)(payer|insurance|insurer):\\s*([^\\n]+)"
+        validation: "Must not be empty"
+      
+      plan_type:
+        pattern: "(?i)(plan type|plan):\\s*([^\\n]+)"
+        validation: "Must not be empty"
+        allowed_values: ["Medicare", "Medicaid", "Commercial", "Self-Pay", "Other"]
+  
+  visit_note:
+    required_fields:
+      referral_id:
+        pattern: "REF-\\d{4}"
+        validation: "Must start with REF- followed by 4 digits"
+        extract_from: ["title", "header", "top_section"]
+      
+      service_date:
+        pattern: "(?i)(service date|visit date|date of service):\\s*(\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4})"
+        validation: "Must be valid date and not in future"
+        normalize: "date_format_mm_dd_yyyy"
+      
+      caregiver_id:
+        pattern: "(?i)(caregiver id|provider id|caregiver):\\s*(CG-\\d{3}|[^\\n]+)"
+        validation: "Must not be empty"
+      
+      units_delivered:
+        pattern: "(?i)(units delivered|units provided|hours worked):\\s*(\\d+\\.?\\d*)"
+        validation: "Must be positive number"
+        data_type: "float"
+      
+      evv_proof_present:
+        pattern: "(?i)(evv proof|electronic verification|evv):\\s*(yes|no|present|absent|true|false)"
+        validation: "Must be Yes or No"
+        allowed_values: ["Yes", "No"]
+        normalize: "boolean_to_yes_no"
+      
+      visit_note_signed:
+        pattern: "(?i)(signed|signature|approved):\\s*(yes|no|true|false)"
+        validation: "Must be Yes or No"
+        allowed_values: ["Yes", "No"]
+        normalize: "boolean_to_yes_no"
+  
+  billing_readiness:
+    required_fields:
+      referral_id:
+        pattern: "REF-\\d{4}"
+        validation: "Must start with REF- followed by 4 digits"
+        extract_from: ["title", "header", "top_section"]
+      
+      ready_to_bill:
+        pattern: "(?i)(ready to bill|billing ready|can bill):\\s*(yes|no|true|false)"
+        validation: "Must be Yes or No"
+        allowed_values: ["Yes", "No"]
+        normalize: "boolean_to_yes_no"
+      
+      billing_hold_reason:
+        pattern: "(?i)(hold reason|billing hold|reason for hold):\\s*([^\\n]+)"
+        validation: "Required if ready_to_bill is No"
+        optional_if: "ready_to_bill == Yes"
+      
+      claim_recommended:
+        pattern: "(?i)(claim recommended|recommended action):\\s*(yes|no|true|false)"
+        validation: "Must be Yes or No"
+        allowed_values: ["Yes", "No"]
+        normalize: "boolean_to_yes_no"
+      
+      cpt_code:
+        pattern: "(?i)(cpt code|cpt|billing code):\\s*(\\d{5})"
+        validation: "Must be 5-digit CPT code"
+        data_type: "string"
+
+# Data Normalization Rules
+normalization:
+  date_format_mm_dd_yyyy:
+    input_patterns:
+      - "MM/DD/YYYY"
+      - "MM-DD-YYYY"
+      - "M/D/YY"
+      - "M-D-YY"
+    output_format: "MM/DD/YYYY"
+  
+  phone_format_xxx_xxx_xxxx:
+    input_patterns:
+      - "(XXX) XXX-XXXX"
+      - "XXX-XXX-XXXX"
+      - "XXXXXXXXXX"
+    output_format: "XXX-XXX-XXXX"
+  
+  boolean_to_yes_no:
+    mappings:
+      yes_values: ["yes", "true", "1", "present"]
+      no_values: ["no", "false", "0", "absent"]
+      output: "Yes/No"
+  
+  title_case:
+    apply_to: ["patient_name", "caregiver_name"]
+    rules: "Capitalize first letter of each word"
+
+# Validation Rules
+validation:
+  cross_field_validation:
+    - rule: "auth_end_date must be after auth_start_date"
+      fields: ["auth_start_date", "auth_end_date"]
+      error_message: "End date cannot be before start date"
+    
+    - rule: "service_date cannot be in the future"
+      fields: ["service_date"]
+      error_message: "Service date cannot be a future date"
+    
+    - rule: "if ready_to_bill is No, billing_hold_reason is required"
+      fields: ["ready_to_bill", "billing_hold_reason"]
+      error_message: "Hold reason must be provided when not ready to bill"
+  
+  referential_integrity:
+    - rule: "referral_id must exist across all related documents"
+      applies_to: ["auth_approval", "visit_note", "billing_readiness"]
+      error_message: "Referral ID not found in referral intake"
+
+# Post-Processing Rules
+post_processing:
+  deduplication:
+    enabled: true
+    match_fields: ["referral_id", "document_type"]
+  
+  auto_correction:
+    enabled: true
+    rules:
+      - "Fix common date format issues"
+      - "Standardize phone number formats"
+      - "Remove extra whitespace"
+  
+  enrichment:
+    enabled: true
+    rules:
+      - "Calculate auth_units_remaining from auth_units_total and visits"
+      - "Derive patient_age from dob"
+      - "Auto-populate extraction_date with current timestamp"
+
+# Error Handling
+error_handling:
+  on_missing_required_field: "flag_as_incomplete"
+  on_validation_failure: "log_and_continue"
+  on_low_confidence: "request_manual_review"
+  confidence_threshold_for_review: 0.75
+  retry_failed_extractions: true
+  max_retries: 2
