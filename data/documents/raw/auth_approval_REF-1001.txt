@@ -1,0 +1,29 @@
+AUTHORIZATION APPROVAL NOTICE
+
+Payer: BlueCross
+Plan Type: PPO
+Authorization Status: APPROVED
+
+Authorization Number: BC-APR-948201
+Patient Name: John Martinez
+Date of Birth: 1969-08-14
+
+Service Authorized:
+Service Category: Imaging
+Procedure: MRI – Knee
+
+Authorization Details:
+Authorization Start Date: 01/05/2026
+Authorization End Date: 02/04/2026
+Authorized Units: 1
+Unit Type: SCANS
+
+Rendering Provider: Any In-Network Imaging Facility
+Place of Service: Outpatient
+
+Notes:
+This authorization confirms coverage for the service listed above.
+Services rendered outside the authorization window may not be reimbursed.
+
+Issued Date: 01/05/2026
+Issued By: BlueCross Utilization Management

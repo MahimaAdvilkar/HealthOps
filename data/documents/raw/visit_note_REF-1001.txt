@@ -1,0 +1,34 @@
+VISIT COMPLETION NOTE
+
+Referral ID: REF-1001
+Patient Name: John Martinez
+Date of Birth: 1969-08-14
+
+Service Performed:
+Service Category: Imaging
+Procedure: MRI – Knee
+
+Date of Service: 01/07/2026
+Time In: 10:00 AM
+Time Out: 10:45 AM
+Units Delivered: 1
+Unit Type: SCANS
+
+Rendering Staff:
+Technician Name: Alex Chen
+Technician ID: TECH-204
+
+Location:
+Facility: SF Imaging Center
+City: San Francisco, CA
+
+Visit Outcome:
+Service completed successfully.
+No complications reported.
+Patient tolerated procedure well.
+
+Documentation:
+Visit verified and signed by technician.
+
+Signature: Alex Chen
+Signed Date: 01/07/2026
