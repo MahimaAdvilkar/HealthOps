@@ -42,7 +42,7 @@ function App() {
           className={activeTab === 'scheduler' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('scheduler')}
         >
-          🤖 AI Scheduler
+          AI Scheduler
         </button>
       </div>
 

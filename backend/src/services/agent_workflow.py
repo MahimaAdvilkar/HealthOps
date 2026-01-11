@@ -544,7 +544,7 @@ class AgentWorkflow:
         }
         
         # Agent 1: Validate
-        print(f"\n🔍 Agent 1: Validating referral {referral.get('referral_id')}...")
+        print(f"\nAgent 1: Validating referral {referral.get('referral_id')}...")
         validation = self.validation_agent.validate_referral(referral)
         validation_rec = self.validation_agent.get_agent_recommendation(validation)
         
@@ -555,7 +555,7 @@ class AgentWorkflow:
         # Agent 2: Match caregivers (only if validation passed)
         matches = []
         if validation.get("is_valid"):
-            print(f"🎯 Agent 2: Finding matching caregivers...")
+            print(f"Agent 2: Finding matching caregivers...")
             matches = self.matching_agent.match_caregivers(referral, caregivers)
             matching_rec = self.matching_agent.get_agent_recommendation(
                 referral.get("referral_id"), 
@@ -570,7 +570,7 @@ class AgentWorkflow:
             workflow_result["matching_recommendation"] = "SKIPPED: Validation failed"
         
         # Agent 3: Create schedule recommendation
-        print(f"📅 Agent 3: Creating schedule recommendation...")
+        print(f"Agent 3: Creating schedule recommendation...")
         top_match = matches[0] if matches else None
         schedule_rec = self.scheduling_agent.create_schedule_recommendation(
             referral, 
