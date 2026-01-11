@@ -22,7 +22,7 @@ def main():
     print(f"   {result['message']}")
     
     if not result['success']:
-        print("\n❌ Connection failed!")
+        print("\nConnection failed!")
         print("\nPlease check:")
         print("1. PostgreSQL service is running (it is ✓)")
         print("2. DB_PASSWORD in .env matches your PostgreSQL password")

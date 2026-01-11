@@ -9,6 +9,8 @@ const AgentScheduler: React.FC = () => {
   const [workflowResult, setWorkflowResult] = useState<WorkflowResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduleSuccess, setScheduleSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const AgentScheduler: React.FC = () => {
       setProcessing(true);
       setSelectedReferral(referral);
       setWorkflowResult(null);
+      setScheduleSuccess(false);
       
       const result = await agentService.processReferral(referral.referral_id);
       setWorkflowResult(result);
@@ -43,6 +46,47 @@ const AgentScheduler: React.FC = () => {
       console.error(err);
     } finally {
       setProcessing(false);
+    }
+  };
+
+  const handleScheduleNow = async () => {
+    if (!selectedReferral) return;
+    
+    try {
+      setScheduling(true);
+      setError(null);
+      
+      // Call schedule endpoint (it will send email automatically)
+      const response = await fetch(
+        `http://localhost:8000/api/v1/schedule/confirm?referral_id=${selectedReferral.referral_id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to schedule referral');
+      }
+      
+      const result = await response.json();
+      
+      setScheduleSuccess(true);
+      
+      // Show success message
+      alert(`Referral ${selectedReferral.referral_id} scheduled successfully!\n\nConfirmation email sent to: ${result.email_details?.to_email || 'customer'}`);
+      
+      // Reload pending referrals
+      await loadPendingReferrals();
+      
+    } catch (err) {
+      setError('Failed to schedule referral');
+      console.error(err);
+      alert('Failed to schedule referral. Please try again.');
+    } finally {
+      setScheduling(false);
     }
   };
 
@@ -86,7 +130,7 @@ const AgentScheduler: React.FC = () => {
       <div className="scheduler-layout">
         {/* Left Panel: Pending Referrals */}
         <div className="pending-panel">
-          <h3>⏳ Waiting for Scheduling ({pendingReferrals.length})</h3>
+          <h3>Waiting for Scheduling ({pendingReferrals.length})</h3>
           <div className="referral-list">
             {pendingReferrals.map((referral) => (
               <div
@@ -104,7 +148,7 @@ const AgentScheduler: React.FC = () => {
                 </div>
                 <div className="referral-details">
                   <div>{referral.service_type}</div>
-                  <div>📍 {referral.patient_city}</div>
+                  <div>{referral.patient_city}</div>
                   <div>Units: {referral.auth_units_remaining}</div>
                 </div>
                 <button
@@ -116,8 +160,8 @@ const AgentScheduler: React.FC = () => {
                   disabled={processing}
                 >
                   {processing && selectedReferral?.referral_id === referral.referral_id
-                    ? '⏳ Processing...'
-                    : '▶ Run AI Agents'}
+                    ? 'Processing...'
+                    : 'Analyze'}
                 </button>
               </div>
             ))}
@@ -128,7 +172,7 @@ const AgentScheduler: React.FC = () => {
         <div className="workflow-panel">
           {!workflowResult && !selectedReferral && (
             <div className="empty-state">
-              <h3>👈 Select a referral to start</h3>
+              <h3>Select a referral to start</h3>
               <p>Click on any referral and run the AI agents to see the workflow</p>
             </div>
           )}
@@ -136,7 +180,7 @@ const AgentScheduler: React.FC = () => {
           {selectedReferral && !workflowResult && !processing && (
             <div className="selected-info">
               <h3>Selected: {selectedReferral.referral_id}</h3>
-              <p>Click "Run AI Agents" to process this referral</p>
+              <p>Click "Analyze" to process this referral</p>
             </div>
           )}
 
@@ -145,9 +189,9 @@ const AgentScheduler: React.FC = () => {
               <div className="spinner"></div>
               <h3>⚙️ AI Agents Working...</h3>
               <div className="agent-progress">
-                <div className="agent-step">✓ Agent 1: Validating referral</div>
-                <div className="agent-step">⏳ Agent 2: Finding caregivers</div>
-                <div className="agent-step">⏳ Agent 3: Creating schedule</div>
+                <div className="agent-step">Agent 1: Validating referral</div>
+                <div className="agent-step">Agent 2: Finding caregivers</div>
+                <div className="agent-step">Agent 3: Creating schedule</div>
               </div>
             </div>
           )}
@@ -155,7 +199,7 @@ const AgentScheduler: React.FC = () => {
           {workflowResult && (
             <div className="workflow-results">
               <div className="result-header">
-                <h3>📊 Workflow Results: {workflowResult.referral_id}</h3>
+                <h3>Workflow Results: {workflowResult.referral_id}</h3>
                 <span className="timestamp">{new Date(workflowResult.timestamp).toLocaleString()}</span>
               </div>
 
@@ -185,7 +229,7 @@ const AgentScheduler: React.FC = () => {
 
                 {workflowResult.validation.issues.length > 0 && (
                   <div className="issues-section">
-                    <strong>❌ Issues:</strong>
+                    <strong>Issues:</strong>
                     <ul>
                       {workflowResult.validation.issues.map((issue, idx) => (
                         <li key={idx} className="issue-item">{issue}</li>
@@ -214,7 +258,7 @@ const AgentScheduler: React.FC = () => {
               {/* Agent 2: Matching */}
               <div className="agent-result">
                 <div className="agent-title">
-                  <span className="agent-icon">🎯</span>
+                  <span className="agent-icon">2</span>
                   <h4>Agent 2: Caregiver Matching</h4>
                 </div>
                 
@@ -227,9 +271,9 @@ const AgentScheduler: React.FC = () => {
                           <span className="match-score">{match.match_score}%</span>
                         </div>
                         <div className="match-info">
-                          <div>📍 {match.city}</div>
-                          <div>🛠️ {match.skills}</div>
-                          <div>📅 {match.availability}</div>
+                          <div>Location: {match.city}</div>
+                          <div>Skills: {match.skills}</div>
+                          <div>Availability: {match.availability}</div>
                           <div>🗣️ {match.language}</div>
                         </div>
                         <div className="match-reasons">
@@ -284,7 +328,7 @@ const AgentScheduler: React.FC = () => {
 
                 {workflowResult.schedule_recommendation.rationale.length > 0 && (
                   <div className="rationale-section">
-                    <strong>💭 Rationale:</strong>
+                    <strong>Rationale:</strong>
                     <ul>
                       {workflowResult.schedule_recommendation.rationale.map((item, idx) => (
                         <li key={idx}>{item}</li>
@@ -295,7 +339,7 @@ const AgentScheduler: React.FC = () => {
 
                 {workflowResult.schedule_recommendation.next_steps.length > 0 && (
                   <div className="next-steps-section">
-                    <strong>📋 Next Steps:</strong>
+                    <strong>Next Steps:</strong>
                     <ol>
                       {workflowResult.schedule_recommendation.next_steps.map((step, idx) => (
                         <li key={idx}>{step}</li>
@@ -305,14 +349,14 @@ const AgentScheduler: React.FC = () => {
                 )}
 
                 <div className="recommendation-box" style={{ borderColor: getActionColor(workflowResult.scheduling_recommendation) }}>
-                  <strong>🤖 Agent Recommendation:</strong>
+                  <strong>Agent Recommendation:</strong>
                   <p>{workflowResult.scheduling_recommendation}</p>
                 </div>
               </div>
 
               {/* Final Action */}
               <div className="final-action-box">
-                <h3>🎯 Final Workflow Status</h3>
+                <h3>Final Workflow Status</h3>
                 <div className="final-status">
                   <span>Status:</span>
                   <strong>{workflowResult.final_status}</strong>
@@ -323,8 +367,12 @@ const AgentScheduler: React.FC = () => {
                 </div>
                 
                 {workflowResult.schedule_recommendation.can_schedule && (
-                  <button className="schedule-now-btn">
-                    📅 Schedule Now
+                  <button 
+                    className="schedule-now-btn"
+                    onClick={handleScheduleNow}
+                    disabled={scheduling || scheduleSuccess}
+                  >
+                    {scheduling ? 'Scheduling...' : scheduleSuccess ? 'Scheduled!' : 'Schedule Now'}
                   </button>
                 )}
               </div>

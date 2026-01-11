@@ -33,3 +33,10 @@ PyPDF2==3.0.1
 # PostgreSQL Database
 psycopg2-binary==2.9.9
 
+# Crew AI
+crewai
+crewai-tools
+
+# Google Gemini AI
+google-generativeai
+

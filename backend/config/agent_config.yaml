@@ -63,3 +63,24 @@ workflow:
   enable_parallel_processing: false
   max_retry_attempts: 3
   timeout_seconds: 30
+
+# Crew AI Configuration
+crew_ai:
+  llm:
+    model: "gpt-4o"  # Swarms model to use
+    temperature: 0.7
+    base_url: "https://api.swarms.world/v1"
+  
+  scoring:
+    city_match_points: 40
+    exact_skill_match_points: 40
+    general_skill_match_points: 20
+    flexible_availability_points: 20
+    partial_availability_points: 10
+  
+  thresholds:
+    max_matches_returned: 3
+  
+  monitoring:
+    max_history_size: 100
+    verbose: true
