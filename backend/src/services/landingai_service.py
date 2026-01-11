@@ -58,6 +58,7 @@ class LandingAIService:
         self.prompt_loader = PromptLoader()
         self._initialize_client()
         self._load_prompts()
+        self._load_extraction_rules()
     
     def _initialize_client(self):
         self.api_key = self.config.get("LANDING_AI_API_KEY")
@@ -87,6 +88,50 @@ class LandingAIService:
             "document_processing.yaml", 
             "validation_prompt"
         )
+    
+    def _load_extraction_rules(self):
+        """Load extraction rules from data/extraction_rules.yaml"""
+        try:
+            # Navigate to data folder from backend/src/services
+            current_dir = Path(__file__).parent.parent.parent.parent
+            rules_path = current_dir / "data" / "extraction_rules.yaml"
+            
+            if not rules_path.exists():
+                print(f"Warning: Extraction rules file not found at {rules_path}")
+                self.extraction_rules = {}
+                return
+            
+            with open(rules_path, 'r', encoding='utf-8') as f:
+                self.extraction_rules = yaml.safe_load(f)
+            
+            print(f"Loaded extraction rules from {rules_path}")
+            print(f"Available document types: {list(self.extraction_rules.get('extraction_rules', {}).keys())}")
+            
+        except Exception as e:
+            print(f"Error loading extraction rules: {e}")
+            self.extraction_rules = {}
+    
+    def get_document_type_from_text(self, text: str) -> str:
+        """
+        Identify document type based on keywords from extraction rules
+        """
+        text_lower = text.lower()
+        doc_types = self.extraction_rules.get('document_types', {})
+        
+        for doc_type, config in doc_types.items():
+            keywords = config.get('keywords', [])
+            for keyword in keywords:
+                if keyword.lower() in text_lower:
+                    return doc_type
+        
+        return "unknown"
+    
+    def get_extraction_fields(self, document_type: str) -> Dict[str, Any]:
+        """
+        Get extraction field definitions for a document type
+        """
+        rules = self.extraction_rules.get('extraction_rules', {})
+        return rules.get(document_type, {}).get('required_fields', {})
     
     def _encode_image(self, image_path: str) -> str:
         with open(image_path, "rb") as image_file:
@@ -174,12 +219,25 @@ class LandingAIService:
             
             result = response.json()
             
+            # Extract text content
+            extracted_text = result.get("markdown", "")
+            
+            # Auto-detect document type if not provided
+            if not document_type:
+                document_type = self.get_document_type_from_text(extracted_text)
+            
+            # Get extraction rules for this document type
+            extraction_fields = self.get_extraction_fields(document_type)
+            
             extracted_data = {
-                "text": result.get("markdown", ""),
+                "text": extracted_text,
                 "tables": [],
                 "key_value_pairs": {},
                 "layout": result.get("chunks", []),
-                "confidence": 0.95
+                "confidence": 0.95,
+                "document_type": document_type,
+                "expected_fields": list(extraction_fields.keys()) if extraction_fields else [],
+                "extraction_rules_applied": bool(extraction_fields)
             }
             
             for chunk in result.get("chunks", []):
@@ -192,9 +250,14 @@ class LandingAIService:
                 "success": True,
                 "message": "Document processed successfully",
                 "extracted_data": extracted_data,
-                "document_type": document_type or "Unknown",
+                "document_type": document_type,
                 "processing_time": processing_time,
-                "metadata": result.get("metadata", {})
+                "metadata": result.get("metadata", {}),
+                "extraction_rules": {
+                    "type": document_type,
+                    "fields_to_extract": list(extraction_fields.keys()) if extraction_fields else [],
+                    "rules_applied": bool(extraction_fields)
+                }
             }
             
         except Exception as e:
@@ -208,21 +271,43 @@ class LandingAIService:
     
     async def validate_extraction(self, extracted_data: Dict[str, Any]) -> Dict[str, Any]:
         try:
+            # Get document type and extraction rules
+            document_type = extracted_data.get("document_type", "unknown")
+            extraction_fields = self.get_extraction_fields(document_type)
+            
             validation_results = {
                 "has_text": bool(extracted_data.get("text")),
                 "has_tables": bool(extracted_data.get("tables")),
                 "has_key_value_pairs": bool(extracted_data.get("key_value_pairs")),
                 "confidence_score": extracted_data.get("confidence", 0),
+                "document_type": document_type,
+                "expected_fields": list(extraction_fields.keys()) if extraction_fields else [],
                 "issues": []
             }
             
-            if validation_results["confidence_score"] < self.confidence_threshold:
+            # Check confidence against rules threshold
+            rules_threshold = self.extraction_rules.get('settings', {}).get('confidence_threshold', 0.75)
+            if validation_results["confidence_score"] < rules_threshold:
                 validation_results["issues"].append(
-                    f"Low confidence score: {validation_results['confidence_score']:.2f}"
+                    f"Low confidence score: {validation_results['confidence_score']:.2f} (threshold: {rules_threshold})"
                 )
             
             if not validation_results["has_text"]:
                 validation_results["issues"].append("No text extracted from document")
+            
+            # Check if required fields are present (basic keyword check)
+            if extraction_fields and validation_results["has_text"]:
+                text_lower = extracted_data.get("text", "").lower()
+                missing_fields = []
+                for field_name, field_config in extraction_fields.items():
+                    # Simple check - look for field name in text
+                    if field_name.replace("_", " ") not in text_lower:
+                        missing_fields.append(field_name)
+                
+                if missing_fields:
+                    validation_results["issues"].append(
+                        f"Potentially missing fields: {', '.join(missing_fields[:5])}"
+                    )
             
             validation_results["success"] = len(validation_results["issues"]) == 0
             
