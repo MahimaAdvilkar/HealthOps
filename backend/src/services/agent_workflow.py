@@ -6,6 +6,14 @@ from datetime import datetime
 from dotenv import load_dotenv
 from pathlib import Path
 
+# Try to import Google Generative AI
+try:
+    import google.generativeai as genai
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("Warning: google-generativeai not installed. Using fallback logic.")
+
 
 class ConfigLoader:
     """Loads configuration from .env and YAML files"""
@@ -57,13 +65,23 @@ class ReferralValidationAgent:
     Agent 1: Validates referral/client information
     Checks: insurance status, authorization, urgency, completeness
     All scoring thresholds loaded from YAML config
+    Uses Google Gemini for AI recommendations
     """
     
     def __init__(self):
         self.config = ConfigLoader()
         self.agent_name = "Referral Validation Agent"
-        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
-        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"
+        self.google_api_key = self.config.get("GOOGLE_API_KEY")
+        self.gemini_model = None
+        
+        # Initialize Gemini
+        if GEMINI_AVAILABLE and self.google_api_key:
+            try:
+                genai.configure(api_key=self.google_api_key)
+                self.gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+                print(f"[{self.agent_name}] Gemini AI initialized")
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini init failed: {e}")
         
         # Load all scoring parameters from config
         self.insurance_penalty = self.config.get_yaml('validation_agent', 'scoring', 'insurance_inactive_penalty', default=30)
@@ -156,51 +174,27 @@ class ReferralValidationAgent:
     
     def get_agent_recommendation(self, validation: Dict[str, Any]) -> str:
         """
-        Get AI agent recommendation based on validation using Swarms API
+        Get AI agent recommendation based on validation using Google Gemini
         """
-        if not self.swarms_api_key:
-            # Fallback to rule-based recommendation
-            if validation["status"] == "BLOCKED":
-                return f"HOLD: Cannot proceed. Issues: {', '.join(validation['issues'])}"
-            elif validation["status"] == "READY":
-                return f"PROCEED: Referral validated. Priority: {validation['priority']}"
-            elif validation["status"] == "READY_WITH_WARNINGS":
-                return f"PROCEED WITH CAUTION: {', '.join(validation['warnings'])}"
-            else:
-                return f"REVIEW: {validation['status']}"
-        
-        # Use AI to generate recommendation
-        try:
-            prompt = f"""As a healthcare referral validation expert, provide a brief recommendation (1-2 sentences) for this referral:
+        prompt = f"""You are a healthcare referral validation agent. Based on this validation result, provide a brief actionable recommendation (1-2 sentences).
 
+Referral ID: {validation.get('referral_id')}
 Status: {validation['status']}
-Score: {validation['validation_score']}/100
+Validation Score: {validation['validation_score']}/100
 Issues: {', '.join(validation['issues']) if validation['issues'] else 'None'}
 Warnings: {', '.join(validation['warnings']) if validation['warnings'] else 'None'}
 Priority: {validation.get('priority', 'NORMAL')}
 
-Provide actionable guidance for the care coordinator."""
+Respond with a clear action: PROCEED, HOLD, or BLOCK, followed by specific next steps."""
 
-            response = requests.post(
-                self.swarms_api_url,
-                headers={
-                    "Authorization": f"Bearer {self.swarms_api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "gpt-4o",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.3,
-                    "max_tokens": 150
-                },
-                timeout=10
-            )
-            
-            if response.status_code == 200:
-                result = response.json()
-                return result['choices'][0]['message']['content'].strip()
-        except Exception as e:
-            print(f"AI recommendation failed: {e}")
+        # Try Gemini AI
+        if self.gemini_model:
+            try:
+                response = self.gemini_model.generate_content(prompt)
+                if response and response.text:
+                    return response.text.strip()
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini failed: {e}")
         
         # Fallback to rule-based
         if validation["status"] == "BLOCKED":
@@ -217,13 +211,24 @@ class CaregiverMatchingAgent:
     """
     Agent 2: Matches caregivers to referrals based on location, skills, availability
     All scoring weights and thresholds loaded from YAML config
+    Uses Google Gemini for AI recommendations
     """
     
     def __init__(self):
         self.config = ConfigLoader()
-        self.agent_name = "Caregiver Matching Agent"       
-        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
-        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"        
+        self.agent_name = "Caregiver Matching Agent"
+        self.google_api_key = self.config.get("GOOGLE_API_KEY")
+        self.gemini_model = None
+        
+        # Initialize Gemini
+        if GEMINI_AVAILABLE and self.google_api_key:
+            try:
+                genai.configure(api_key=self.google_api_key)
+                self.gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+                print(f"[{self.agent_name}] Gemini AI initialized")
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini init failed: {e}")
+        
         # Load scoring parameters from config
         self.city_match_points = self.config.get_yaml('matching_agent', 'scoring', 'city_match_points', default=40)
         self.exact_skill_points = self.config.get_yaml('matching_agent', 'scoring', 'exact_skill_match_points', default=40)
@@ -305,54 +310,35 @@ class CaregiverMatchingAgent:
         matches: List[Dict[str, Any]]
     ) -> str:
         """
-        Get AI agent recommendation for caregiver matching using Swarms API
+        Get AI agent recommendation for caregiver matching using Google Gemini
         """
         if not matches:
             return f"NO MATCHES: No caregivers found in the area for {referral_id}"
         
-        if not self.swarms_api_key:
-            # Fallback to rule-based
-            if len(matches) >= 3:
-                return f"EXCELLENT: Found {len(matches)} matching caregivers. Top match: {matches[0]['caregiver_id']} ({matches[0]['match_score']}%)"
-            elif len(matches) > 0:
-                return f"GOOD: Found {len(matches)} caregiver(s). Assign {matches[0]['caregiver_id']} (score: {matches[0]['match_score']}%)"
-            return f"LIMITED: Only {len(matches)} match found"
-        
-        # Use AI to generate recommendation
-        try:
-            match_summary = f"{len(matches)} caregivers found\\n"
-            for i, m in enumerate(matches[:3], 1):
-                match_summary += f"{i}. {m['caregiver_id']}: {m['match_score']}% - {', '.join(m['match_reasons'][:2])}\\n"
-            
-            prompt = f"""As a healthcare caregiver matching expert, provide a brief recommendation (1-2 sentences) for this referral:
+        # Use Gemini AI to generate recommendation
+        if self.gemini_model:
+            try:
+                match_summary = f"{len(matches)} caregivers found\n"
+                for i, m in enumerate(matches[:3], 1):
+                    match_summary += f"{i}. {m['caregiver_id']}: {m['match_score']}% - {', '.join(m['match_reasons'][:2])}\n"
+                
+                prompt = f"""As a healthcare caregiver matching expert, provide a brief recommendation (1-2 sentences) for this referral:
 
 Referral: {referral_id}
 {match_summary}
 
-Recommend which caregiver to assign and why."""
+Recommend which caregiver to assign and why. Be specific about the best match."""
 
-            response = requests.post(
-                self.swarms_api_url,
-                headers={
-                    "Authorization": f"Bearer {self.swarms_api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "gpt-4o",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.3,
-                    "max_tokens": 150
-                },
-                timeout=10
-            )
-            
-            if response.status_code == 200:
-                result = response.json()
-                return result['choices'][0]['message']['content'].strip()
-        except Exception as e:
-            print(f"AI matching recommendation failed: {e}")
+                response = self.gemini_model.generate_content(prompt)
+                recommendation = response.text.strip()
+                print(f"[{self.agent_name}] Gemini recommendation: {recommendation[:100]}...")
+                return recommendation
+                
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini recommendation failed: {e}")
         
-        # Fallback
+        # Fallback to rule-based only if Gemini unavailable
+        print(f"[{self.agent_name}] Using fallback rule-based recommendation")
         if len(matches) >= 3:
             return f"EXCELLENT: Found {len(matches)} matching caregivers. Top match: {matches[0]['caregiver_id']} ({matches[0]['match_score']}%)"
         elif len(matches) > 0:
@@ -364,13 +350,23 @@ class SchedulingAgent:
     """
     Agent 3: Creates scheduling recommendations
     All limits and thresholds loaded from YAML config
+    Uses Google Gemini for AI recommendations
     """
     
     def __init__(self):
         self.config = ConfigLoader()
         self.agent_name = "Scheduling Agent"
-        self.swarms_api_key = self.config.get("SWARMS_API_KEY")
-        self.swarms_api_url = "https://api.swarms.world/v1/chat/completions"
+        self.google_api_key = self.config.get("GOOGLE_API_KEY")
+        self.gemini_model = None
+        
+        # Initialize Gemini
+        if GEMINI_AVAILABLE and self.google_api_key:
+            try:
+                genai.configure(api_key=self.google_api_key)
+                self.gemini_model = genai.GenerativeModel('gemini-2.0-flash')
+                print(f"[{self.agent_name}] Gemini AI initialized")
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini init failed: {e}")
         
         # Load scheduling parameters from config
         self.max_units_per_week = self.config.get_yaml('scheduling_agent', 'limits', 'max_units_per_week', default=20)
@@ -407,11 +403,38 @@ class SchedulingAgent:
             "next_steps": []
         }
         
+        # Determine priority FIRST using configured urgent keywords (always check this)
+        urgency = referral.get("urgency", "")
+        if any(keyword in urgency for keyword in self.urgent_keywords):
+            recommendation["priority"] = self.high_priority
+        
+        if validation.get("priority") == self.high_priority:
+            recommendation["priority"] = self.high_priority
+        
         # Check if we can schedule
         if not validation.get("is_valid"):
             recommendation["schedule_action"] = self.action_block
             recommendation["rationale"].append("Referral validation failed")
             recommendation["next_steps"].append("Resolve validation issues first")
+            return recommendation
+        
+        # Check prerequisites: docs and home assessment must be complete before scheduling
+        docs_complete = referral.get("docs_complete", "N") == "Y"
+        home_assessment_done = referral.get("home_assessment_done", "N") == "Y"
+        
+        if not docs_complete:
+            recommendation["schedule_action"] = self.action_hold
+            recommendation["rationale"].append("Documentation incomplete - cannot schedule")
+            recommendation["next_steps"].append("Complete required documentation first")
+            if not home_assessment_done:
+                recommendation["rationale"].append("Home assessment not completed")
+                recommendation["next_steps"].append("Schedule and complete home assessment")
+            return recommendation
+        
+        if not home_assessment_done:
+            recommendation["schedule_action"] = self.action_hold
+            recommendation["rationale"].append("Home assessment not completed - cannot schedule")
+            recommendation["next_steps"].append("Schedule and complete home assessment first")
             return recommendation
         
         if not caregiver_match:
@@ -420,18 +443,13 @@ class SchedulingAgent:
             recommendation["next_steps"].append("Find suitable caregiver")
             return recommendation
         
-        # Can schedule!
+        # All prerequisites met - can schedule!
         recommendation["can_schedule"] = True
         recommendation["schedule_action"] = self.action_schedule
         
-        # Determine priority using configured urgent keywords
-        urgency = referral.get("urgency", "")
-        if any(keyword in urgency for keyword in self.urgent_keywords):
-            recommendation["priority"] = self.high_priority
+        # Add urgency to rationale if high priority
+        if recommendation["priority"] == self.high_priority:
             recommendation["rationale"].append(f"{urgency} referral - high priority")
-        
-        if validation.get("priority") == self.high_priority:
-            recommendation["priority"] = self.high_priority
         
         # Calculate units to schedule using configured max
         units_remaining = referral.get("auth_units_remaining", 0)
@@ -461,24 +479,16 @@ class SchedulingAgent:
     
     def get_agent_recommendation(self, schedule_rec: Dict[str, Any]) -> str:
         """
-        Get AI agent recommendation for scheduling using Swarms API
+        Get AI agent recommendation for scheduling using Google Gemini
         """
         action = schedule_rec.get("schedule_action")
         priority = schedule_rec.get("priority")
         rationale = ', '.join(schedule_rec['rationale'])
         
-        if not self.swarms_api_key:
-            # Fallback to rule-based
-            if action == "SCHEDULE_NOW":
-                return f"SCHEDULE NOW [{priority}]: {rationale}"
-            elif action == "HOLD":
-                return f"HOLD: {rationale}"
-            else:
-                return f"BLOCK: Cannot schedule. {rationale}"
-        
-        # Use AI to generate recommendation
-        try:
-            prompt = f"""As a healthcare scheduling coordinator, provide a brief action recommendation (1-2 sentences) for this scheduling decision:
+        # Use Gemini AI to generate recommendation
+        if self.gemini_model:
+            try:
+                prompt = f"""As a healthcare scheduling coordinator, provide a brief action recommendation (1-2 sentences) for this scheduling decision:
 
 Action: {action}
 Priority: {priority}
@@ -489,28 +499,16 @@ Rationale: {rationale}
 
 Provide clear next steps for the coordinator."""
 
-            response = requests.post(
-                self.swarms_api_url,
-                headers={
-                    "Authorization": f"Bearer {self.swarms_api_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "model": "gpt-4o",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.3,
-                    "max_tokens": 150
-                },
-                timeout=10
-            )
-            
-            if response.status_code == 200:
-                result = response.json()
-                return result['choices'][0]['message']['content'].strip()
-        except Exception as e:
-            print(f"AI scheduling recommendation failed: {e}")
+                response = self.gemini_model.generate_content(prompt)
+                recommendation = response.text.strip()
+                print(f"[{self.agent_name}] Gemini recommendation: {recommendation[:100]}...")
+                return recommendation
+                
+            except Exception as e:
+                print(f"[{self.agent_name}] Gemini recommendation failed: {e}")
         
-        # Fallback
+        # Fallback to rule-based only if Gemini unavailable
+        print(f"[{self.agent_name}] Using fallback rule-based recommendation")
         if action == "SCHEDULE_NOW":
             return f"SCHEDULE NOW [{priority}]: {rationale}"
         elif action == "HOLD":
@@ -552,9 +550,22 @@ class AgentWorkflow:
         workflow_result["validation_recommendation"] = validation_rec
         workflow_result["agents_executed"].append("ReferralValidationAgent")
         
-        # Agent 2: Match caregivers (only if validation passed)
+        # Check prerequisites before caregiver matching
+        docs_complete = referral.get("docs_complete", "N") == "Y"
+        home_assessment_done = referral.get("home_assessment_done", "N") == "Y"
+        
+        # Agent 2: Match caregivers (only if validation passed AND docs complete AND home assessment done)
         matches = []
-        if validation.get("is_valid"):
+        if not validation.get("is_valid"):
+            workflow_result["matches"] = []
+            workflow_result["matching_recommendation"] = "SKIPPED: Validation failed"
+        elif not docs_complete:
+            workflow_result["matches"] = []
+            workflow_result["matching_recommendation"] = "SKIPPED: Documentation incomplete - complete docs first"
+        elif not home_assessment_done:
+            workflow_result["matches"] = []
+            workflow_result["matching_recommendation"] = "SKIPPED: Home assessment pending - complete assessment first"
+        else:
             print(f"Agent 2: Finding matching caregivers...")
             matches = self.matching_agent.match_caregivers(referral, caregivers)
             matching_rec = self.matching_agent.get_agent_recommendation(
@@ -565,9 +576,6 @@ class AgentWorkflow:
             workflow_result["matches"] = matches
             workflow_result["matching_recommendation"] = matching_rec
             workflow_result["agents_executed"].append("CaregiverMatchingAgent")
-        else:
-            workflow_result["matches"] = []
-            workflow_result["matching_recommendation"] = "SKIPPED: Validation failed"
         
         # Agent 3: Create schedule recommendation
         print(f"Agent 3: Creating schedule recommendation...")
@@ -583,15 +591,31 @@ class AgentWorkflow:
         workflow_result["scheduling_recommendation"] = scheduling_recommendation
         workflow_result["agents_executed"].append("SchedulingAgent")
         
-        # Final workflow status
+        # Final workflow status - based on schedule recommendation
         if schedule_rec.get("can_schedule"):
             workflow_result["final_status"] = "READY_TO_SCHEDULE"
             workflow_result["final_action"] = "Proceed with scheduling"
-        elif validation.get("is_valid"):
-            workflow_result["final_status"] = "PENDING_CAREGIVER"
-            workflow_result["final_action"] = "Find suitable caregiver"
-        else:
+        elif not validation.get("is_valid"):
             workflow_result["final_status"] = "BLOCKED"
-            workflow_result["final_action"] = "Resolve validation issues"
+            workflow_result["final_action"] = "Resolve validation issues: " + ", ".join(validation.get("issues", []))
+        else:
+            # Validation passed but can't schedule - check why
+            action = schedule_rec.get("schedule_action", "HOLD")
+            rationale = schedule_rec.get("rationale", [])
+            next_steps = schedule_rec.get("next_steps", [])
+            
+            # Determine specific status based on reason
+            if any("Documentation" in r for r in rationale):
+                workflow_result["final_status"] = "PENDING_DOCUMENTATION"
+                workflow_result["final_action"] = "Complete required documentation"
+            elif any("Home assessment" in r or "assessment" in r for r in rationale):
+                workflow_result["final_status"] = "PENDING_HOME_ASSESSMENT"
+                workflow_result["final_action"] = "Schedule and complete home assessment"
+            elif not top_match:
+                workflow_result["final_status"] = "PENDING_CAREGIVER"
+                workflow_result["final_action"] = "Find suitable caregiver in area"
+            else:
+                workflow_result["final_status"] = "ON_HOLD"
+                workflow_result["final_action"] = next_steps[0] if next_steps else "Review and resolve blockers"
         
         return workflow_result
