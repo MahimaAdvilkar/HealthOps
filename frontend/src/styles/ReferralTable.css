@@ -121,6 +121,39 @@
   text-overflow: ellipsis;
 }
 
+.actions-cell {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.analyze-btn {
+  background: #6366f1;
+  color: white;
+}
+
+.analyze-btn:hover {
+  background: #4f46e5;
+}
+
+.view-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.view-btn:hover {
+  background: #d1d5db;
+}
+
 .table-footer {
   background: white;
   padding: 15px 20px;
