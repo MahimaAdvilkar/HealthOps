@@ -1300,38 +1300,6 @@ async def advance_referral_journey(referral_id: str, stage: str, note: Optional[
                 if not res.get("success"):
                     raise HTTPException(status_code=500, detail=res.get("message"))
 
-        # Send email notification for journey status update
-        try:
-            stage_labels = {
-                "INTAKE_RECEIVED": "Intake Received",
-                "DOCS_COMPLETED": "Documents Completed",
-                "INSURANCE_VERIFIED": "Insurance Verified",
-                "HOME_ASSESSMENT_COMPLETED": "Home Assessment Completed",
-                "CAREGIVER_MATCHED": "Caregiver Matched",
-                "SCHEDULED": "Service Scheduled",
-                "SERVICE_IN_PROGRESS": "Service In Progress",
-                "SERVICE_COMPLETED": "Service Completed",
-                "READY_TO_BILL": "Ready to Bill"
-            }
-            stage_label = stage_labels.get(st, st)
-            
-            details = f"Referral {rid} has been updated to: {stage_label}"
-            if note:
-                details += f"\n\nNote: {note}"
-            
-            email_result = email_service.send_workflow_notification(
-                referral_id=rid,
-                workflow_status=stage_label,
-                details=details
-            )
-            if email_result.get("success"):
-                print(f"[Journey] Email notification sent for {rid} -> {st}")
-            else:
-                print(f"[Journey] Email notification failed: {email_result.get('error', 'Unknown error')}")
-        except Exception as email_err:
-            print(f"[Journey] Email notification error: {email_err}")
-            # Don't fail the journey update if email fails
-
         return {"success": True, "referral_id": rid, "current_stage": st, "event": ev}
     except HTTPException:
         raise
