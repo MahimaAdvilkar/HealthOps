@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8022';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export interface Referral {
   referral_id: string;
@@ -304,7 +304,8 @@ export const apiService = {
       method: 'POST',
     });
     if (!response.ok) {
-      throw new Error('Failed to simulate intake');
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Failed to simulate intake (${response.status})`);
     }
     return response.json();
   },
