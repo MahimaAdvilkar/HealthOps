@@ -11,10 +11,19 @@ import JourneyBoard from './components/JourneyBoard';
 function App() {
   const [activeTab, setActiveTab] = useState<'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey'>('referrals');
   const [dataVersion, setDataVersion] = useState(0);
+  const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
 
   const handleNavigate = (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey') => {
     setActiveTab(tab);
     // Scroll to the table section
+    setTimeout(() => {
+      document.querySelector('.tabs')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleScheduleReferral = (referralId: string) => {
+    setSelectedReferralId(referralId);
+    setActiveTab('scheduler');
     setTimeout(() => {
       document.querySelector('.tabs')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
@@ -30,8 +39,6 @@ function App() {
         <h1>HealthOps Dashboard</h1>
         <p>Referral and Caregiver Management System</p>
       </header>
-
-      <Dashboard onNavigate={handleNavigate} onDataChanged={handleDataChanged} dataVersion={dataVersion} />
 
       <div className="tabs">
         <button 
@@ -50,32 +57,37 @@ function App() {
           className={activeTab === 'scheduler' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('scheduler')}
         >
-          AI Scheduler
+          Schedule Client
         </button>
         <button 
           className={activeTab === 'journey' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('journey')}
         >
-          🧭 Journey Board
+          Journey Board
         </button>
         <button 
           className={activeTab === 'intake' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('intake')}
         >
-          📄 PDF Intake
+          PDF Intake
         </button>
         <button 
           className={activeTab === 'compliance' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('compliance')}
         >
-          🛡️ Compliance
+          Compliance
         </button>
       </div>
 
       <div className="tab-content">
-        {activeTab === 'referrals' && <ReferralTable dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'referrals' && (
+          <>
+            <Dashboard onNavigate={handleNavigate} onDataChanged={handleDataChanged} dataVersion={dataVersion} />
+            <ReferralTable dataVersion={dataVersion} onDataChanged={handleDataChanged} onScheduleReferral={handleScheduleReferral} />
+          </>
+        )}
         {activeTab === 'caregivers' && <CaregiverTable dataVersion={dataVersion} />}
-        {activeTab === 'scheduler' && <AgentScheduler dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'scheduler' && <AgentScheduler dataVersion={dataVersion} onDataChanged={handleDataChanged} initialReferralId={selectedReferralId} onReferralProcessed={() => setSelectedReferralId(null)} />}
         {activeTab === 'journey' && <JourneyBoard dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
         {activeTab === 'intake' && <PdfIntake onDataChanged={handleDataChanged} onNavigate={handleNavigate} />}
         {activeTab === 'compliance' && <ComplianceDocs dataVersion={dataVersion} />}

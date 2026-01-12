@@ -57,7 +57,7 @@ export interface ApplyScheduleResponse {
   mode: 'db' | 'file';
 }
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8022';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export const agentService = {
   async processReferral(referralId: string): Promise<WorkflowResult> {

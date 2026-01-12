@@ -986,57 +986,88 @@ async def simulate_referral_intake(
         # Pick a template row from the synthetic CSV so fields look realistic
         base_rows = _parse_csv_dicts(REFERRALS_CSV)
         if not base_rows:
-            raise HTTPException(status_code=500, detail="Synthetic referrals CSV is empty")
+            raise HTTPException(status_code=500, detail="Synthetic referrals CSV is empty or not found")
         template = random.choice(base_rows)
 
-        # Collect existing IDs (CSV + runtime)
+        # Collect existing IDs (CSV + runtime + DB)
         existing_ids = [r.get("referral_id") for r in base_rows if r.get("referral_id")]
         runtime_rows = _load_runtime_referrals()
         existing_ids += [r.get("referral_id") for r in runtime_rows if r.get("referral_id")]
+        
+        # Also check DB for existing IDs
+        if _db_ready():
+            db_result = db_service.query("SELECT referral_id FROM referrals")
+            if db_result.get("success") and db_result.get("data"):
+                existing_ids += [r.get("referral_id") for r in db_result["data"] if r.get("referral_id")]
+        
         new_id = _next_referral_id([str(x) for x in existing_ids if x])
+
+        # Random values for realistic demo
+        cities = ["San Francisco", "Oakland", "Berkeley", "San Jose", "Fremont", "Dublin", "San Leandro"]
+        payers = ["Medicare", "Medi-Cal", "BlueCross", "Aetna", "Cigna", "United", "Anthem"]
+        service_types = ["PersonalCare", "HomeHealthNursing", "HomeHealthPT", "BehavioralHealth", "ECM", "CS_NutritionSupport"]
+        urgencies = ["Routine", "Urgent"]
+        plan_types = ["HMO", "PPO", "FFS", "Medicaid", "Commercial"]
 
         new_row = dict(template)
         new_row["referral_id"] = new_id
+        new_row["use_case"] = "HOME_CARE"
+        new_row["service_type"] = service_type or random.choice(service_types)
+        new_row["referral_source"] = random.choice(["PCP", "Hospital", "County", "Self", "Payer"])
+        new_row["urgency"] = urgency or random.choice(urgencies)
         new_row["referral_received_date"] = today.isoformat()
         new_row["first_outreach_date"] = ""
-        new_row["last_activity_date"] = ""
-        new_row["schedule_status"] = "NOT_SCHEDULED"
-        new_row["scheduled_date"] = ""
-        new_row["service_complete"] = "N"
+        new_row["last_activity_date"] = today.isoformat()
         new_row["insurance_active"] = "Y"
+        new_row["payer"] = payer or random.choice(payers)
+        new_row["plan_type"] = random.choice(plan_types)
+        
+        # Initial stage: auth pending or not required
+        needs_auth = random.choice([True, False])
+        new_row["auth_required"] = "Y" if needs_auth else "N"
+        new_row["auth_status"] = "PENDING" if needs_auth else "NOT_REQUIRED"
+        new_row["auth_start_date"] = today.isoformat() if needs_auth else ""
+        new_row["auth_end_date"] = (today + timedelta(days=random.randint(30, 90))).isoformat() if needs_auth else ""
+        new_row["auth_units_total"] = random.randint(10, 80) if needs_auth else random.randint(20, 60)
+        new_row["auth_units_remaining"] = new_row["auth_units_total"]
+        new_row["unit_type"] = random.choice(["HOURS", "VISITS"])
 
-        # Reset journey state so the agentic timeline is visible.
+        # Reset journey state so the agentic timeline is visible
         new_row["docs_complete"] = "N"
         new_row["home_assessment_done"] = "N"
-        new_row["ready_to_bill"] = "N"
-        new_row["referral_source"] = "Simulated Intake"
-
-        # Make it schedulable by default
-        new_row["auth_required"] = "N"
-        new_row["auth_status"] = "APPROVED"
-
-        # Reset a few operational fields
+        new_row["patient_responsive"] = random.choice(["HIGH", "MED", "LOW"])
         new_row["contact_attempts"] = 0
-        new_row["agent_next_action"] = "Review and schedule"
-        new_row["agent_rationale"] = "New referral intake (demo)"
+        new_row["schedule_status"] = "NOT_SCHEDULED"
+        new_row["scheduled_date"] = ""
+        new_row["units_scheduled_next_7d"] = 0
+        new_row["units_delivered_to_date"] = 0
+        new_row["service_complete"] = "N"
+        new_row["evv_or_visit_note_exists"] = "N"
+        new_row["ready_to_bill"] = "N"
+        new_row["claim_status"] = "NOT_SUBMITTED"
+        new_row["denial_reason"] = ""
+        new_row["payment_amount"] = 0
 
-        # Optional overrides from UI
-        if urgency:
-            new_row["urgency"] = urgency
-        if patient_city:
-            new_row["patient_city"] = patient_city
-        if payer:
-            new_row["payer"] = payer
-        if service_type:
-            new_row["service_type"] = service_type
-
-        # Keep segment consistent with urgency for demo readability
+        # Patient info from template or random
+        new_row["patient_city"] = patient_city or random.choice(cities)
+        
+        # Agent segment based on urgency and auth status
         urg = str(new_row.get("urgency") or "").strip().lower()
+        auth_stat = str(new_row.get("auth_status") or "").strip().upper()
         if urg == "urgent":
-            new_row["agent_segment"] = "RED"
+            new_row["agent_segment"] = "RED" if auth_stat == "PENDING" else "ORANGE"
+        elif auth_stat == "PENDING":
+            new_row["agent_segment"] = "YELLOW"
         else:
-            if not new_row.get("agent_segment"):
-                new_row["agent_segment"] = "GREEN"
+            new_row["agent_segment"] = "GREEN"
+        
+        # Set appropriate next action based on state
+        if auth_stat == "PENDING":
+            new_row["agent_next_action"] = "FOLLOW_UP_AUTH"
+            new_row["agent_rationale"] = "New intake; authorization pending - follow up with payer."
+        else:
+            new_row["agent_next_action"] = "REQUEST_DOCS"
+            new_row["agent_rationale"] = "New intake; gather required documents to proceed."
 
         # Coerce numeric fields
         new_row = _coerce_int_fields(new_row, _REFERRAL_INT_FIELDS)
@@ -1057,7 +1088,16 @@ async def simulate_referral_intake(
                 'patient_age', 'patient_gender', 'patient_address', 'patient_city',
                 'patient_zip', 'agent_segment', 'agent_next_action', 'agent_rationale'
             ]
-            values = [new_row.get(c) for c in cols]
+            # Convert empty strings to None for date columns (PostgreSQL requires NULL, not '')
+            date_cols = {'referral_received_date', 'first_outreach_date', 'last_activity_date',
+                         'auth_start_date', 'auth_end_date', 'scheduled_date', 'patient_dob'}
+            values = []
+            for c in cols:
+                val = new_row.get(c)
+                # Convert empty string to None for date fields
+                if c in date_cols and val == '':
+                    val = None
+                values.append(val)
             placeholders = ",".join(["%s"] * len(cols))
             insert_sql = f"INSERT INTO referrals ({','.join(cols)}) VALUES ({placeholders})"
             res = db_service.query(insert_sql, tuple(values))
@@ -1230,7 +1270,20 @@ async def advance_referral_journey(referral_id: str, stage: str, note: Optional[
 
         # Apply side effects to referral row so the rest of the system updates
         if _db_ready():
-            updates: dict[str, object] = {"updated_at": datetime.utcnow()}
+            updates: dict[str, object] = {
+                "updated_at": datetime.utcnow(),
+            }
+            
+            # Try to update journey_stage if column exists (migration may not have run)
+            try:
+                journey_res = db_service.query(
+                    "UPDATE referrals SET journey_stage = %s, journey_updated_at = %s WHERE referral_id = %s",
+                    (st, datetime.utcnow(), rid)
+                )
+                # If it fails silently, that's OK - column may not exist
+            except Exception:
+                pass  # Column doesn't exist yet
+            
             if st == "DOCS_COMPLETED":
                 updates.update({"docs_complete": "Y"})
             elif st == "HOME_ASSESSMENT_COMPLETED":
@@ -1246,6 +1299,38 @@ async def advance_referral_journey(referral_id: str, stage: str, note: Optional[
                 res = db_service.query(f"UPDATE referrals SET {set_clause} WHERE referral_id = %s", tuple(params))
                 if not res.get("success"):
                     raise HTTPException(status_code=500, detail=res.get("message"))
+
+        # Send email notification for journey status update
+        try:
+            stage_labels = {
+                "INTAKE_RECEIVED": "Intake Received",
+                "DOCS_COMPLETED": "Documents Completed",
+                "INSURANCE_VERIFIED": "Insurance Verified",
+                "HOME_ASSESSMENT_COMPLETED": "Home Assessment Completed",
+                "CAREGIVER_MATCHED": "Caregiver Matched",
+                "SCHEDULED": "Service Scheduled",
+                "SERVICE_IN_PROGRESS": "Service In Progress",
+                "SERVICE_COMPLETED": "Service Completed",
+                "READY_TO_BILL": "Ready to Bill"
+            }
+            stage_label = stage_labels.get(st, st)
+            
+            details = f"Referral {rid} has been updated to: {stage_label}"
+            if note:
+                details += f"\n\nNote: {note}"
+            
+            email_result = email_service.send_workflow_notification(
+                referral_id=rid,
+                workflow_status=stage_label,
+                details=details
+            )
+            if email_result.get("success"):
+                print(f"[Journey] Email notification sent for {rid} -> {st}")
+            else:
+                print(f"[Journey] Email notification failed: {email_result.get('error', 'Unknown error')}")
+        except Exception as email_err:
+            print(f"[Journey] Email notification error: {email_err}")
+            # Don't fail the journey update if email fails
 
         return {"success": True, "referral_id": rid, "current_stage": st, "event": ev}
     except HTTPException:
@@ -1951,9 +2036,29 @@ def _compute_caregiver_load(assignments: dict, referrals: list[dict]) -> dict[st
 
 
 def _derive_journey_stage(r: dict) -> str:
-    """Derive a human-demo-friendly stage for board view."""
+    """Derive a human-demo-friendly stage for board view.
+    
+    Prioritizes explicitly set journey_stage from database, falls back to derived logic.
+    """
     try:
-        # Terminal
+        # Check if journey_stage is explicitly set in database
+        stored_stage = str(r.get("journey_stage") or "").strip().upper()
+        if stored_stage and stored_stage not in ("", "INTAKE_RECEIVED"):
+            # Map stored stages to board stages
+            stage_mapping = {
+                "DOCS_COMPLETED": "READY_TO_SCHEDULE",
+                "HOME_ASSESSMENT_SCHEDULED": "HOME_ASSESSMENT_PENDING",
+                "HOME_ASSESSMENT_COMPLETED": "READY_TO_SCHEDULE",
+                "SERVICE_STARTED": "SCHEDULED",
+                "READY_TO_BILL": "READY_TO_BILL",
+                "SERVICE_COMPLETED": "COMPLETED",
+            }
+            if stored_stage in stage_mapping:
+                return stage_mapping[stored_stage]
+            if stored_stage in ("SCHEDULED", "COMPLETED", "AUTH_PENDING", "AUTH_ISSUE", "DOCS_PENDING", "HOME_ASSESSMENT_PENDING", "READY_TO_SCHEDULE", "IN_PROGRESS"):
+                return stored_stage
+
+        # Terminal states from data
         if str(r.get("service_complete") or "").strip().upper() == "Y" or str(r.get("schedule_status") or "").strip().upper() == "COMPLETED":
             return "COMPLETED"
         if str(r.get("ready_to_bill") or "").strip().upper() == "Y":

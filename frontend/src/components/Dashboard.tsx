@@ -48,14 +48,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onDataChanged, dataVe
       setIntakeMessage(null);
 
       const resp = await apiService.simulateIntake();
-      setIntakeMessage(`New referral added: ${resp.referral.referral_id} (${resp.mode})`);
+      setIntakeMessage(`New referral added: ${resp.referral.referral_id} - ${resp.referral.service_type} (${resp.referral.patient_city})`);
 
       // Refresh all tabs
       onDataChanged();
-      onNavigate('referrals');
-    } catch (e) {
-      setIntakeMessage('Failed to add new referral');
-      console.error(e);
+    } catch (e: any) {
+      const errorMsg = e?.message || 'Unknown error';
+      setIntakeMessage(`Failed to add new referral: ${errorMsg}. Check if backend is running.`);
+      console.error('Simulate intake error:', e);
     } finally {
       setIntakeLoading(false);
     }
@@ -78,17 +78,20 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onDataChanged, dataVe
               </button>
             </div>
           </div>
-          {intakeMessage && <div className="dashboard-message">{intakeMessage}</div>}
+          {intakeMessage && (
+            <div className={`dashboard-message ${intakeMessage.includes('Failed') ? 'error' : 'success'}`}>
+              {intakeMessage}
+            </div>
+          )}
           <div className="dashboard-stats">
             <div className="stat-card clickable" onClick={() => onNavigate('referrals')}>
               <div className="stat-value">{ops.kpis.active_clients}</div>
               <div className="stat-label">Active Clients</div>
               <div className="stat-hint">Click to view</div>
             </div>
-            <div className="stat-card clickable" onClick={() => onNavigate('referrals')}>
+            <div className="stat-card">
               <div className="stat-value">{ops.kpis.pending_scheduling}</div>
               <div className="stat-label">Pending Scheduling</div>
-              <div className="stat-hint">Click to view</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">{ops.kpis.urgent_pending}</div>
@@ -102,103 +105,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onDataChanged, dataVe
               <div className="stat-value">{ops.kpis.paired_referrals}</div>
               <div className="stat-label">Paired Referrals</div>
             </div>
-            <div className="stat-card">
+            <div className="stat-card clickable" onClick={() => onNavigate('caregivers')}>
               <div className="stat-value">{ops.kpis.available_caregivers ?? '—'}</div>
               <div className="stat-label">Caregivers Available</div>
+              <div className="stat-hint">Click to view</div>
             </div>
             <div className="stat-card">
               <div className="stat-value">{ops.kpis.unique_caregivers_paired}</div>
               <div className="stat-label">Caregivers Paired</div>
             </div>
           </div>
-
-          {ops.priority_queue.length > 0 && (
-            <div className="dashboard-funnel">
-              <h3>Priority Queue (Top)</h3>
-              <table className="funnel-table">
-                <thead>
-                  <tr>
-                    <th>Referral</th>
-                    <th>Priority</th>
-                    <th>Score</th>
-                    <th>Urgency</th>
-                    <th>Segment</th>
-                    <th>City</th>
-                    <th>Units</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ops.priority_queue.map((r) => (
-                    <tr key={r.referral_id}>
-                      <td>{r.referral_id}</td>
-                      <td>{r.priority}</td>
-                      <td>{r.score}</td>
-                      <td>{r.urgency || '—'}</td>
-                      <td>{r.agent_segment || '—'}</td>
-                      <td>{r.patient_city || '—'}</td>
-                      <td>{r.auth_units_remaining ?? '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {ops.urgent_pending_preview.length > 0 && (
-            <div className="dashboard-funnel">
-              <h3>Urgent Pending (Preview)</h3>
-              <table className="funnel-table">
-                <thead>
-                  <tr>
-                    <th>Referral</th>
-                    <th>Segment</th>
-                    <th>City</th>
-                    <th>Units</th>
-                    <th>Received</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ops.urgent_pending_preview.map((r) => (
-                    <tr key={r.referral_id}>
-                      <td>{r.referral_id}</td>
-                      <td>{r.agent_segment || '—'}</td>
-                      <td>{r.patient_city || '—'}</td>
-                      <td>{r.auth_units_remaining ?? '—'}</td>
-                      <td>{r.referral_received_date || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
         </section>
       )}
-
-      <section className="dashboard-section">
-        <h2 className="dashboard-title">Dataset Stats</h2>
-        <div className="dashboard-stats">
-          <div className="stat-card clickable" onClick={() => onNavigate('referrals')}>
-            <div className="stat-value">{stats?.total_referrals || 0}</div>
-            <div className="stat-label">Total Referrals</div>
-            <div className="stat-hint">Click to view</div>
-          </div>
-          <div className="stat-card active clickable" onClick={() => onNavigate('referrals')}>
-            <div className="stat-value">{stats?.active_referrals || 0}</div>
-            <div className="stat-label">Active Referrals</div>
-            <div className="stat-hint">Click to view</div>
-          </div>
-          <div className="stat-card clickable" onClick={() => onNavigate('caregivers')}>
-            <div className="stat-value">{stats?.total_caregivers || 0}</div>
-            <div className="stat-label">Total Caregivers</div>
-            <div className="stat-hint">Click to view</div>
-          </div>
-          <div className="stat-card active clickable" onClick={() => onNavigate('caregivers')}>
-            <div className="stat-value">{stats?.active_caregivers || 0}</div>
-            <div className="stat-label">Active Caregivers</div>
-            <div className="stat-hint">Click to view</div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS referrals (
     agent_segment VARCHAR(20),
     agent_next_action VARCHAR(100),
     agent_rationale TEXT,
+    journey_stage VARCHAR(50) DEFAULT 'INTAKE_RECEIVED',
+    journey_updated_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
