@@ -6,9 +6,11 @@ import '../styles/AgentScheduler.css';
 interface AgentSchedulerProps {
   dataVersion: number;
   onDataChanged: () => void;
+  initialReferralId?: string | null;
+  onReferralProcessed?: () => void;
 }
 
-const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChanged }) => {
+const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChanged, initialReferralId, onReferralProcessed }) => {
   const [pendingReferrals, setPendingReferrals] = useState<PendingReferral[]>([]);
   const [selectedReferral, setSelectedReferral] = useState<PendingReferral | null>(null);
   const [workflowResult, setWorkflowResult] = useState<WorkflowResult | null>(null);
@@ -23,6 +25,39 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
   useEffect(() => {
     loadPendingReferrals();
   }, [dataVersion]);
+
+  // Auto-process referral when navigated from another tab
+  useEffect(() => {
+    if (initialReferralId && pendingReferrals.length > 0 && !processing) {
+      const referral = pendingReferrals.find(r => r.referral_id === initialReferralId);
+      if (referral) {
+        handleProcessReferral(referral);
+        onReferralProcessed?.();
+      } else {
+        // Referral not in pending list - process by ID directly
+        handleProcessReferralById(initialReferralId);
+        onReferralProcessed?.();
+      }
+    }
+  }, [initialReferralId, pendingReferrals]);
+
+  const handleProcessReferralById = async (referralId: string) => {
+    try {
+      setProcessing(true);
+      setSelectedReferral({ referral_id: referralId } as PendingReferral);
+      setWorkflowResult(null);
+      setScheduleSuccess(false);
+      
+      const result = await agentService.processReferral(referralId);
+      setWorkflowResult(result);
+      setError(null);
+    } catch (err) {
+      setError('Failed to process referral');
+      console.error(err);
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   const loadPendingReferrals = async () => {
     try {
@@ -72,14 +107,21 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
       setScheduleMessage(null);
       setError(null);
 
-      const resp = await agentService.applySchedule({
-        referral_id: workflowResult.referral_id,
-        caregiver_id: caregiverId,
-        schedule_status: 'SCHEDULED',
-      });
+      // Call schedule/confirm endpoint which updates DB and sends email
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/schedule/confirm?referral_id=${workflowResult.referral_id}&caregiver_id=${caregiverId}`,
+        { method: 'POST' }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to schedule referral');
+      }
+
+      const result = await response.json();
 
       setScheduleSuccess(true);
-      setScheduleMessage(`Scheduled ${resp.referral_id} with ${caregiverId} (${resp.mode})`);
+      setScheduleMessage(`Scheduled ${workflowResult.referral_id} with ${caregiverId}. Email sent: ${result.email_sent ? 'Yes' : 'No'}`);
 
       onDataChanged();
       await loadPendingReferrals();
@@ -119,10 +161,12 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
   return (
     <div className="agent-scheduler-container">
       <div className="scheduler-header">
-        <h2>AI Agent Scheduler</h2>
-        <p className="subtitle">3-Agent Workflow: Validation → Matching → Scheduling</p>
+        <div>
+          <h2>Schedule Client</h2>
+          <p className="subtitle">3-Agent Workflow: Validation → Matching → Scheduling</p>
+        </div>
         <button onClick={loadPendingReferrals} className="refresh-btn">
-          Refresh List
+          Refresh
         </button>
       </div>
 
@@ -189,7 +233,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
           {processing && (
             <div className="processing-state">
               <div className="spinner"></div>
-              <h3>⚙️ AI Agents Working...</h3>
+              <h3>Processing...</h3>
               <div className="agent-progress">
                 <div className="agent-step">Agent 1: Validating referral</div>
                 <div className="agent-step">Agent 2: Finding caregivers</div>
@@ -208,7 +252,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
               {/* Agent 1: Validation */}
               <div className="agent-result">
                 <div className="agent-title">
-                  <span className="agent-icon">🔍</span>
+                  <span className="agent-icon">1</span>
                   <h4>Agent 1: Referral Validation</h4>
                 </div>
                 <div className="validation-status" style={{ backgroundColor: getStatusColor(workflowResult.validation.status) }}>
@@ -242,7 +286,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
 
                 {workflowResult.validation.warnings.length > 0 && (
                   <div className="warnings-section">
-                    <strong>⚠️ Warnings:</strong>
+                    <strong>Warnings:</strong>
                     <ul>
                       {workflowResult.validation.warnings.map((warning, idx) => (
                         <li key={idx} className="warning-item">{warning}</li>
@@ -252,7 +296,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
                 )}
 
                 <div className="recommendation-box" style={{ borderColor: getActionColor(workflowResult.validation_recommendation) }}>
-                  <strong>💡 Agent Recommendation:</strong>
+                  <strong>Recommendation:</strong>
                   <p>{workflowResult.validation_recommendation}</p>
                 </div>
               </div>
@@ -276,11 +320,11 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
                           <div>Location: {match.city}</div>
                           <div>Skills: {match.skills}</div>
                           <div>Availability: {match.availability}</div>
-                          <div>🗣️ {match.language}</div>
+                          <div>Language: {match.language}</div>
                         </div>
                         <div className="match-reasons">
                           {match.match_reasons.map((reason, ridx) => (
-                            <div key={ridx} className="reason-tag">✓ {reason}</div>
+                            <div key={ridx} className="reason-tag">{reason}</div>
                           ))}
                         </div>
                       </div>
@@ -291,7 +335,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
                 )}
 
                 <div className="recommendation-box" style={{ borderColor: getActionColor(workflowResult.matching_recommendation) }}>
-                  <strong>💡 Agent Recommendation:</strong>
+                  <strong>Recommendation:</strong>
                   <p>{workflowResult.matching_recommendation}</p>
                 </div>
               </div>
@@ -299,7 +343,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
               {/* Agent 3: Scheduling */}
               <div className="agent-result">
                 <div className="agent-title">
-                  <span className="agent-icon">📅</span>
+                  <span className="agent-icon">3</span>
                   <h4>Agent 3: Scheduling Intelligence</h4>
                 </div>
 
@@ -307,7 +351,7 @@ const AgentScheduler: React.FC<AgentSchedulerProps> = ({ dataVersion, onDataChan
                   <div className="detail-row">
                     <span>Can Schedule:</span>
                     <strong className={workflowResult.schedule_recommendation.can_schedule ? 'text-success' : 'text-danger'}>
-                      {workflowResult.schedule_recommendation.can_schedule ? '✓ YES' : '✗ NO'}
+                      {workflowResult.schedule_recommendation.can_schedule ? 'YES' : 'NO'}
                     </strong>
                   </div>
                   <div className="detail-row">

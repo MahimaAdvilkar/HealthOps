@@ -73,20 +73,19 @@ const JourneyBoard: React.FC<JourneyBoardProps> = ({ dataVersion, onDataChanged 
                 s.referrals.map((r) => (
                   <div
                     key={r.referral_id}
-                    className={`journey-card ${String(r.urgency || '').toLowerCase() === 'urgent' ? 'urgent' : ''}`}
+                    className="journey-card"
                     onClick={() => setSelectedReferralId(r.referral_id)}
                     role="button"
                     tabIndex={0}
                   >
                     <div className="journey-card-top">
                       <strong>{r.referral_id}</strong>
-                      {r.urgency && <span className="journey-badge">{r.urgency}</span>}
+                      {r.urgency && <span className={`journey-badge ${String(r.urgency || '').toLowerCase()}`}>{r.urgency}</span>}
                     </div>
                     <div className="journey-card-meta">
-                      <div>📍 {r.patient_city || '—'}</div>
-                      <div>🏷️ {r.payer || '—'}</div>
-                      {r.auth_status && <div>🧾 Auth: {r.auth_status}</div>}
-                      {r.schedule_status && <div>📅 {r.schedule_status}</div>}
+                      <span>{r.patient_city || '—'}</span>
+                      <span>•</span>
+                      <span>{r.payer || '—'}</span>
                     </div>
                     <div className="journey-card-action">{r.agent_next_action || '—'}</div>
                   </div>
