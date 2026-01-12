@@ -6,9 +6,10 @@ import '../styles/ReferralTable.css';
 interface ReferralTableProps {
   dataVersion: number;
   onDataChanged: () => void;
+  onScheduleReferral?: (referralId: string) => void;
 }
 
-const ReferralTable: React.FC<ReferralTableProps> = ({ dataVersion, onDataChanged }) => {
+const ReferralTable: React.FC<ReferralTableProps> = ({ dataVersion, onDataChanged, onScheduleReferral }) => {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -121,7 +122,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ dataVersion, onDataChange
               <th>Units Remaining</th>
               <th>Next Action</th>
               <th>Contact Attempts</th>
-              <th>Journey</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -145,12 +146,20 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ dataVersion, onDataChange
                 <td>{referral.auth_units_remaining || 0}</td>
                 <td className="action-cell">{referral.agent_next_action || 'N/A'}</td>
                 <td>{referral.contact_attempts || 0}</td>
-                <td>
+                <td className="actions-cell">
                   <button
-                    className="refresh-btn"
-                    onClick={() => setJourneyReferralId(referral.referral_id)}
+                    className="action-btn analyze-btn"
+                    onClick={() => onScheduleReferral?.(referral.referral_id)}
+                    title="Analyze & Schedule"
                   >
-                    View
+                    Analyze
+                  </button>
+                  <button
+                    className="action-btn view-btn"
+                    onClick={() => setJourneyReferralId(referral.referral_id)}
+                    title="View Journey"
+                  >
+                    Journey
                   </button>
                 </td>
               </tr>
