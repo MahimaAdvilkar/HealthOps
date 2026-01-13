@@ -3,7 +3,7 @@ import { apiService, OpsSummary, Stats } from '../services/api';
 import '../styles/Dashboard.css';
 
 interface DashboardProps {
-  onNavigate: (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey') => void;
+  onNavigate: (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey' | 'viz') => void;
   onDataChanged: () => void;
   dataVersion: number;
 }

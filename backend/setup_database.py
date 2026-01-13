@@ -58,9 +58,9 @@ def main():
     result = db.get_table_stats()
     if result['success']:
         stats = result['stats']
-        print(f"   Total Referrals:     {stats['referrals_count']}")
+        print(f"   Total Referrals:     {stats['total_referrals']}")
         print(f"   Active Referrals:    {stats['active_referrals']}")
-        print(f"   Total Caregivers:    {stats['caregivers_count']}")
+        print(f"   Total Caregivers:    {stats['total_caregivers']}")
         print(f"   Active Caregivers:   {stats['active_caregivers']}")
     
     db.disconnect()

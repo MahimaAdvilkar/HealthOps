@@ -23,7 +23,11 @@ from src.models.data_schemas import (
 )
 from src.services.landingai_service import LandingAIService
 from src.services.agent_workflow import AgentWorkflow
-from src.services.crew_workflow import HealthOpsCrewWorkflow
+try:
+    from src.services.crew_workflow import HealthOpsCrewWorkflow
+except ModuleNotFoundError as e:
+    HealthOpsCrewWorkflow = None
+    _crew_workflow_import_error = e
 from src.services.email_service import email_service
 from src.services.rules_engine import rules_engine
 from src.services.sorting_agent import sorting_agent
@@ -56,12 +60,19 @@ async def lifespan(app: FastAPI):
     agent_workflow = AgentWorkflow()
     print("Agent Workflow initialized successfully")
     
-    try:
-        crew_workflow = HealthOpsCrewWorkflow()
-        print("Crew AI Workflow initialized successfully")
-    except Exception as e:
-        print(f"Warning: Crew AI initialization failed - {e}")
+    if HealthOpsCrewWorkflow is None:
+        print(
+            "Warning: Crew AI workflow not available - "
+            f"{_crew_workflow_import_error}"
+        )
         crew_workflow = None
+    else:
+        try:
+            crew_workflow = HealthOpsCrewWorkflow()
+            print("Crew AI Workflow initialized successfully")
+        except Exception as e:
+            print(f"Warning: Crew AI initialization failed - {e}")
+            crew_workflow = None
     
     yield
     
