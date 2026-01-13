@@ -7,7 +7,11 @@ import os
 from typing import List, Dict, Any
 from pathlib import Path
 from dotenv import load_dotenv
-import google.generativeai as genai
+
+try:
+    import google.generativeai as genai
+except ModuleNotFoundError:
+    genai = None
 
 load_dotenv()
 
@@ -23,6 +27,10 @@ class SortingAgent:
     
     def _initialize_llm(self):
         """Initialize Google Gemini client"""
+        if genai is None:
+            print("WARNING: google-generativeai not installed. AI sorting will use fallback.")
+            return None
+
         google_api_key = os.getenv('GOOGLE_API_KEY')
         
         if not google_api_key or google_api_key == 'your_google_api_key_here':

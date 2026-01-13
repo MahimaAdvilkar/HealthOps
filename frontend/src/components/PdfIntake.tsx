@@ -4,7 +4,7 @@ import '../styles/PdfIntake.css';
 
 interface PdfIntakeProps {
   onDataChanged: () => void;
-  onNavigate: (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey') => void;
+  onNavigate: (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey' | 'viz') => void;
 }
 
 const PdfIntake: React.FC<PdfIntakeProps> = ({ onDataChanged, onNavigate }) => {

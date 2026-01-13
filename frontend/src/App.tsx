@@ -7,13 +7,16 @@ import AgentScheduler from './components/AgentScheduler';
 import PdfIntake from './components/PdfIntake';
 import ComplianceDocs from './components/ComplianceDocs';
 import JourneyBoard from './components/JourneyBoard';
+import DataVizAgent from './components/DataVizAgent';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey'>('referrals');
+  const [activeTab, setActiveTab] = useState<
+    'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey' | 'viz'
+  >('referrals');
   const [dataVersion, setDataVersion] = useState(0);
   const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
 
-  const handleNavigate = (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey') => {
+  const handleNavigate = (tab: 'referrals' | 'caregivers' | 'scheduler' | 'intake' | 'compliance' | 'journey' | 'viz') => {
     setActiveTab(tab);
     // Scroll to the table section
     setTimeout(() => {
@@ -66,6 +69,12 @@ function App() {
           Journey Board
         </button>
         <button 
+          className={activeTab === 'viz' ? 'tab-active' : ''} 
+          onClick={() => setActiveTab('viz')}
+        >
+          Viz Agent
+        </button>
+        <button 
           className={activeTab === 'intake' ? 'tab-active' : ''} 
           onClick={() => setActiveTab('intake')}
         >
@@ -89,6 +98,7 @@ function App() {
         {activeTab === 'caregivers' && <CaregiverTable dataVersion={dataVersion} />}
         {activeTab === 'scheduler' && <AgentScheduler dataVersion={dataVersion} onDataChanged={handleDataChanged} initialReferralId={selectedReferralId} onReferralProcessed={() => setSelectedReferralId(null)} />}
         {activeTab === 'journey' && <JourneyBoard dataVersion={dataVersion} onDataChanged={handleDataChanged} />}
+        {activeTab === 'viz' && <DataVizAgent dataVersion={dataVersion} />}
         {activeTab === 'intake' && <PdfIntake onDataChanged={handleDataChanged} onNavigate={handleNavigate} />}
         {activeTab === 'compliance' && <ComplianceDocs dataVersion={dataVersion} />}
       </div>
